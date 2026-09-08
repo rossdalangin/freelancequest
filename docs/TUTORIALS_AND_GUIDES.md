@@ -1,4 +1,11 @@
-# Step-by-Step Tutorials, Pitch Scripts & Career Transition Guides
+# Step-by-Step Tutorials, Deployment Guides & Pitch Scripts
+
+---
+
+## Technical Guide: Installing FREELANCEQUEST on Localhost (XAMPP) & cPanel
+For complete, step-by-step setup and installation instructions, refer to the dedicated **[INSTALLATION_GUIDE.md](./INSTALLATION_GUIDE.md)**:
+- **Localhost Setup (XAMPP)**: Setting up PHP 8.2+, enabling `pdo_sqlite`, virtual host configuration (`freelancequest.local`), and running `php database/seed.php`.
+- **Production Server Deployment (cPanel)**: Uploading zip, configuring document root (`/public`), file permissions (`chmod 775`), PHP version selection, and database seeder execution.
 
 ---
 
