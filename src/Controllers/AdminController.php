@@ -52,6 +52,125 @@ class AdminController
         require __DIR__ . '/../../views/admin/users.php';
     }
 
+    public function manageLessons()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT l.*, c.title as course_title FROM lessons l LEFT JOIN courses c ON l.course_id = c.id ORDER BY l.id DESC");
+        $lessons = $stmt->fetchAll();
+
+        $courses = $pdo->query("SELECT * FROM courses")->fetchAll();
+
+        require __DIR__ . '/../../views/admin/lessons.php';
+    }
+
+    public function createLesson()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $slug = strtolower(str_replace(' ', '-', $title)) . '-' . rand(100, 999);
+        $courseId = $_POST['course_id'] ?? 1;
+        $levelNum = $_POST['level_number'] ?? 1;
+        $summary = $_POST['summary'] ?? '';
+        $content = $_POST['content'] ?? '';
+        $xpReward = $_POST['xp_reward'] ?? 50;
+        $coinReward = $_POST['coin_reward'] ?? 10;
+
+        $stmt = $pdo->prepare("INSERT INTO lessons (course_id, level_number, title, slug, summary, content, xp_reward, coin_reward) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$courseId, $levelNum, $title, $slug, $summary, $content, $xpReward, $coinReward]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_LESSON_CREATE', "Created lesson: {$title}");
+
+        header('Location: /admin/lessons');
+        exit;
+    }
+
+    public function manageQuizzes()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT q.*, l.title as lesson_title FROM quizzes q LEFT JOIN lessons l ON q.lesson_id = l.id ORDER BY q.id DESC");
+        $quizzes = $stmt->fetchAll();
+
+        $lessons = $pdo->query("SELECT id, title FROM lessons")->fetchAll();
+
+        require __DIR__ . '/../../views/admin/quizzes.php';
+    }
+
+    public function createQuiz()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $lessonId = $_POST['lesson_id'] ?? 1;
+        $title = $_POST['title'] ?? 'Knowledge Check';
+        $xpReward = $_POST['xp_reward'] ?? 100;
+        $coinReward = $_POST['coin_reward'] ?? 25;
+
+        $stmt = $pdo->prepare("INSERT INTO quizzes (lesson_id, title, xp_reward, coin_reward) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$lessonId, $title, $xpReward, $coinReward]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_QUIZ_CREATE', "Created quiz: {$title}");
+
+        header('Location: /admin/quizzes');
+        exit;
+    }
+
+    public function manageMissions()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT * FROM missions ORDER BY id DESC");
+        $missions = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/missions.php';
+    }
+
+    public function createMission()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? 'New Mission';
+        $levelNum = $_POST['level_number'] ?? 1;
+        $type = $_POST['type'] ?? 'interactive';
+        $scenario = $_POST['scenario'] ?? '';
+        $instructions = $_POST['instructions'] ?? '';
+        $xpReward = $_POST['xp_reward'] ?? 250;
+        $coinReward = $_POST['coin_reward'] ?? 50;
+
+        $stmt = $pdo->prepare("INSERT INTO missions (level_number, title, type, scenario, instructions, xp_reward, coin_reward) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$levelNum, $title, $type, $scenario, $instructions, $xpReward, $coinReward]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_MISSION_CREATE', "Created mission: {$title}");
+
+        header('Location: /admin/missions');
+        exit;
+    }
+
     public function updateUserPlan(string $id)
     {
         $admin = $this->checkAdminAuth();

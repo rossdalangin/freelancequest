@@ -132,7 +132,8 @@ function initializeSchema()
             lesson_id INTEGER REFERENCES lessons(id) ON DELETE CASCADE,
             title TEXT NOT NULL,
             passing_score INTEGER DEFAULT 70,
-            xp_reward INTEGER DEFAULT 100
+            xp_reward INTEGER DEFAULT 100,
+            coin_reward INTEGER DEFAULT 25
         );",
 
         "CREATE TABLE questions (

@@ -137,8 +137,15 @@ class LearningController
         $stmtIns->execute([$user['id'], $quizId, $score, $passed ? 1 : 0]);
 
         if ($passed) {
+            // Compute exact XP and Coins proportional to quiz score percentage
+            $quizCoinReward = $quiz['coin_reward'] ?? 25;
+            $quizXpReward = $quiz['xp_reward'] ?? 100;
+
+            $earnedXP = (int) round(($score / 100) * $quizXpReward);
+            $earnedCoins = (int) round(($score / 100) * $quizCoinReward);
+
             $gameEngine = new GameEngineService();
-            $gameEngine->awardXPAndCoins($user['id'], $quiz['xp_reward'], 20);
+            $gameEngine->awardXPAndCoins($user['id'], $earnedXP, $earnedCoins);
         }
 
         header('Location: /dashboard');

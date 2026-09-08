@@ -92,6 +92,12 @@ $router->post('/pricing/subscribe', [SubscriptionController::class, 'subscribe']
 $router->get('/admin', [AdminController::class, 'index']);
 $router->get('/admin/users', [AdminController::class, 'manageUsers']);
 $router->post('/admin/users/{id}/plan', [AdminController::class, 'updateUserPlan']);
+$router->get('/admin/lessons', [AdminController::class, 'manageLessons']);
+$router->post('/admin/lessons/create', [AdminController::class, 'createLesson']);
+$router->get('/admin/quizzes', [AdminController::class, 'manageQuizzes']);
+$router->post('/admin/quizzes/create', [AdminController::class, 'createQuiz']);
+$router->get('/admin/missions', [AdminController::class, 'manageMissions']);
+$router->post('/admin/missions/create', [AdminController::class, 'createMission']);
 $router->get('/admin/payments', [AdminController::class, 'managePayments']);
 $router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
 $router->get('/admin/logs', [AdminController::class, 'viewLogs']);
