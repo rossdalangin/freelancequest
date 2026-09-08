@@ -8,7 +8,7 @@ function seedDatabase()
     initializeSchema();
     $pdo = Database::getConnection();
 
-    echo "Seeding native database with expanded levels & resources...\n";
+    echo "Seeding native database with expanded levels, resources & SOPs...\n";
 
     // 1. Seed Levels 0 to 15
     $levels = [
@@ -63,7 +63,7 @@ function seedDatabase()
         $stmtSk->execute([$s['category_id'], $s['name'], $s['slug'], $s['description']]);
     }
 
-    // 3. Courses & Expanded Lessons for Levels 1 - 15
+    // 3. Courses & Expanded Lessons
     $stmtC = $pdo->prepare("INSERT INTO courses (title, slug, description, level_number, category) VALUES (?, ?, ?, ?, ?)");
     $stmtC->execute(['Freelancing & VA Foundations', 'foundations', 'Master the basics of remote virtual assistance.', 1, 'Foundations']);
     $c1 = $pdo->lastInsertId();
@@ -196,14 +196,21 @@ function seedDatabase()
         $stmtB->execute([$b['name'], $b['slug'], $b['description'], $b['icon'], $b['category'], $b['xp_bonus']]);
     }
 
-    // 6. Resources & Groups
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (1, 'Virtual Assistant Starter Playbook (PDF)', 'Complete beginner guide to setting up your VA career.', 'pdf', 'https://freelancequest.test/resources/va-starter-playbook.pdf', 0);");
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (2, 'Google Workspace Keyboard Shortcuts Cheat Sheet', 'Boost your typing speed and efficiency instantly.', 'cheat_sheet', 'https://freelancequest.test/resources/google-shortcuts.pdf', 0);");
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (3, 'Client Onboarding SOP Checklist', 'Professional checklist for onboarding new client projects.', 'template', 'https://freelancequest.test/resources/onboarding-sop.docx', 0);");
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (5, 'High-Converting VA Resume Template (Word/PDF)', 'ATS-friendly resume layout designed specifically for remote VAs.', 'template', 'https://freelancequest.test/resources/va-resume-template.docx', 1);");
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (8, '10 Winning Upwork Proposal Scripts', 'Proven proposal templates that earned over $100k in freelancing.', 'script', 'https://freelancequest.test/resources/winning-proposals.pdf', 1);");
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (11, 'Client Service Agreement & Contract Template', 'Standard freelance agreement covering payment terms and scope limits.', 'template', 'https://freelancequest.test/resources/contract-template.docx', 1);");
-    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (14, 'Virtual Agency SOP Operations Manual', 'Standard Operating Procedures for hiring subcontractors and managing agency workflows.', 'manual', 'https://freelancequest.test/resources/agency-sop-manual.pdf', 1);");
+    // 6. Resources Vault Items
+    $resources = [
+        ['level_number' => 1, 'title' => 'Virtual Assistant Starter Playbook (PDF)', 'description' => 'Complete beginner guide to setting up your VA career.', 'type' => 'pdf', 'file_content_or_url' => '/docs/PLATFORM_MANUAL.md', 'is_premium' => false],
+        ['level_number' => 2, 'title' => 'Google Workspace Keyboard Shortcuts Cheat Sheet', 'description' => 'Boost your typing speed and efficiency instantly.', 'type' => 'cheat_sheet', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => false],
+        ['level_number' => 3, 'title' => 'Client Onboarding SOP Checklist', 'description' => 'Professional checklist for onboarding new client projects.', 'type' => 'template', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => false],
+        ['level_number' => 5, 'title' => 'High-Converting VA Resume Template', 'description' => 'ATS-friendly resume layout designed specifically for remote VAs.', 'type' => 'template', 'file_content_or_url' => '/resume-builder/print', 'is_premium' => true],
+        ['level_number' => 8, 'title' => '10 Winning Upwork Proposal Scripts', 'description' => 'Proven proposal templates that earned over $100k in freelancing.', 'type' => 'script', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
+        ['level_number' => 11, 'title' => 'Client Service Agreement & Contract Template', 'description' => 'Standard freelance agreement covering payment terms and scope limits.', 'type' => 'template', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => true],
+        ['level_number' => 14, 'title' => 'Virtual Agency SOP Operations Manual', 'description' => 'Standard Operating Procedures for hiring subcontractors and managing agency workflows.', 'type' => 'manual', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => true],
+    ];
+
+    $stmtRes = $pdo->prepare("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (?, ?, ?, ?, ?, ?)");
+    foreach ($resources as $res) {
+        $stmtRes->execute([$res['level_number'], $res['title'], $res['description'], $res['type'], $res['file_content_or_url'], $res['is_premium']]);
+    }
 
     $pdo->exec("INSERT INTO groups (name, slug, description, icon) VALUES ('Beginner VA Lounge', 'beginner-va', 'A welcoming community for beginners starting their remote journey.', '🌱');");
     $pdo->exec("INSERT INTO groups (name, slug, description, icon) VALUES ('WordPress & Tech VAs', 'tech-vas', 'Technical support, website management, and troubleshooting.', '💻');");

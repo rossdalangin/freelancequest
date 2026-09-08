@@ -17,6 +17,8 @@ class MarketingController
             'SALES_PITCH_DECK.md' => 'marketing/SALES_PITCH_DECK.md',
             'EMAIL_MARKETING_SEQUENCES.md' => 'marketing/EMAIL_MARKETING_SEQUENCES.md',
             'SOCIAL_MEDIA_CAMPAIGNS.md' => 'marketing/SOCIAL_MEDIA_CAMPAIGNS.md',
+            'SOPS_AND_CHECKLISTS.md' => 'docs/SOPS_AND_CHECKLISTS.md',
+            'TUTORIALS_AND_GUIDES.md' => 'docs/TUTORIALS_AND_GUIDES.md',
         ];
 
         if (!isset($allowed[$doc])) {

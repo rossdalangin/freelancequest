@@ -59,7 +59,7 @@ $router->post('/resume-builder', [ResumeBuilderController::class, 'update']);
 
 $router->get('/portfolio-builder', [PortfolioController::class, 'index']);
 $router->post('/portfolio-builder', [PortfolioController::class, 'update']);
-$router->get('/p/{username}', [PortfolioController::showPublic]);
+$router->get('/p/{username}', [PortfolioController::class, 'showPublic']);
 
 $router->get('/verify/{code}', [CertificateController::class, 'verify']);
 $router->get('/verify/{code}/print', [CertificateController::class, 'printView']);
