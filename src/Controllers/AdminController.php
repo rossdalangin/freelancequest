@@ -306,19 +306,6 @@ class AdminController
         exit;
     }
 
-    public function manageQuizzesOld()
-    {
-        $admin = $this->checkAdminAuth();
-        $pdo = Database::getConnection();
-
-        $stmt = $pdo->query("SELECT q.*, l.title as lesson_title FROM quizzes q LEFT JOIN lessons l ON q.lesson_id = l.id ORDER BY q.id DESC");
-        $quizzes = $stmt->fetchAll();
-
-        $lessons = $pdo->query("SELECT id, title FROM lessons")->fetchAll();
-
-        require __DIR__ . '/../../views/admin/quizzes.php';
-    }
-
     public function createQuiz()
     {
         $admin = $this->checkAdminAuth();
