@@ -40,8 +40,11 @@ This comprehensive guide covers step-by-step instructions for installing and run
 
 ### Step 4: Configure Virtual Host or Subdirectory URL
 #### Option A: Direct Apache Localhost Access (Easiest)
-Navigate in your web browser to:
-`http://localhost/freelancequest/public/`
+Navigate in your web browser to either:
+- `http://localhost/freelancequest/` (auto-redirects to `/public/`)
+- `http://localhost/freelancequest/public/`
+
+*Note: FREELANCEQUEST includes dynamic URL router parsing so all pages (`/learn`, `/pricing`, `/admin`) resolve seamlessly under XAMPP subfolders without throwing `404 Not Found`!*
 
 #### Option B: Virtual Host Setup (Recommended - `http://freelancequest.local`)
 1. Open `C:\xampp\apache\conf\extra\httpd-vhosts.conf` and append:

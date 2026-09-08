@@ -18,7 +18,19 @@ class Router
 
     public function dispatch(string $method, string $uri): void
     {
-        $path = parse_url($uri, PHP_URL_PATH);
+        $path = parse_url($uri, PHP_URL_PATH) ?? '/';
+
+        // Strip subdirectory prefix if running in XAMPP or subfolder (e.g. /freelancequest/public)
+        if (isset($_SERVER['SCRIPT_NAME'])) {
+            $baseDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+            if ($baseDir !== '' && $baseDir !== '/' && str_starts_with($path, $baseDir)) {
+                $path = substr($path, strlen($baseDir));
+            }
+        }
+
+        if ($path === '' || $path === false) {
+            $path = '/';
+        }
 
         // Match static routes
         if (isset($this->routes[$method][$path])) {
