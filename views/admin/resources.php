@@ -10,7 +10,7 @@
 
     <!-- CREATE NEW RESOURCE -->
     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-        <h3 class="text-lg font-bold text-white">ADD NEW DOWNLOADABLE RESOURCE</h3>
+        <h3 class="text-lg font-bold text-white">+ ADD NEW DOWNLOADABLE RESOURCE</h3>
         <form action="/admin/resources/create" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
 
@@ -59,40 +59,73 @@
         </form>
     </div>
 
-    <!-- EXISTING RESOURCES -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-        <table class="w-full text-left text-xs text-slate-300">
-            <thead class="bg-slate-950 text-slate-400 uppercase font-extrabold border-b border-slate-800">
-                <tr>
-                    <th class="p-4">Level</th>
-                    <th class="p-4">Title & Description</th>
-                    <th class="p-4">Type</th>
-                    <th class="p-4">Access</th>
-                    <th class="p-4">Actions</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800">
-                <?php foreach ($resources as $res): ?>
-                <tr>
-                    <td class="p-4 font-bold text-amber-400">LVL <?= $res['level_number'] ?></td>
-                    <td class="p-4">
-                        <p class="font-bold text-white"><?= htmlspecialchars($res['title']) ?></p>
-                        <p class="text-[10px] text-slate-400"><?= htmlspecialchars($res['description']) ?></p>
-                    </td>
-                    <td class="p-4 uppercase font-bold text-indigo-400"><?= htmlspecialchars($res['type']) ?></td>
-                    <td class="p-4 font-bold <?= $res['is_premium'] ? 'text-amber-400' : 'text-emerald-400' ?>">
-                        <?= $res['is_premium'] ? '🔒 PRO' : 'FREE' ?>
-                    </td>
-                    <td class="p-4">
-                        <form action="/admin/resources/<?= $res['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this resource?');">
-                            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
-                            <button type="submit" class="bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white font-bold px-2.5 py-1 rounded text-[10px] transition">DELETE</button>
-                        </form>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    <!-- EXISTING RESOURCES EDIT LIST -->
+    <div class="space-y-6">
+        <h3 class="text-xl font-bold text-white">EXISTING RESOURCES (EDIT & UPDATE)</h3>
+
+        <?php foreach ($resources as $res): ?>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div class="flex items-center gap-3">
+                    <span class="bg-amber-500/20 text-amber-400 text-xs font-black px-2.5 py-1 rounded-full border border-amber-500/30">LVL <?= $res['level_number'] ?></span>
+                    <h4 class="text-base font-bold text-white"><?= htmlspecialchars($res['title']) ?></h4>
+                    <span class="text-xs font-bold <?= $res['is_premium'] ? 'text-amber-400' : 'text-emerald-400' ?>"><?= $res['is_premium'] ? '🔒 PRO' : 'FREE' ?></span>
+                </div>
+                <form action="/admin/resources/<?= $res['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this resource?');">
+                    <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                    <button type="submit" class="bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white font-bold px-3 py-1 rounded text-xs transition">DELETE RESOURCE</button>
+                </form>
+            </div>
+
+            <!-- EDIT RESOURCE FORM -->
+            <form action="/admin/resources/<?= $res['id'] ?>/edit" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Resource Title</label>
+                    <input type="text" name="title" required value="<?= htmlspecialchars($res['title']) ?>" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Level Number</label>
+                    <input type="number" name="level_number" value="<?= $res['level_number'] ?>" min="1" max="15" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Type</label>
+                    <select name="type" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2">
+                        <option value="pdf" <?= $res['type'] === 'pdf' ? 'selected' : '' ?>>PDF Playbook</option>
+                        <option value="template" <?= $res['type'] === 'template' ? 'selected' : '' ?>>SOP / Doc Template</option>
+                        <option value="script" <?= $res['type'] === 'script' ? 'selected' : '' ?>>Outreach Script</option>
+                        <option value="manual" <?= $res['type'] === 'manual' ? 'selected' : '' ?>>Manual</option>
+                        <option value="calculator" <?= $res['type'] === 'calculator' ? 'selected' : '' ?>>Excel / Calculator</option>
+                        <option value="cheat_sheet" <?= $res['type'] === 'cheat_sheet' ? 'selected' : '' ?>>Cheat Sheet</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">File URL / Path</label>
+                    <input type="text" name="file_content_or_url" required value="<?= htmlspecialchars($res['file_content_or_url']) ?>" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Description</label>
+                    <input type="text" name="description" required value="<?= htmlspecialchars($res['description']) ?>" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2">
+                </div>
+
+                <div class="md:col-span-2 flex items-center gap-2">
+                    <input type="checkbox" name="is_premium" value="1" id="res_prem_<?= $res['id'] ?>" <?= $res['is_premium'] ? 'checked' : '' ?> class="rounded border-slate-800">
+                    <label for="res_prem_<?= $res['id'] ?>" class="text-xs text-amber-400 font-bold">Require Pro/Master Subscription (Premium)</label>
+                </div>
+
+                <div class="md:col-span-2">
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-lg text-xs">
+                        UPDATE RESOURCE DETAILS
+                    </button>
+                </div>
+            </form>
+        </div>
+        <?php endforeach; ?>
     </div>
 </div>
 <?php require __DIR__ . '/../layout/footer.php'; ?>

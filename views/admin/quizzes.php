@@ -8,8 +8,9 @@
         <a href="/admin" class="text-xs text-indigo-400 font-bold hover:underline">&larr; Back to Dashboard</a>
     </div>
 
+    <!-- CREATE QUIZ -->
     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-        <h3 class="text-lg font-bold text-white">CREATE NEW QUIZ FOR LESSON</h3>
+        <h3 class="text-lg font-bold text-white">+ CREATE NEW QUIZ</h3>
         <form action="/admin/quizzes/create" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
 
@@ -45,9 +46,9 @@
         </form>
     </div>
 
-    <!-- EXISTING QUIZZES LIST -->
+    <!-- EXISTING QUIZZES LIST & EDIT -->
     <div class="space-y-6">
-        <h3 class="text-xl font-bold text-white">EXISTING QUIZZES & QUESTIONS</h3>
+        <h3 class="text-xl font-bold text-white">EXISTING QUIZZES (EDIT & MANAGE QUESTIONS)</h3>
 
         <?php foreach ($quizzes as $q): ?>
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
@@ -55,7 +56,6 @@
                 <div>
                     <span class="text-xs text-indigo-400 font-bold">LESSON: <?= htmlspecialchars($q['lesson_title'] ?? 'General') ?></span>
                     <h4 class="text-lg font-bold text-white"><?= htmlspecialchars($q['title']) ?></h4>
-                    <span class="text-xs text-slate-400">+<?= $q['xp_reward'] ?> XP &bull; +<?= $q['coin_reward'] ?? 25 ?> Coins</span>
                 </div>
                 <form action="/admin/quizzes/<?= $q['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this quiz?');">
                     <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
@@ -63,8 +63,42 @@
                 </form>
             </div>
 
+            <!-- EDIT QUIZ FORM -->
+            <form action="/admin/quizzes/<?= $q['id'] ?>/edit" method="POST" class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Quiz Title</label>
+                    <input type="text" name="title" value="<?= htmlspecialchars($q['title']) ?>" required class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-400 mb-1">Associated Lesson</label>
+                    <select name="lesson_id" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                        <?php foreach ($lessons as $les): ?>
+                        <option value="<?= $les['id'] ?>" <?= $q['lesson_id'] == $les['id'] ? 'selected' : '' ?>><?= htmlspecialchars($les['title']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 mb-1">XP Reward</label>
+                        <input type="number" name="xp_reward" value="<?= $q['xp_reward'] ?>" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 mb-1">Coin Reward</label>
+                        <input type="number" name="coin_reward" value="<?= $q['coin_reward'] ?? 25 ?>" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                    </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                    <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded text-xs">UPDATE QUIZ DETAILS</button>
+                </div>
+            </form>
+
             <!-- QUESTIONS FOR THIS QUIZ -->
-            <div class="space-y-3">
+            <div class="space-y-3 pt-2">
                 <h5 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Quiz Questions (<?= count($q['questions']) ?>)</h5>
 
                 <?php foreach ($q['questions'] as $qn): ?>
