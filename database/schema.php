@@ -7,6 +7,8 @@ function initializeSchema()
     $pdo = Database::getConnection();
 
     $queries = [
+        "DROP TABLE IF EXISTS audit_logs;",
+        "DROP TABLE IF EXISTS settings;",
         "DROP TABLE IF EXISTS subscriptions;",
         "DROP TABLE IF EXISTS comments;",
         "DROP TABLE IF EXISTS community_posts;",
@@ -295,6 +297,22 @@ function initializeSchema()
             price REAL DEFAULT 0.00,
             starts_at TEXT NOT NULL,
             ends_at TEXT
+        );",
+
+        "CREATE TABLE settings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            key_name TEXT UNIQUE NOT NULL,
+            value_text TEXT,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE audit_logs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+            action TEXT NOT NULL,
+            details TEXT,
+            ip_address TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );"
     ];
 

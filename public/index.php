@@ -74,7 +74,9 @@ $router->get('/pricing', [SubscriptionController::class, 'index']);
 $router->post('/pricing/subscribe', [SubscriptionController::class, 'subscribe']);
 
 $router->get('/admin', [AdminController::class, 'index']);
+$router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
+$router->get('/admin/export-data', [AdminController::class, 'exportData']);
 
 $router->get('/marketing', [MarketingController::class, 'index']);
 $router->get('/marketing/doc/{doc}', [MarketingController::class, 'showDocument']);

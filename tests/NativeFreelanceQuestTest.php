@@ -87,4 +87,18 @@ class NativeFreelanceQuestTest extends TestCase
         $this->assertStringContainsString('PRINT / SAVE RESUME PDF', $output);
         $this->assertStringContainsString('Professional Summary', $output);
     }
+
+    public function testDataManagementService()
+    {
+        \App\Services\DataManagementService::setSetting('xp_multiplier', '1.5');
+        $this->assertEquals('1.5', \App\Services\DataManagementService::getSetting('xp_multiplier'));
+
+        \App\Services\DataManagementService::logActivity(1, 'TEST_ACTION', 'Testing details');
+        $logs = \App\Services\DataManagementService::getAuditLogs(5);
+        $this->assertNotEmpty($logs);
+
+        $backupJson = \App\Services\DataManagementService::exportBackupJson();
+        $this->assertStringContainsString('exported_at', $backupJson);
+        $this->assertStringContainsString('users', $backupJson);
+    }
 }

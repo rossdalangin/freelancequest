@@ -3,7 +3,9 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../database/seed.php';
 
+ob_start();
 seedDatabase();
+ob_clean();
 
 // Setup autoloader
 spl_autoload_register(function ($class) {
@@ -17,21 +19,18 @@ spl_autoload_register(function ($class) {
 
 use App\Router;
 use App\Controllers\DashboardController;
-use App\Controllers\ResumeBuilderController;
-use App\Controllers\CertificateController;
+use App\Controllers\AdminController;
 
 $router = new Router();
 $router->get('/dashboard', [DashboardController::class, 'index']);
-$router->get('/resume-builder/print', [ResumeBuilderController::class, 'printView']);
-$router->get('/verify/{code}/print', [CertificateController::class, 'printView']);
+$router->get('/admin/export-data', [AdminController::class, 'exportData']);
 
-ob_start();
-$router->dispatch('GET', '/resume-builder/print');
+$router->dispatch('GET', '/admin/export-data');
 $output = ob_get_clean();
 
-if (str_contains($output, 'PRINT / SAVE RESUME PDF')) {
-    echo "Resume print route test passed!\n";
+if (str_contains($output, 'exported_at') && str_contains($output, 'users')) {
+    echo "Admin export data route test passed!\n";
 } else {
-    echo "Resume print route test failed.\n";
+    echo "Admin export data route test failed.\n";
     exit(1);
 }
