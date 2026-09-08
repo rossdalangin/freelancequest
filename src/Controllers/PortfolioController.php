@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Database;
 use App\Services\GameEngineService;
+use App\Services\SecurityService;
 
 class PortfolioController
 {
@@ -45,6 +46,11 @@ class PortfolioController
 
     public function update()
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
@@ -66,6 +72,7 @@ class PortfolioController
 
     public function showPublic(string $username)
     {
+        $username = basename($username);
         $pdo = Database::getConnection();
 
         $stmtP = $pdo->prepare("SELECT * FROM portfolios WHERE slug = ?");

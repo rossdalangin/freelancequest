@@ -6,6 +6,7 @@
 
     <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
         <form action="/onboarding" method="POST" class="space-y-6">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
             <div>
                 <label class="block text-xs font-bold text-slate-300 mb-2">Experience Level</label>
                 <select name="experience_level" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">

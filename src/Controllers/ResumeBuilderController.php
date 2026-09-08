@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Database;
 use App\Services\GameEngineService;
+use App\Services\SecurityService;
 
 class ResumeBuilderController
 {
@@ -52,6 +53,11 @@ class ResumeBuilderController
 
     public function update()
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");

@@ -21,6 +21,7 @@ spl_autoload_register(function ($class) {
 });
 
 use App\Router;
+use App\Services\SecurityService;
 use App\Controllers\DashboardController;
 use App\Controllers\OnboardingController;
 use App\Controllers\LearningController;
@@ -32,6 +33,9 @@ use App\Controllers\SubscriptionController;
 use App\Controllers\AdminController;
 use App\Controllers\ResourceVaultController;
 use App\Controllers\MarketingController;
+
+SecurityService::setSecurityHeaders();
+SecurityService::startSecureSession();
 
 $router = new Router();
 

@@ -11,6 +11,7 @@ class MarketingController
 
     public function showDocument(string $doc)
     {
+        $doc = basename($doc);
         $allowed = [
             'LANDING_PAGE_COPY.md' => 'marketing/LANDING_PAGE_COPY.md',
             'SALES_PITCH_DECK.md' => 'marketing/SALES_PITCH_DECK.md',

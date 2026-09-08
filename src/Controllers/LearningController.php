@@ -5,6 +5,7 @@ namespace App\Controllers;
 use Database;
 use App\Services\GameEngineService;
 use App\Services\CertificateService;
+use App\Services\SecurityService;
 
 class LearningController
 {
@@ -65,6 +66,16 @@ class LearningController
 
     public function completeLesson(string $slug)
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        if (!SecurityService::checkRateLimit('complete_lesson', 30, 60)) {
+            http_response_code(429);
+            die("Rate limit exceeded.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtL = $pdo->prepare("SELECT * FROM lessons WHERE slug = ?");
@@ -92,6 +103,16 @@ class LearningController
 
     public function submitQuiz(string $quizId)
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        if (!SecurityService::checkRateLimit('submit_quiz', 30, 60)) {
+            http_response_code(429);
+            die("Rate limit exceeded.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
@@ -146,6 +167,16 @@ class LearningController
 
     public function submitMission(string $id)
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        if (!SecurityService::checkRateLimit('submit_mission', 30, 60)) {
+            http_response_code(429);
+            die("Rate limit exceeded.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtM = $pdo->prepare("SELECT * FROM missions WHERE id = ?");

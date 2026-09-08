@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Database;
 use App\Services\GameEngineService;
+use App\Services\SecurityService;
 
 class CommunityController
 {
@@ -31,6 +32,16 @@ class CommunityController
 
     public function storePost()
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        if (!SecurityService::checkRateLimit('community_post', 20, 60)) {
+            http_response_code(429);
+            die("Rate limit exceeded.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
@@ -54,6 +65,16 @@ class CommunityController
 
     public function storeComment(string $postId)
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        if (!SecurityService::checkRateLimit('community_comment', 30, 60)) {
+            http_response_code(429);
+            die("Rate limit exceeded.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");

@@ -20,6 +20,7 @@ class NativeFreelanceQuestTest extends TestCase
     protected function setUp(): void
     {
         seedDatabase();
+        $_POST['csrf_token'] = \App\Services\SecurityService::getCsrfToken();
     }
 
     public function testDatabaseSeedingIntegrity()

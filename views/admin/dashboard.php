@@ -26,6 +26,7 @@
     <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
         <h2 class="text-xl font-extrabold text-white">AI COURSE BUILDER</h2>
         <form action="/admin/ai-course-builder" method="POST" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
             <input type="text" name="topic" required placeholder="Topic..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
             <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-6 rounded-xl text-sm">GENERATE MODULE &rarr;</button>
         </form>

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Database;
+use App\Services\SecurityService;
 
 class SubscriptionController
 {
@@ -58,6 +59,11 @@ class SubscriptionController
 
     public function subscribe()
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
         $pdo = Database::getConnection();
 
         $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");

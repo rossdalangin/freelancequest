@@ -8,6 +8,7 @@ class CertificateController
 {
     public function verify(string $code)
     {
+        $code = preg_replace('/[^a-zA-Z0-9\-]/', '', $code);
         $pdo = Database::getConnection();
 
         $stmt = $pdo->prepare("SELECT c.*, u.name as user_name FROM certificates c JOIN users u ON c.user_id = u.id WHERE c.certificate_code = ?");

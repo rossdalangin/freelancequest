@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use Database;
+use App\Services\SecurityService;
 
 class AdminController
 {
@@ -22,6 +23,11 @@ class AdminController
 
     public function generateAiCourse()
     {
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
         $pdo = Database::getConnection();
 
         $topic = $_POST['topic'] ?? 'Lead Generation';
