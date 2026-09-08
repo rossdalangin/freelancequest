@@ -55,20 +55,45 @@
             </form>
         </div>
 
-        <!-- System Settings Form -->
+        <!-- System & Payment Gateway Settings Form -->
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-            <h2 class="text-xl font-extrabold text-white">⚙️ SYSTEM GAME SETTINGS</h2>
+            <h2 class="text-xl font-extrabold text-white">⚙️ GAME & PAYMENT GATEWAY ACCOUNTS</h2>
             <form action="/admin/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1">Global XP Reward Multiplier</label>
-                    <input type="text" name="xp_multiplier" value="<?= htmlspecialchars($xpMultiplier ?? '1.0', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Global XP Multiplier</label>
+                        <input type="text" name="xp_multiplier" value="<?= htmlspecialchars($xpMultiplier ?? '1.0', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">7-Day Streak Bonus XP</label>
+                        <input type="text" name="streak_bonus_xp" value="<?= htmlspecialchars($streakBonus ?? '200', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-300 mb-1">7-Day Streak Bonus XP</label>
-                    <input type="text" name="streak_bonus_xp" value="<?= htmlspecialchars($streakBonus ?? '200', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
+
+                <div class="border-t border-slate-800 pt-4 space-y-3">
+                    <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">Admin Payment Receiving Accounts</h3>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">PayPal Admin Merchant Email</label>
+                        <input type="email" name="paypal_email" value="<?= htmlspecialchars($paypalEmail ?? 'admin@freelancequest.com', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-1">Stripe Publishable Key / Account ID</label>
+                        <input type="text" name="stripe_key" value="<?= htmlspecialchars($stripeKey ?? 'pk_live_freelancequest_admin_key', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">GCash Account Mobile Number</label>
+                            <input type="text" name="gcash_number" value="<?= htmlspecialchars($gcashNumber ?? '09171234567', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">GCash Account Name</label>
+                            <input type="text" name="gcash_name" value="<?= htmlspecialchars($gcashName ?? 'FreelanceQuest Admin', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-6 rounded-xl text-sm">SAVE SETTINGS &rarr;</button>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-6 rounded-xl text-xs shadow-lg">SAVE ALL SETTINGS & PAYMENT ACCOUNTS &rarr;</button>
             </form>
         </div>
     </div>

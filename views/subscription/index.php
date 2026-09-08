@@ -38,11 +38,17 @@
                     <?php if ($plan['name'] !== 'free'): ?>
                     <div>
                         <label class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Select Payment Gateway</label>
-                        <select name="payment_gateway" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-amber-500">
-                            <option value="paypal">💳 PayPal</option>
-                            <option value="stripe">💳 Stripe (Credit/Debit Card)</option>
-                            <option value="gcash">📱 GCash / E-Wallet</option>
+                        <select name="payment_gateway" class="w-full bg-slate-950 border border-slate-800 text-xs text-white rounded-lg p-2.5 focus:outline-none focus:border-amber-500 mb-2">
+                            <option value="paypal">💳 PayPal (<?= htmlspecialchars($paypalEmail) ?>)</option>
+                            <option value="stripe">💳 Stripe (Card Processing)</option>
+                            <option value="gcash">📱 GCash (<?= htmlspecialchars($gcashNumber) ?> - <?= htmlspecialchars($gcashName) ?>)</option>
                         </select>
+
+                        <div class="bg-slate-950 p-2.5 rounded-lg border border-slate-800 text-[10px] text-slate-400 space-y-1">
+                            <p class="font-bold text-amber-400">Merchant Payment Destination:</p>
+                            <p>• PayPal: <span class="text-white font-mono"><?= htmlspecialchars($paypalEmail) ?></span></p>
+                            <p>• GCash: <span class="text-white font-mono"><?= htmlspecialchars($gcashNumber) ?></span> (<?= htmlspecialchars($gcashName) ?>)</p>
+                        </div>
                     </div>
                     <?php endif; ?>
 

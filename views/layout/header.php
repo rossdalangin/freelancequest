@@ -58,10 +58,11 @@
                 <a href="/portfolio-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-briefcase mr-1"></i> Portfolio</a>
                 <a href="/community" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-users mr-1"></i> Community</a>
                 <a href="/pricing" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-3 py-1.5 rounded-lg shadow-md transition">⚡ PRO</a>
+                <a href="/settings" class="text-slate-300 hover:text-white transition"><i class="fa-solid fa-gear"></i> Settings</a>
 
                 <form action="/logout" method="POST" class="inline">
                     <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
-                    <button type="submit" class="text-slate-400 hover:text-red-400 transition ml-2">Logout</button>
+                    <button type="submit" class="text-slate-400 hover:text-red-400 transition ml-1">Logout</button>
                 </form>
             </nav>
             <?php else: ?>

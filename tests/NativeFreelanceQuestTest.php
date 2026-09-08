@@ -100,7 +100,12 @@ class NativeFreelanceQuestTest extends TestCase
     public function testDataManagementService()
     {
         \App\Services\DataManagementService::setSetting('xp_multiplier', '1.5');
+        \App\Services\DataManagementService::setSetting('paypal_email', 'merchant@admin.com');
+        \App\Services\DataManagementService::setSetting('gcash_number', '09170000000');
+
         $this->assertEquals('1.5', \App\Services\DataManagementService::getSetting('xp_multiplier'));
+        $this->assertEquals('merchant@admin.com', \App\Services\DataManagementService::getSetting('paypal_email'));
+        $this->assertEquals('09170000000', \App\Services\DataManagementService::getSetting('gcash_number'));
 
         \App\Services\DataManagementService::logActivity(1, 'TEST_ACTION', 'Testing details');
         $logs = \App\Services\DataManagementService::getAuditLogs(5);
@@ -109,5 +114,16 @@ class NativeFreelanceQuestTest extends TestCase
         $backupJson = \App\Services\DataManagementService::exportBackupJson();
         $this->assertStringContainsString('exported_at', $backupJson);
         $this->assertStringContainsString('users', $backupJson);
+    }
+
+    public function testUserSettingsController()
+    {
+        $controller = new \App\Controllers\UserController();
+        ob_start();
+        $controller->showSettings();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('ACCOUNT & GAME SETTINGS', $output);
+        $this->assertStringContainsString('Professional Headline', $output);
     }
 }

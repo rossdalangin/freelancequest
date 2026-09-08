@@ -13,6 +13,12 @@ class SubscriptionController
         $user = AuthController::getCurrentUser();
         $pdo = Database::getConnection();
 
+        // Admin Configured Payment Receiving Accounts
+        $paypalEmail = DataManagementService::getSetting('paypal_email', 'admin@freelancequest.com');
+        $stripeKey = DataManagementService::getSetting('stripe_key', 'pk_live_freelancequest_admin_key');
+        $gcashNumber = DataManagementService::getSetting('gcash_number', '09171234567');
+        $gcashName = DataManagementService::getSetting('gcash_name', 'FreelanceQuest Admin');
+
         $plans = [
             [
                 'name' => 'free',

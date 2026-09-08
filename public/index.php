@@ -36,6 +36,7 @@ use App\Controllers\SubscriptionController;
 use App\Controllers\AdminController;
 use App\Controllers\ResourceVaultController;
 use App\Controllers\MarketingController;
+use App\Controllers\UserController;
 
 SecurityService::setSecurityHeaders();
 SecurityService::startSecureSession();
@@ -57,6 +58,8 @@ $router->post('/logout', [AuthController::class, 'logout']);
 
 // Game Protected Routes
 $router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/settings', [UserController::class, 'showSettings']);
+$router->post('/settings', [UserController::class, 'updateSettings']);
 
 $router->get('/onboarding', [OnboardingController::class, 'index']);
 $router->post('/onboarding', [OnboardingController::class, 'store']);

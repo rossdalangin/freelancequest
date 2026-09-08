@@ -35,6 +35,12 @@ class AdminController
         $xpMultiplier = DataManagementService::getSetting('xp_multiplier', '1.0');
         $streakBonus = DataManagementService::getSetting('streak_bonus_xp', '200');
 
+        // Payment Account Settings
+        $paypalEmail = DataManagementService::getSetting('paypal_email', 'admin@freelancequest.com');
+        $stripeKey = DataManagementService::getSetting('stripe_key', 'pk_live_freelancequest_admin_key');
+        $gcashNumber = DataManagementService::getSetting('gcash_number', '09171234567');
+        $gcashName = DataManagementService::getSetting('gcash_name', 'FreelanceQuest Admin');
+
         // Audit Logs
         $auditLogs = DataManagementService::getAuditLogs(10);
 
@@ -379,9 +385,19 @@ class AdminController
         $xpMult = $_POST['xp_multiplier'] ?? '1.0';
         $streakBonus = $_POST['streak_bonus_xp'] ?? '200';
 
+        $paypalEmail = $_POST['paypal_email'] ?? '';
+        $stripeKey = $_POST['stripe_key'] ?? '';
+        $gcashNumber = $_POST['gcash_number'] ?? '';
+        $gcashName = $_POST['gcash_name'] ?? '';
+
         DataManagementService::setSetting('xp_multiplier', $xpMult);
         DataManagementService::setSetting('streak_bonus_xp', $streakBonus);
-        DataManagementService::logActivity($admin['id'], 'SYSTEM_SETTINGS_UPDATE', "XP Multiplier: {$xpMult}, Streak Bonus: {$streakBonus}");
+        DataManagementService::setSetting('paypal_email', $paypalEmail);
+        DataManagementService::setSetting('stripe_key', $stripeKey);
+        DataManagementService::setSetting('gcash_number', $gcashNumber);
+        DataManagementService::setSetting('gcash_name', $gcashName);
+
+        DataManagementService::logActivity($admin['id'], 'SYSTEM_SETTINGS_UPDATE', "Updated System & Payment Settings. PayPal: {$paypalEmail}, GCash: {$gcashNumber}");
 
         header('Location: /admin');
         exit;
