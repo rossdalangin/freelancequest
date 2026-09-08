@@ -76,4 +76,15 @@ class NativeFreelanceQuestTest extends TestCase
         $this->assertStringContainsString('FREELANCEQUEST', $output);
         $this->assertStringContainsString('MARKETING & SALES COLLATERAL', $output);
     }
+
+    public function testResumePrintViewRenders()
+    {
+        $controller = new \App\Controllers\ResumeBuilderController();
+        ob_start();
+        $controller->printView();
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('PRINT / SAVE RESUME PDF', $output);
+        $this->assertStringContainsString('Professional Summary', $output);
+    }
 }

@@ -20,7 +20,7 @@ class ResumeBuilderController
         $resume = $stmtR->fetch();
 
         if (!$resume) {
-            $stmtIns = $pdo->prepare("INSERT INTO resumes (user_id, title, full_name, professional_title, email, summary, skills, tools, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmtIns = $pdo->prepare("INSERT INTO resumes (user_id, title, full_name, professional_title, email, summary, skills, tools, experience, education) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $stmtIns->execute([
                 $user['id'],
                 'Virtual Assistant Resume',
@@ -37,6 +37,13 @@ class ResumeBuilderController
                         'period' => '2025 - Present',
                         'details' => 'Managed calendar scheduling, inbox organization, and web research projects with 99% accuracy.'
                     ]
+                ]),
+                json_encode([
+                    [
+                        'degree' => 'Bachelor of Science / General VA Certification',
+                        'institution' => 'FreelanceQuest Academy',
+                        'year' => '2025'
+                    ]
                 ])
             ]);
 
@@ -47,6 +54,7 @@ class ResumeBuilderController
         $resume['skills'] = json_decode($resume['skills'], true) ?? [];
         $resume['tools'] = json_decode($resume['tools'], true) ?? [];
         $resume['experience'] = json_decode($resume['experience'], true) ?? [];
+        $resume['education'] = json_decode($resume['education'], true) ?? [];
 
         require __DIR__ . '/../../views/resume/builder.php';
     }
@@ -81,5 +89,26 @@ class ResumeBuilderController
 
         header('Location: /resume-builder');
         exit;
+    }
+
+    public function printView()
+    {
+        $pdo = Database::getConnection();
+
+        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
+        $user = $stmtUser->fetch();
+
+        $stmtR = $pdo->prepare("SELECT * FROM resumes WHERE user_id = ?");
+        $stmtR->execute([$user['id']]);
+        $resume = $stmtR->fetch();
+
+        if ($resume) {
+            $resume['skills'] = json_decode($resume['skills'], true) ?? [];
+            $resume['tools'] = json_decode($resume['tools'], true) ?? [];
+            $resume['experience'] = json_decode($resume['experience'], true) ?? [];
+            $resume['education'] = json_decode($resume['education'], true) ?? [];
+        }
+
+        require __DIR__ . '/../../views/resume/print.php';
     }
 }

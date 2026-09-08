@@ -17,21 +17,21 @@ spl_autoload_register(function ($class) {
 
 use App\Router;
 use App\Controllers\DashboardController;
-use App\Controllers\MarketingController;
+use App\Controllers\ResumeBuilderController;
+use App\Controllers\CertificateController;
 
 $router = new Router();
 $router->get('/dashboard', [DashboardController::class, 'index']);
-$router->get('/marketing/doc/{doc}', [MarketingController::class, 'showDocument']);
+$router->get('/resume-builder/print', [ResumeBuilderController::class, 'printView']);
+$router->get('/verify/{code}/print', [CertificateController::class, 'printView']);
 
 ob_start();
-$_SERVER['REQUEST_METHOD'] = 'GET';
-$_SERVER['REQUEST_URI'] = '/marketing/doc/LANDING_PAGE_COPY.md';
-$router->dispatch('GET', '/marketing/doc/LANDING_PAGE_COPY.md');
+$router->dispatch('GET', '/resume-builder/print');
 $output = ob_get_clean();
 
-if (str_contains($output, 'MARKETING & SALES COLLATERAL') && str_contains($output, 'FREELANCEQUEST')) {
-    echo "Router & Marketing document test passed!\n";
+if (str_contains($output, 'PRINT / SAVE RESUME PDF')) {
+    echo "Resume print route test passed!\n";
 } else {
-    echo "Router simulation failed.\n";
+    echo "Resume print route test failed.\n";
     exit(1);
 }

@@ -54,13 +54,15 @@ $router->get('/mission/{id}', [LearningController::class, 'showMission']);
 $router->post('/mission/{id}/submit', [LearningController::class, 'submitMission']);
 
 $router->get('/resume-builder', [ResumeBuilderController::class, 'index']);
+$router->get('/resume-builder/print', [ResumeBuilderController::class, 'printView']);
 $router->post('/resume-builder', [ResumeBuilderController::class, 'update']);
 
 $router->get('/portfolio-builder', [PortfolioController::class, 'index']);
 $router->post('/portfolio-builder', [PortfolioController::class, 'update']);
-$router->get('/p/{username}', [PortfolioController::class, 'showPublic']);
+$router->get('/p/{username}', [PortfolioController::showPublic]);
 
 $router->get('/verify/{code}', [CertificateController::class, 'verify']);
+$router->get('/verify/{code}/print', [CertificateController::class, 'printView']);
 
 $router->get('/resources', [ResourceVaultController::class, 'index']);
 

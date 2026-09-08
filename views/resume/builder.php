@@ -1,10 +1,15 @@
 <?php require __DIR__ . '/../layout/header.php'; ?>
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-2xl space-y-6 shadow-xl">
-        <div class="border-b border-slate-800 pb-4">
-            <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">LEVEL 5 CAREER ASSET</span>
-            <h1 class="text-2xl font-extrabold text-white">INTERACTIVE RESUME BUILDER</h1>
-            <p class="text-xs text-slate-400">Build an ATS-optimized professional resume to win real client projects.</p>
+        <div class="border-b border-slate-800 pb-4 flex justify-between items-start">
+            <div>
+                <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">LEVEL 5 CAREER ASSET</span>
+                <h1 class="text-2xl font-extrabold text-white">INTERACTIVE RESUME BUILDER</h1>
+                <p class="text-xs text-slate-400">Build an ATS-optimized professional resume to win real client projects.</p>
+            </div>
+            <a href="/resume-builder/print" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-3.5 py-2 rounded-xl text-xs shadow-lg transition">
+                🖨️ PRINT / PDF
+            </a>
         </div>
 
         <form action="/resume-builder" method="POST" class="space-y-4">
