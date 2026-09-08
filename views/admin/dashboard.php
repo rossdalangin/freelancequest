@@ -28,6 +28,17 @@
             <span class="text-xs font-bold text-slate-400 uppercase">Knowledge Quizzes</span>
             <div class="text-3xl font-black text-amber-400"><?= $quizzesCount ?></div>
         </div>
+        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
+            <span class="text-xs font-bold text-slate-400 uppercase">Payments</span>
+            <div class="text-3xl font-black text-emerald-400"><?= $paymentsCount ?></div>
+        </div>
+    </div>
+
+    <!-- ADMIN QUICK NAVIGATION -->
+    <div class="flex items-center gap-4">
+        <a href="/admin/users" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">👥 Manage Users & Memberships</a>
+        <a href="/admin/payments" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">💳 Payments & Refunds</a>
+        <a href="/admin/logs" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">📜 Audit Logs & History</a>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">

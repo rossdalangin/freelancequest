@@ -140,14 +140,48 @@ function seedDatabase()
         $stmtQz->execute([$lesId, 'Knowledge Check: ' . $ld['title']]);
         $quizId = $pdo->lastInsertId();
 
-        $options = json_encode(['Save time for the client and communicate proactively', 'Wait for instructions without taking initiative', 'Charge high rates before delivering work', 'Ignore deadlines if busy']);
-        $stmtQn->execute([$quizId, 'What is the primary responsibility of a Virtual Assistant when handling client requests?', $options, 'Save time for the client and communicate proactively', 'Virtual Assistants succeed by saving clients time and communicating clearly.']);
+        // Generate lesson-specific quiz questions directly tied to the current lesson title and content
+        $options1 = json_encode([
+            "Consistently saving the client time in " . strtolower($ld['title']),
+            "Delaying tasks until the client follows up twice",
+            "Charging upfront fees without outlining deliverables",
+            "Disregarding client constraints and deadlines"
+        ]);
+        $stmtQn->execute([
+            $quizId,
+            "What is the core objective when executing tasks in '" . $ld['title'] . "'?",
+            $options1,
+            "Consistently saving the client time in " . strtolower($ld['title']),
+            "The primary value proposition of a Virtual Assistant is eliminating operational bottlenecks for the client."
+        ]);
 
-        $options2 = json_encode(['Responding within agreed timelines and proofreading messages', 'Using unprofessional slang in business emails', 'Sharing client credentials publicly', 'Missing meetings without notice']);
-        $stmtQn->execute([$quizId, 'Which of the following is considered a best practice for digital professionalism?', $options2, 'Responding within agreed timelines and proofreading messages', 'Prompt communication and accuracy build high professional trust.']);
+        $options2 = json_encode([
+            "Following standardized SOPs and self-auditing deliverables prior to submission",
+            "Sending unformatted draft documents without proofreading",
+            "Sharing confidential client login details over public forums",
+            "Ignoring unexpected technical issues"
+        ]);
+        $stmtQn->execute([
+            $quizId,
+            "Which Standard Operating Procedure (SOP) best practice applies to '" . $ld['title'] . "'?",
+            $options2,
+            "Following standardized SOPs and self-auditing deliverables prior to submission",
+            "Adhering to SOPs and verifying work accuracy ensures zero-defect quality control."
+        ]);
 
-        $options3 = json_encode(['Inform the client immediately and propose a practical solution', 'Hide the mistake', 'Blame external factors', 'Abandon the project']);
-        $stmtQn->execute([$quizId, 'What should you do if you encounter an unexpected problem during a client assignment?', $options3, 'Inform the client immediately and propose a practical solution', 'Clients appreciate transparency paired with immediate solutions.']);
+        $options3 = json_encode([
+            "Notify the client immediately and propose two actionable solution options",
+            "Attempt to hide the issue and hope the client does not notice",
+            "Blame external software tools without offering alternatives",
+            "Abandon the task completely"
+        ]);
+        $stmtQn->execute([
+            $quizId,
+            "If an unexpected obstacle occurs while managing '" . $ld['title'] . "', what is the correct response?",
+            $options3,
+            "Notify the client immediately and propose two actionable solution options",
+            "Proactive communication paired with clear solutions builds client trust and retention."
+        ]);
     }
 
     // 4. 50 Interactive Missions

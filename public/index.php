@@ -90,6 +90,11 @@ $router->get('/pricing', [SubscriptionController::class, 'index']);
 $router->post('/pricing/subscribe', [SubscriptionController::class, 'subscribe']);
 
 $router->get('/admin', [AdminController::class, 'index']);
+$router->get('/admin/users', [AdminController::class, 'manageUsers']);
+$router->post('/admin/users/{id}/plan', [AdminController::class, 'updateUserPlan']);
+$router->get('/admin/payments', [AdminController::class, 'managePayments']);
+$router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
+$router->get('/admin/logs', [AdminController::class, 'viewLogs']);
 $router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
 $router->get('/admin/export-data', [AdminController::class, 'exportData']);

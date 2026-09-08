@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use Database;
 use App\Services\SecurityService;
+use App\Services\DataManagementService;
 
 class SubscriptionController
 {
@@ -67,13 +68,34 @@ class SubscriptionController
         $pdo = Database::getConnection();
 
         $planName = $_POST['plan_name'] ?? 'pro';
-        $price = $planName === 'master' ? 49.00 : ($planName === 'pro' ? 19.00 : 0.00);
+        $paymentGateway = strtolower($_POST['payment_gateway'] ?? 'paypal');
+        if (!in_array($paymentGateway, ['paypal', 'stripe', 'gcash'])) {
+            $paymentGateway = 'paypal';
+        }
+
+        $amount = $planName === 'master' ? 49.00 : ($planName === 'pro' ? 19.00 : 0.00);
+
+        if ($amount > 0) {
+            $txnId = strtoupper($paymentGateway) . '-' . strtoupper(bin2hex(random_bytes(6)));
+
+            // Record Payment
+            $stmtPay = $pdo->prepare("INSERT INTO payments (user_id, payment_gateway, transaction_id, amount, currency, status, details) VALUES (?, ?, ?, ?, 'USD', 'completed', ?)");
+            $stmtPay->execute([
+                $user['id'],
+                $paymentGateway,
+                $txnId,
+                $amount,
+                json_encode(['plan' => $planName, 'gateway' => $paymentGateway, 'date' => date('Y-m-d H:i:s')])
+            ]);
+
+            DataManagementService::logActivity($user['id'], 'MEMBERSHIP_UPGRADE_PAYMENT', "Upgraded to {$planName} via {$paymentGateway} (\${$amount}). Txn: {$txnId}");
+        }
 
         $stmtUp = $pdo->prepare("UPDATE users SET subscription_tier = ?, subscription_ends_at = DATE('now', '+1 month') WHERE id = ?");
         $stmtUp->execute([$planName, $user['id']]);
 
         $stmtIns = $pdo->prepare("INSERT INTO subscriptions (user_id, plan_name, status, price, starts_at, ends_at) VALUES (?, ?, 'active', ?, DATE('now'), DATE('now', '+1 month'))");
-        $stmtIns->execute([$user['id'], $planName, $price]);
+        $stmtIns->execute([$user['id'], $planName, $amount]);
 
         header('Location: /dashboard');
         exit;

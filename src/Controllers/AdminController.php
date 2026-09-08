@@ -27,6 +27,7 @@ class AdminController
         $lessonsCount = $pdo->query("SELECT COUNT(*) FROM lessons")->fetchColumn();
         $missionsCount = $pdo->query("SELECT COUNT(*) FROM missions")->fetchColumn();
         $quizzesCount = $pdo->query("SELECT COUNT(*) FROM quizzes")->fetchColumn();
+        $paymentsCount = $pdo->query("SELECT COUNT(*) FROM payments")->fetchColumn();
 
         $latestUsers = $pdo->query("SELECT * FROM users ORDER BY id DESC LIMIT 5")->fetchAll();
 
@@ -38,6 +39,88 @@ class AdminController
         $auditLogs = DataManagementService::getAuditLogs(10);
 
         require __DIR__ . '/../../views/admin/dashboard.php';
+    }
+
+    public function manageUsers()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT * FROM users ORDER BY id DESC");
+        $users = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/users.php';
+    }
+
+    public function updateUserPlan(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $plan = $_POST['subscription_tier'] ?? 'free';
+        $role = $_POST['role'] ?? 'student';
+
+        $stmtUp = $pdo->prepare("UPDATE users SET subscription_tier = ?, role = ? WHERE id = ?");
+        $stmtUp->execute([$plan, $role, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_USER_PLAN_UPDATE', "Updated User #{$id} Plan to {$plan}, Role: {$role}");
+
+        header('Location: /admin/users');
+        exit;
+    }
+
+    public function managePayments()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT p.*, u.name as user_name, u.email as user_email FROM payments p JOIN users u ON p.user_id = u.id ORDER BY p.id DESC");
+        $payments = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/payments.php';
+    }
+
+    public function refundPayment(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $stmtPay = $pdo->prepare("SELECT * FROM payments WHERE id = ?");
+        $stmtPay->execute([$id]);
+        $payment = $stmtPay->fetch();
+
+        if ($payment) {
+            $stmtUp = $pdo->prepare("UPDATE payments SET status = 'refunded' WHERE id = ?");
+            $stmtUp->execute([$id]);
+
+            // Demote user to free tier
+            $stmtUser = $pdo->prepare("UPDATE users SET subscription_tier = 'free' WHERE id = ?");
+            $stmtUser->execute([$payment['user_id']]);
+
+            DataManagementService::logActivity($admin['id'], 'ADMIN_PAYMENT_REFUND', "Refunded Payment #{$id} (\${$payment['amount']}) for User #{$payment['user_id']}");
+        }
+
+        header('Location: /admin/payments');
+        exit;
+    }
+
+    public function viewLogs()
+    {
+        $admin = $this->checkAdminAuth();
+        $auditLogs = DataManagementService::getAuditLogs(100);
+
+        require __DIR__ . '/../../views/admin/logs.php';
     }
 
     public function updateSettings()

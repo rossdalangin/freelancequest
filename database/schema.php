@@ -7,6 +7,7 @@ function initializeSchema()
     $pdo = Database::getConnection();
 
     $queries = [
+        "DROP TABLE IF EXISTS payments;",
         "DROP TABLE IF EXISTS audit_logs;",
         "DROP TABLE IF EXISTS settings;",
         "DROP TABLE IF EXISTS subscriptions;",
@@ -297,6 +298,18 @@ function initializeSchema()
             price REAL DEFAULT 0.00,
             starts_at TEXT NOT NULL,
             ends_at TEXT
+        );",
+
+        "CREATE TABLE payments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            payment_gateway TEXT NOT NULL,
+            transaction_id TEXT UNIQUE NOT NULL,
+            amount REAL NOT NULL,
+            currency TEXT DEFAULT 'USD',
+            status TEXT DEFAULT 'completed',
+            details TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );",
 
         "CREATE TABLE settings (
