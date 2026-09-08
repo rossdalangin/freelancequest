@@ -94,7 +94,132 @@ class AdminController
         exit;
     }
 
+    public function deleteLesson(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM lessons WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_LESSON_DELETE', "Deleted lesson #{$id}");
+
+        header('Location: /admin/lessons');
+        exit;
+    }
+
     public function manageQuizzes()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT q.*, l.title as lesson_title FROM quizzes q LEFT JOIN lessons l ON q.lesson_id = l.id ORDER BY q.id DESC");
+        $quizzes = $stmt->fetchAll();
+
+        foreach ($quizzes as &$q) {
+            $stmtQn = $pdo->prepare("SELECT * FROM questions WHERE quiz_id = ?");
+            $stmtQn->execute([$q['id']]);
+            $q['questions'] = $stmtQn->fetchAll();
+            foreach ($q['questions'] as &$qn) {
+                $qn['options'] = json_decode($qn['options'], true) ?? [];
+            }
+        }
+
+        $lessons = $pdo->query("SELECT id, title FROM lessons")->fetchAll();
+
+        require __DIR__ . '/../../views/admin/quizzes.php';
+    }
+
+    public function deleteQuiz(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM quizzes WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_QUIZ_DELETE', "Deleted quiz #{$id}");
+
+        header('Location: /admin/quizzes');
+        exit;
+    }
+
+    public function addQuizQuestion(string $quizId)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $questionText = $_POST['question_text'] ?? '';
+        $options = array_filter(array_map('trim', explode("\n", $_POST['options'] ?? '')));
+        $correctOption = $_POST['correct_option'] ?? ($options[0] ?? '');
+        $explanation = $_POST['explanation'] ?? '';
+
+        if ($questionText && count($options) >= 2) {
+            $stmt = $pdo->prepare("INSERT INTO questions (quiz_id, question_text, options, correct_option, explanation) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$quizId, $questionText, json_encode(array_values($options)), $correctOption, $explanation]);
+
+            DataManagementService::logActivity($admin['id'], 'ADMIN_QUESTION_ADD', "Added question to quiz #{$quizId}");
+        }
+
+        header('Location: /admin/quizzes');
+        exit;
+    }
+
+    public function deleteQuestion(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM questions WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_QUESTION_DELETE', "Deleted question #{$id}");
+
+        header('Location: /admin/quizzes');
+        exit;
+    }
+
+    public function deleteMission(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM missions WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_MISSION_DELETE', "Deleted mission #{$id}");
+
+        header('Location: /admin/missions');
+        exit;
+    }
+
+    public function manageQuizzesOld()
     {
         $admin = $this->checkAdminAuth();
         $pdo = Database::getConnection();

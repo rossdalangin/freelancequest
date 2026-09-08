@@ -74,6 +74,12 @@
                     <td class="p-4 font-bold text-white"><?= htmlspecialchars($m['title']) ?></td>
                     <td class="p-4 font-bold uppercase text-indigo-400"><?= htmlspecialchars($m['type']) ?></td>
                     <td class="p-4 font-bold text-emerald-400">+<?= $m['xp_reward'] ?> XP &bull; +<?= $m['coin_reward'] ?> Coins</td>
+                    <td class="p-4">
+                        <form action="/admin/missions/<?= $m['id'] ?>/delete" method="POST" onsubmit="return confirm('Delete this mission?');">
+                            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                            <button type="submit" class="bg-red-600/20 text-red-400 hover:bg-red-600 hover:text-white font-bold px-2.5 py-1 rounded text-[10px] transition">DELETE</button>
+                        </form>
+                    </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
