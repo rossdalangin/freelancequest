@@ -9,10 +9,8 @@ class SubscriptionController
 {
     public function index()
     {
+        $user = AuthController::getCurrentUser();
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $plans = [
             [
@@ -59,15 +57,14 @@ class SubscriptionController
 
     public function subscribe()
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $planName = $_POST['plan_name'] ?? 'pro';
         $price = $planName === 'master' ? 49.00 : ($planName === 'pro' ? 19.00 : 0.00);

@@ -8,8 +8,19 @@ use App\Services\DataManagementService;
 
 class AdminController
 {
+    private function checkAdminAuth(): array
+    {
+        $user = AuthController::requireAuth();
+        if (($user['role'] ?? '') !== 'admin') {
+            http_response_code(403);
+            die("Access Denied: Administrator privileges required.");
+        }
+        return $user;
+    }
+
     public function index()
     {
+        $admin = $this->checkAdminAuth();
         $pdo = Database::getConnection();
 
         $usersCount = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
@@ -31,6 +42,8 @@ class AdminController
 
     public function updateSettings()
     {
+        $admin = $this->checkAdminAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -41,7 +54,7 @@ class AdminController
 
         DataManagementService::setSetting('xp_multiplier', $xpMult);
         DataManagementService::setSetting('streak_bonus_xp', $streakBonus);
-        DataManagementService::logActivity(1, 'SYSTEM_SETTINGS_UPDATE', "XP Multiplier: {$xpMult}, Streak Bonus: {$streakBonus}");
+        DataManagementService::logActivity($admin['id'], 'SYSTEM_SETTINGS_UPDATE', "XP Multiplier: {$xpMult}, Streak Bonus: {$streakBonus}");
 
         header('Location: /admin');
         exit;
@@ -49,6 +62,8 @@ class AdminController
 
     public function generateAiCourse()
     {
+        $admin = $this->checkAdminAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -66,7 +81,7 @@ class AdminController
         $stmtL = $pdo->prepare("INSERT INTO lessons (course_id, level_number, title, slug, summary, content, xp_reward, coin_reward) VALUES (?, 4, ?, ?, ?, ?, 100, 20)");
         $stmtL->execute([$courseId, 'Intro to ' . $topic, 'intro-' . $slug, 'Foundations of ' . $topic, "## " . $topic . "\n\nPractical guide."]);
 
-        DataManagementService::logActivity(1, 'AI_COURSE_GENERATED', "Topic: {$topic}");
+        DataManagementService::logActivity($admin['id'], 'AI_COURSE_GENERATED', "Topic: {$topic}");
 
         header('Location: /admin');
         exit;
@@ -74,6 +89,8 @@ class AdminController
 
     public function exportData()
     {
+        $admin = $this->checkAdminAuth();
+
         header('Content-Type: application/json');
         header('Content-Disposition: attachment; filename="freelancequest-backup-' . date('Y-m-d') . '.json"');
         echo DataManagementService::exportBackupJson();

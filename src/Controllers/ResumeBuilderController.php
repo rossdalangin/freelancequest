@@ -10,10 +10,8 @@ class ResumeBuilderController
 {
     public function index()
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $stmtR = $pdo->prepare("SELECT * FROM resumes WHERE user_id = ?");
         $stmtR->execute([$user['id']]);
@@ -61,15 +59,14 @@ class ResumeBuilderController
 
     public function update()
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $fullName = $_POST['full_name'] ?? $user['name'];
         $title = $_POST['professional_title'] ?? 'Virtual Assistant';
@@ -93,10 +90,8 @@ class ResumeBuilderController
 
     public function printView()
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $stmtR = $pdo->prepare("SELECT * FROM resumes WHERE user_id = ?");
         $stmtR->execute([$user['id']]);

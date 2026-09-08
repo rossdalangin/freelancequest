@@ -21,6 +21,15 @@ class NativeFreelanceQuestTest extends TestCase
     {
         seedDatabase();
         $_POST['csrf_token'] = \App\Services\SecurityService::getCsrfToken();
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->query("SELECT id FROM users WHERE role = 'student' LIMIT 1");
+        $studentId = $stmt->fetchColumn();
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+        $_SESSION['user_id'] = $studentId;
     }
 
     public function testDatabaseSeedingIntegrity()

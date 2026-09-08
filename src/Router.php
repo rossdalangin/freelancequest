@@ -20,11 +20,19 @@ class Router
     {
         $path = parse_url($uri, PHP_URL_PATH) ?? '/';
 
-        // Strip subdirectory prefix if running in XAMPP or subfolder (e.g. /freelancequest/public)
+        // Robustly strip subdirectory prefixes (e.g. /freelancequest or /freelancequest/public)
         if (isset($_SERVER['SCRIPT_NAME'])) {
-            $baseDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-            if ($baseDir !== '' && $baseDir !== '/' && str_starts_with($path, $baseDir)) {
-                $path = substr($path, strlen($baseDir));
+            $scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+
+            // Try matching full script directory (/freelancequest/public)
+            if ($scriptDir !== '' && $scriptDir !== '/' && str_starts_with($path, $scriptDir)) {
+                $path = substr($path, strlen($scriptDir));
+            } else {
+                // Try parent directory if request went through root rewrite (/freelancequest)
+                $parentDir = rtrim(dirname($scriptDir), '/\\');
+                if ($parentDir !== '' && $parentDir !== '/' && str_starts_with($path, $parentDir)) {
+                    $path = substr($path, strlen($parentDir));
+                }
             }
         }
 

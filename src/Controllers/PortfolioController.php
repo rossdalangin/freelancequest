@@ -10,10 +10,9 @@ class PortfolioController
 {
     public function index()
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
 
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
         $slug = $user['username'] ?? 'user-' . $user['id'];
 
         $stmtP = $pdo->prepare("SELECT * FROM portfolios WHERE user_id = ?");
@@ -46,15 +45,14 @@ class PortfolioController
 
     public function update()
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $title = $_POST['title'] ?? '';
         $tagline = $_POST['tagline'] ?? '';

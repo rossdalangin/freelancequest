@@ -22,6 +22,9 @@ spl_autoload_register(function ($class) {
 
 use App\Router;
 use App\Services\SecurityService;
+use App\Controllers\HomeController;
+use App\Controllers\AuthController;
+use App\Controllers\PageController;
 use App\Controllers\DashboardController;
 use App\Controllers\OnboardingController;
 use App\Controllers\LearningController;
@@ -39,7 +42,20 @@ SecurityService::startSecureSession();
 
 $router = new Router();
 
-$router->get('/', [DashboardController::class, 'index']);
+// Public Routes
+$router->get('/', [HomeController::class, 'index']);
+$router->get('/about', [PageController::class, 'about']);
+$router->get('/features', [PageController::class, 'features']);
+$router->get('/faq', [PageController::class, 'faq']);
+
+// Auth Routes
+$router->get('/login', [AuthController::class, 'showLogin']);
+$router->post('/login', [AuthController::class, 'processLogin']);
+$router->get('/register', [AuthController::class, 'showRegister']);
+$router->post('/register', [AuthController::class, 'processRegister']);
+$router->post('/logout', [AuthController::class, 'logout']);
+
+// Game Protected Routes
 $router->get('/dashboard', [DashboardController::class, 'index']);
 
 $router->get('/onboarding', [OnboardingController::class, 'index']);

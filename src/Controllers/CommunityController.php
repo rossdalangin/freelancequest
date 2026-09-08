@@ -10,6 +10,7 @@ class CommunityController
 {
     public function index()
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
 
         $stmtP = $pdo->query("SELECT cp.*, u.name as user_name, u.level as user_level FROM community_posts cp JOIN users u ON cp.user_id = u.id ORDER BY cp.id DESC LIMIT 20");
@@ -24,14 +25,13 @@ class CommunityController
         $stmtG = $pdo->query("SELECT * FROM groups");
         $groups = $stmtG->fetchAll();
 
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
-
         require __DIR__ . '/../../views/community/index.php';
     }
 
     public function storePost()
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -43,9 +43,6 @@ class CommunityController
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $title = $_POST['title'] ?? '';
         $content = $_POST['content'] ?? '';
@@ -65,6 +62,8 @@ class CommunityController
 
     public function storeComment(string $postId)
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -76,9 +75,6 @@ class CommunityController
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $content = $_POST['content'] ?? '';
 

@@ -11,6 +11,7 @@ class LearningController
 {
     public function index()
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
 
         $stmtC = $pdo->query("SELECT * FROM courses");
@@ -21,14 +22,12 @@ class LearningController
             $c['lessons'] = $stmtL->fetchAll();
         }
 
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
-
         require __DIR__ . '/../../views/learning/index.php';
     }
 
     public function showLesson(string $slug)
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
 
         $stmtL = $pdo->prepare("SELECT * FROM lessons WHERE slug = ?");
@@ -54,9 +53,6 @@ class LearningController
             }
         }
 
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
-
         $stmtProg = $pdo->prepare("SELECT * FROM lesson_progress WHERE user_id = ? AND lesson_id = ? AND completed = 1");
         $stmtProg->execute([$user['id'], $lesson['id']]);
         $isCompleted = (bool)$stmtProg->fetch();
@@ -66,6 +62,8 @@ class LearningController
 
     public function completeLesson(string $slug)
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -81,9 +79,6 @@ class LearningController
         $stmtL = $pdo->prepare("SELECT * FROM lessons WHERE slug = ?");
         $stmtL->execute([$slug]);
         $lesson = $stmtL->fetch();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $stmtCheck = $pdo->prepare("SELECT * FROM lesson_progress WHERE user_id = ? AND lesson_id = ?");
         $stmtCheck->execute([$user['id'], $lesson['id']]);
@@ -103,6 +98,8 @@ class LearningController
 
     public function submitQuiz(string $quizId)
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -114,9 +111,6 @@ class LearningController
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $stmtQ = $pdo->prepare("SELECT * FROM quizzes WHERE id = ?");
         $stmtQ->execute([$quizId]);
@@ -153,20 +147,20 @@ class LearningController
 
     public function showMission(string $id)
     {
+        $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
 
         $stmtM = $pdo->prepare("SELECT * FROM missions WHERE id = ?");
         $stmtM->execute([$id]);
         $mission = $stmtM->fetch();
 
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
-
         require __DIR__ . '/../../views/missions/show.php';
     }
 
     public function submitMission(string $id)
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
@@ -182,9 +176,6 @@ class LearningController
         $stmtM = $pdo->prepare("SELECT * FROM missions WHERE id = ?");
         $stmtM->execute([$id]);
         $mission = $stmtM->fetch();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $sub = $_POST['submission_text'] ?? '';
         $score = strlen(trim($sub)) > 20 ? 90 : 50;

@@ -9,20 +9,20 @@ class OnboardingController
 {
     public function index()
     {
+        $user = AuthController::requireAuth();
         require __DIR__ . '/../../views/onboarding/index.php';
     }
 
     public function store()
     {
+        $user = AuthController::requireAuth();
+
         if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
             http_response_code(403);
             die("Invalid CSRF Token.");
         }
 
         $pdo = Database::getConnection();
-
-        $stmtUser = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmtUser->fetch();
 
         $answers = [
             'experience_level' => $_POST['experience_level'] ?? '',

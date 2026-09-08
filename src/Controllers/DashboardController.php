@@ -9,17 +9,10 @@ class DashboardController
 {
     public function index()
     {
-        $pdo = Database::getConnection();
-
-        // Get student user or first user
-        $stmt = $pdo->query("SELECT * FROM users WHERE role = 'student' LIMIT 1");
-        $user = $stmt->fetch();
-        if (!$user) {
-            $stmt = $pdo->query("SELECT * FROM users LIMIT 1");
-            $user = $stmt->fetch();
-        }
-
+        $user = AuthController::requireAuth();
         $userId = $user['id'];
+
+        $pdo = Database::getConnection();
 
         $gameEngine = new GameEngineService();
         $quests = $gameEngine->generateDailyQuests($userId);
