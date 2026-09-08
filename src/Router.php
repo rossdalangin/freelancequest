@@ -65,12 +65,15 @@ class Router
 
     private function callHandler(callable|array $handler, array $params = []): void
     {
+        // Convert named route parameters to positional array values to avoid PHP 8.0+ named parameter mismatch
+        $args = array_values($params);
+
         if (is_array($handler)) {
             [$class, $method] = $handler;
             $controller = new $class();
-            call_user_func_array([$controller, $method], $params);
+            call_user_func_array([$controller, $method], $args);
         } else {
-            call_user_func_array($handler, $params);
+            call_user_func_array($handler, $args);
         }
     }
 }
