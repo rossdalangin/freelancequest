@@ -28,14 +28,45 @@ class Database
     private static function ensureSchemaExists(PDO $pdo): void
     {
         try {
+            // Check if users or payments table exists
             $stmt = $pdo->query("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='users'");
-            $exists = (int)$stmt->fetchColumn() > 0;
-            if (!$exists) {
+            $usersExist = (int)$stmt->fetchColumn() > 0;
+
+            if (!$usersExist) {
                 require_once __DIR__ . '/../database/seed.php';
                 seedDatabase();
+            } else {
+                // Ensure payments table exists on existing installations
+                $pdo->exec("CREATE TABLE IF NOT EXISTS payments (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    payment_gateway TEXT NOT NULL,
+                    transaction_id TEXT UNIQUE NOT NULL,
+                    amount REAL NOT NULL,
+                    currency TEXT DEFAULT 'USD',
+                    status TEXT DEFAULT 'completed',
+                    details TEXT,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS settings (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    key_name TEXT UNIQUE NOT NULL,
+                    value_text TEXT,
+                    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS audit_logs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+                    action TEXT NOT NULL,
+                    details TEXT,
+                    ip_address TEXT,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
             }
         } catch (Exception $e) {
-            // Ignore if seeding in progress
+            // Ignore if schema check in progress
         }
     }
 }
