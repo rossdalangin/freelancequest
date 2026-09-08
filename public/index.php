@@ -31,6 +31,7 @@ use App\Controllers\CommunityController;
 use App\Controllers\SubscriptionController;
 use App\Controllers\AdminController;
 use App\Controllers\ResourceVaultController;
+use App\Controllers\MarketingController;
 
 $router = new Router();
 
@@ -68,6 +69,9 @@ $router->post('/pricing/subscribe', [SubscriptionController::class, 'subscribe']
 
 $router->get('/admin', [AdminController::class, 'index']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
+
+$router->get('/marketing', [MarketingController::class, 'index']);
+$router->get('/marketing/doc/{doc}', [MarketingController::class, 'showDocument']);
 
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $uri = $_SERVER['REQUEST_URI'] ?? '/';

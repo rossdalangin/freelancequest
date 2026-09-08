@@ -17,19 +17,20 @@ spl_autoload_register(function ($class) {
 
 use App\Router;
 use App\Controllers\DashboardController;
-use App\Controllers\LearningController;
+use App\Controllers\MarketingController;
 
 $router = new Router();
 $router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/marketing/doc/{doc}', [MarketingController::class, 'showDocument']);
 
 ob_start();
 $_SERVER['REQUEST_METHOD'] = 'GET';
-$_SERVER['REQUEST_URI'] = '/dashboard';
-$router->dispatch('GET', '/dashboard');
+$_SERVER['REQUEST_URI'] = '/marketing/doc/LANDING_PAGE_COPY.md';
+$router->dispatch('GET', '/marketing/doc/LANDING_PAGE_COPY.md');
 $output = ob_get_clean();
 
-if (str_contains($output, 'FREELANCEQUEST')) {
-    echo "Router simulation test passed!\n";
+if (str_contains($output, 'MARKETING & SALES COLLATERAL') && str_contains($output, 'FREELANCEQUEST')) {
+    echo "Router & Marketing document test passed!\n";
 } else {
     echo "Router simulation failed.\n";
     exit(1);

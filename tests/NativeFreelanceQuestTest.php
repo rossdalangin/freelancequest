@@ -30,7 +30,7 @@ class NativeFreelanceQuestTest extends TestCase
         $levelCount = $pdo->query("SELECT COUNT(*) FROM levels")->fetchColumn();
 
         $this->assertEquals(2, $userCount);
-        $this->assertEquals(30, $lessonCount);
+        $this->assertEquals(34, $lessonCount);
         $this->assertEquals(16, $levelCount);
     }
 
@@ -63,5 +63,16 @@ class NativeFreelanceQuestTest extends TestCase
         $found = $stmtVerify->fetch();
 
         $this->assertNotEmpty($found);
+    }
+
+    public function testMarketingControllerRendersDocuments()
+    {
+        $controller = new \App\Controllers\MarketingController();
+        ob_start();
+        $controller->showDocument('LANDING_PAGE_COPY.md');
+        $output = ob_get_clean();
+
+        $this->assertStringContainsString('FREELANCEQUEST', $output);
+        $this->assertStringContainsString('MARKETING & SALES COLLATERAL', $output);
     }
 }

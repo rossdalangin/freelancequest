@@ -8,16 +8,16 @@ function seedDatabase()
     initializeSchema();
     $pdo = Database::getConnection();
 
-    echo "Seeding native database...\n";
+    echo "Seeding native database with expanded levels & resources...\n";
 
-    // 1. Levels 0 to 15
+    // 1. Seed Levels 0 to 15
     $levels = [
         ['level_number' => 0, 'title' => 'Career Zero', 'subtitle' => 'The Uninitiated', 'description' => 'Beginning your journey from scratch with zero experience.', 'required_xp' => 0, 'certificate_title' => null, 'icon' => '🌱'],
         ['level_number' => 1, 'title' => 'Explorer', 'subtitle' => 'The Discovery Phase', 'description' => 'Understanding Virtual Assistance, freelancing, and digital work fundamentals.', 'required_xp' => 100, 'certificate_title' => 'Freelancing Foundations Certificate', 'icon' => '🧭'],
         ['level_number' => 2, 'title' => 'Digital Survivor', 'subtitle' => 'Core Digital Tools', 'description' => 'Mastering Google Workspace, email, spreadsheets, calendar management, and cloud drive.', 'required_xp' => 500, 'certificate_title' => 'Digital Productivity Certificate', 'icon' => '💻'],
         ['level_number' => 3, 'title' => 'VA Apprentice', 'subtitle' => 'Core Administrative Support', 'description' => 'Data entry, customer support, internet research, lead generation, and CRM basics.', 'required_xp' => 1200, 'certificate_title' => 'Virtual Assistant Fundamentals', 'icon' => '⚡'],
-        ['level_number' => 4, 'title' => 'Specialist', 'subtitle' => 'Choose Your Career Niche', 'description' => 'Selecting a specialization: Social Media, Executive Admin, Lead Gen, E-commerce, WordPress.', 'required_xp' => 2200, 'certificate_title' => 'VA Specialist Certification', 'icon' => '🎯'],
-        ['level_number' => 5, 'title' => 'Job Ready', 'subtitle' => 'Professional Branding', 'description' => 'Crafting an irresistible resume, CV, headline, and bio.', 'required_xp' => 3500, 'certificate_title' => 'Job Ready Candidate Certificate', 'icon' => '📝'],
+        ['level_number' => 4, 'title' => 'Specialist', 'subtitle' => 'Choose Your Niche Track', 'description' => 'Selecting a specialization: Social Media, Executive Admin, Lead Gen, E-commerce, WordPress.', 'required_xp' => 2200, 'certificate_title' => 'VA Specialist Certification', 'icon' => '🎯'],
+        ['level_number' => 5, 'title' => 'Job Ready', 'subtitle' => 'Professional Candidate Branding', 'description' => 'Crafting an irresistible resume, CV, headline, and bio.', 'required_xp' => 3500, 'certificate_title' => 'Job Ready Candidate Certificate', 'icon' => '📝'],
         ['level_number' => 6, 'title' => 'Portfolio Builder', 'subtitle' => 'Visual Proof of Competence', 'description' => 'Building work samples, case studies, testimonials, and a public portfolio website.', 'required_xp' => 5000, 'certificate_title' => 'Certified Portfolio Developer', 'icon' => '🎨'],
         ['level_number' => 7, 'title' => 'Application Academy', 'subtitle' => 'Opportunity Finding', 'description' => 'Navigating job boards, analyzing descriptions, avoiding scams, and proposal strategy.', 'required_xp' => 7000, 'certificate_title' => 'Freelance Job Acquisition Certificate', 'icon' => '🔍'],
         ['level_number' => 8, 'title' => 'Proposal Master', 'subtitle' => 'Winning Client Interest', 'description' => 'Writing irresistible, high-converting client proposals and pitches.', 'required_xp' => 9500, 'certificate_title' => 'Master Proposal Writer', 'icon' => '💌'],
@@ -63,7 +63,7 @@ function seedDatabase()
         $stmtSk->execute([$s['category_id'], $s['name'], $s['slug'], $s['description']]);
     }
 
-    // 3. Courses & 30+ Lessons
+    // 3. Courses & Expanded Lessons for Levels 1 - 15
     $stmtC = $pdo->prepare("INSERT INTO courses (title, slug, description, level_number, category) VALUES (?, ?, ?, ?, ?)");
     $stmtC->execute(['Freelancing & VA Foundations', 'foundations', 'Master the basics of remote virtual assistance.', 1, 'Foundations']);
     $c1 = $pdo->lastInsertId();
@@ -73,6 +73,12 @@ function seedDatabase()
 
     $stmtC->execute(['Core Administrative Support', 'admin-support', 'High demand core VA tasks and client workflows.', 3, 'Admin']);
     $c3 = $pdo->lastInsertId();
+
+    $stmtC->execute(['Specialist Tracks & Niche Mastery', 'specialist-tracks', 'Deep dive into specialized high-value VA niches.', 4, 'Specialist']);
+    $c4 = $pdo->lastInsertId();
+
+    $stmtC->execute(['Client Acquisition & Business Mastery', 'client-acquisition-mastery', 'Advanced sales, negotiation, pricing, and agency building.', 10, 'Business']);
+    $c5 = $pdo->lastInsertId();
 
     $lessonsData = [
         // Level 1
@@ -110,6 +116,14 @@ function seedDatabase()
         ['course_id' => $c3, 'level' => 3, 'title' => 'Social Media VA Basics (Canva & Scheduling)', 'slug' => 'social-media-va-basics', 'summary' => 'Creating graphics on Canva, scheduling posts on Buffer/Metricool.', 'xp' => 70, 'coins' => 15],
         ['course_id' => $c3, 'level' => 3, 'title' => 'WordPress Publishing & Basic Content Updates', 'slug' => 'wordpress-publishing-basics', 'summary' => 'Gutenberg editor, adding featured images, publishing blogs.', 'xp' => 70, 'coins' => 15],
         ['course_id' => $c3, 'level' => 3, 'title' => 'Level 3 Review: VA Apprenticeship Mastery', 'slug' => 'level-3-review', 'summary' => 'Becoming a fully competent generalist Virtual Assistant.', 'xp' => 100, 'coins' => 30],
+
+        // Level 4 Specialist
+        ['course_id' => $c4, 'level' => 4, 'title' => 'Executive VA Masterclass', 'slug' => 'executive-va-masterclass', 'summary' => 'High level C-suite support, inbox management, gatekeeping, confidential operations.', 'xp' => 120, 'coins' => 35],
+        ['course_id' => $c4, 'level' => 4, 'title' => 'Social Media & Graphic Creation Specialist', 'slug' => 'social-media-specialist-track', 'summary' => 'Canva Pro design secrets, content calendars, analytics reporting, and community moderation.', 'xp' => 120, 'coins' => 35],
+
+        // Level 10-15 Advanced Business
+        ['course_id' => $c5, 'level' => 10, 'title' => 'High Ticket Cold Outreach & Pitching', 'slug' => 'cold-outreach-pitching', 'summary' => 'Finding decision makers, personalized Loom videos, cold email templates.', 'xp' => 150, 'coins' => 50],
+        ['course_id' => $c5, 'level' => 14, 'title' => 'Building & Scaling Your Virtual VA Agency', 'slug' => 'building-virtual-va-agency', 'summary' => 'Subcontracting, SOP systems, pricing packages, profit margins, team leadership.', 'xp' => 250, 'coins' => 100],
     ];
 
     $stmtLes = $pdo->prepare("INSERT INTO lessons (course_id, level_number, title, slug, summary, content, xp_reward, coin_reward, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -118,7 +132,7 @@ function seedDatabase()
 
     $sort = 1;
     foreach ($lessonsData as $ld) {
-        $content = "## What is " . $ld['title'] . "?\n\nThis lesson covers actionable strategies, practical step-by-step examples, and practical workflows for Virtual Assistants.\n\n### Core Principles\n- **Understand the Client Need**: Always focus on saving the client time.\n- **Attention to Detail**: Precision builds trust.\n- **Proactive Communication**: Update early and often.\n\n### Practical Example\nWhen tasked with managing inbox messages, categorize emails into: Action Required, Waiting on Response, Reference/Archive.\n\n### Real World Mission\nApply these learnings in the accompanying interactive mission below!";
+        $content = "## What is " . $ld['title'] . "?\n\nThis comprehensive lesson covers actionable strategies, practical step-by-step examples, and practical workflows for Virtual Assistants.\n\n### Core Principles\n- **Understand the Client Need**: Always focus on saving the client time.\n- **Attention to Detail**: Precision builds trust.\n- **Proactive Communication**: Update early and often.\n\n### Practical Example\nWhen tasked with managing inbox messages, categorize emails into: Action Required, Waiting on Response, Reference/Archive.\n\n### Real World Mission\nApply these learnings in the accompanying interactive mission below!";
 
         $stmtLes->execute([$ld['course_id'], $ld['level'], $ld['title'], $ld['slug'], $ld['summary'], $content, $ld['xp'], $ld['coins'], $sort++]);
         $lesId = $pdo->lastInsertId();
@@ -188,6 +202,8 @@ function seedDatabase()
     $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (3, 'Client Onboarding SOP Checklist', 'Professional checklist for onboarding new client projects.', 'template', 'https://freelancequest.test/resources/onboarding-sop.docx', 0);");
     $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (5, 'High-Converting VA Resume Template (Word/PDF)', 'ATS-friendly resume layout designed specifically for remote VAs.', 'template', 'https://freelancequest.test/resources/va-resume-template.docx', 1);");
     $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (8, '10 Winning Upwork Proposal Scripts', 'Proven proposal templates that earned over $100k in freelancing.', 'script', 'https://freelancequest.test/resources/winning-proposals.pdf', 1);");
+    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (11, 'Client Service Agreement & Contract Template', 'Standard freelance agreement covering payment terms and scope limits.', 'template', 'https://freelancequest.test/resources/contract-template.docx', 1);");
+    $pdo->exec("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (14, 'Virtual Agency SOP Operations Manual', 'Standard Operating Procedures for hiring subcontractors and managing agency workflows.', 'manual', 'https://freelancequest.test/resources/agency-sop-manual.pdf', 1);");
 
     $pdo->exec("INSERT INTO groups (name, slug, description, icon) VALUES ('Beginner VA Lounge', 'beginner-va', 'A welcoming community for beginners starting their remote journey.', '🌱');");
     $pdo->exec("INSERT INTO groups (name, slug, description, icon) VALUES ('WordPress & Tech VAs', 'tech-vas', 'Technical support, website management, and troubleshooting.', '💻');");
@@ -198,7 +214,7 @@ function seedDatabase()
     $pdo->exec("INSERT INTO users (name, email, password, role, username, headline, bio, level, xp, coins, streak_count, subscription_tier) VALUES ('Admin Boss', 'admin@freelancequest.com', '$pass', 'admin', 'adminboss', 'Lead Product Architect & Instructor', 'Building top tier VAs.', 15, 50000, 9999, 30, 'master');");
     $pdo->exec("INSERT INTO users (name, email, password, role, username, headline, bio, level, xp, coins, streak_count, subscription_tier) VALUES ('Maria Santos', 'maria@example.com', '$pass', 'student', 'mariasantos', 'Aspiring Administrative & Research VA', 'Eager to help founders.', 3, 1350, 280, 12, 'pro');");
 
-    echo "Seeding completed successfully.\n";
+    echo "Expanded database seeding completed successfully.\n";
 }
 
 if (basename(__FILE__) == basename($_SERVER['PHP_SELF'])) {
