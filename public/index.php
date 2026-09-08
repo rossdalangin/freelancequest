@@ -97,17 +97,25 @@ $router->get('/admin/users', [AdminController::class, 'manageUsers']);
 $router->post('/admin/users/{id}/plan', [AdminController::class, 'updateUserPlan']);
 $router->get('/admin/lessons', [AdminController::class, 'manageLessons']);
 $router->post('/admin/lessons/create', [AdminController::class, 'createLesson']);
+$router->post('/admin/lessons/{id}/edit', [AdminController::class, 'editLesson']);
 $router->post('/admin/lessons/{id}/delete', [AdminController::class, 'deleteLesson']);
 
 $router->get('/admin/quizzes', [AdminController::class, 'manageQuizzes']);
 $router->post('/admin/quizzes/create', [AdminController::class, 'createQuiz']);
+$router->post('/admin/quizzes/{id}/edit', [AdminController::class, 'editQuiz']);
 $router->post('/admin/quizzes/{id}/delete', [AdminController::class, 'deleteQuiz']);
 $router->post('/admin/quizzes/{id}/question/add', [AdminController::class, 'addQuizQuestion']);
 $router->post('/admin/questions/{id}/delete', [AdminController::class, 'deleteQuestion']);
 
 $router->get('/admin/missions', [AdminController::class, 'manageMissions']);
 $router->post('/admin/missions/create', [AdminController::class, 'createMission']);
+$router->post('/admin/missions/{id}/edit', [AdminController::class, 'editMission']);
 $router->post('/admin/missions/{id}/delete', [AdminController::class, 'deleteMission']);
+
+$router->get('/admin/resources', [AdminController::class, 'manageResources']);
+$router->post('/admin/resources/create', [AdminController::class, 'createResource']);
+$router->post('/admin/resources/{id}/edit', [AdminController::class, 'editResource']);
+$router->post('/admin/resources/{id}/delete', [AdminController::class, 'deleteResource']);
 $router->get('/admin/payments', [AdminController::class, 'managePayments']);
 $router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
 $router->get('/admin/logs', [AdminController::class, 'viewLogs']);

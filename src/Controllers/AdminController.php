@@ -100,6 +100,34 @@ class AdminController
         exit;
     }
 
+    public function editLesson(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $courseId = $_POST['course_id'] ?? 1;
+        $levelNum = $_POST['level_number'] ?? 1;
+        $summary = $_POST['summary'] ?? '';
+        $content = $_POST['content'] ?? '';
+        $xpReward = $_POST['xp_reward'] ?? 50;
+        $coinReward = $_POST['coin_reward'] ?? 10;
+
+        $stmt = $pdo->prepare("UPDATE lessons SET course_id = ?, level_number = ?, title = ?, summary = ?, content = ?, xp_reward = ?, coin_reward = ? WHERE id = ?");
+        $stmt->execute([$courseId, $levelNum, $title, $summary, $content, $xpReward, $coinReward, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_LESSON_EDIT', "Updated lesson #{$id}: {$title}");
+
+        header('Location: /admin/lessons');
+        exit;
+    }
+
     public function deleteLesson(string $id)
     {
         $admin = $this->checkAdminAuth();
@@ -187,6 +215,31 @@ class AdminController
         exit;
     }
 
+    public function editQuiz(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $lessonId = $_POST['lesson_id'] ?? 1;
+        $title = $_POST['title'] ?? '';
+        $xpReward = $_POST['xp_reward'] ?? 100;
+        $coinReward = $_POST['coin_reward'] ?? 25;
+
+        $stmt = $pdo->prepare("UPDATE quizzes SET lesson_id = ?, title = ?, xp_reward = ?, coin_reward = ? WHERE id = ?");
+        $stmt->execute([$lessonId, $title, $xpReward, $coinReward, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_QUIZ_EDIT', "Updated quiz #{$id}: {$title}");
+
+        header('Location: /admin/quizzes');
+        exit;
+    }
+
     public function deleteQuestion(string $id)
     {
         $admin = $this->checkAdminAuth();
@@ -220,6 +273,34 @@ class AdminController
         $stmt->execute([$id]);
 
         DataManagementService::logActivity($admin['id'], 'ADMIN_MISSION_DELETE', "Deleted mission #{$id}");
+
+        header('Location: /admin/missions');
+        exit;
+    }
+
+    public function editMission(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $levelNum = $_POST['level_number'] ?? 1;
+        $type = $_POST['type'] ?? 'interactive';
+        $scenario = $_POST['scenario'] ?? '';
+        $instructions = $_POST['instructions'] ?? '';
+        $xpReward = $_POST['xp_reward'] ?? 250;
+        $coinReward = $_POST['coin_reward'] ?? 50;
+
+        $stmt = $pdo->prepare("UPDATE missions SET level_number = ?, title = ?, type = ?, scenario = ?, instructions = ?, xp_reward = ?, coin_reward = ? WHERE id = ?");
+        $stmt->execute([$levelNum, $title, $type, $scenario, $instructions, $xpReward, $coinReward, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_MISSION_EDIT', "Updated mission #{$id}: {$title}");
 
         header('Location: /admin/missions');
         exit;
@@ -260,6 +341,90 @@ class AdminController
         DataManagementService::logActivity($admin['id'], 'ADMIN_QUIZ_CREATE', "Created quiz: {$title}");
 
         header('Location: /admin/quizzes');
+        exit;
+    }
+
+    public function manageResources()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT * FROM resources ORDER BY level_number ASC, id DESC");
+        $resources = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/resources.php';
+    }
+
+    public function createResource()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $desc = $_POST['description'] ?? '';
+        $levelNum = $_POST['level_number'] ?? 1;
+        $type = $_POST['type'] ?? 'pdf';
+        $fileUrl = $_POST['file_content_or_url'] ?? '';
+        $isPremium = isset($_POST['is_premium']) ? 1 : 0;
+
+        $stmt = $pdo->prepare("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$levelNum, $title, $desc, $type, $fileUrl, $isPremium]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_RESOURCE_CREATE', "Created resource: {$title}");
+
+        header('Location: /admin/resources');
+        exit;
+    }
+
+    public function editResource(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $desc = $_POST['description'] ?? '';
+        $levelNum = $_POST['level_number'] ?? 1;
+        $type = $_POST['type'] ?? 'pdf';
+        $fileUrl = $_POST['file_content_or_url'] ?? '';
+        $isPremium = isset($_POST['is_premium']) ? 1 : 0;
+
+        $stmt = $pdo->prepare("UPDATE resources SET level_number = ?, title = ?, description = ?, type = ?, file_content_or_url = ?, is_premium = ? WHERE id = ?");
+        $stmt->execute([$levelNum, $title, $desc, $type, $fileUrl, $isPremium, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_RESOURCE_EDIT', "Updated resource #{$id}: {$title}");
+
+        header('Location: /admin/resources');
+        exit;
+    }
+
+    public function deleteResource(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM resources WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_RESOURCE_DELETE', "Deleted resource #{$id}");
+
+        header('Location: /admin/resources');
         exit;
     }
 
