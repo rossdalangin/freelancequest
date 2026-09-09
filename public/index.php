@@ -157,6 +157,7 @@ $router->get('/admin/logs', [AdminController::class, 'viewLogs']);
 $router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
 $router->get('/admin/export-data', [AdminController::class, 'exportData']);
+$router->post('/admin/reseed-database', [AdminController::class, 'reseedDatabase']);
 
 $router->get('/marketing', [MarketingController::class, 'index']);
 $router->get('/marketing/doc/{doc}', [MarketingController::class, 'showDocument']);

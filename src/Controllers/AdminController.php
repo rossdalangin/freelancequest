@@ -699,4 +699,22 @@ class AdminController
         echo DataManagementService::exportBackupJson();
         exit;
     }
+
+    public function reseedDatabase()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        require_once __DIR__ . '/../../database/seed.php';
+        seedDatabase();
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_DATABASE_RESEED', "Triggered full database reseed for all course levels, lessons, quizzes, and resources.");
+
+        header('Location: /admin');
+        exit;
+    }
 }

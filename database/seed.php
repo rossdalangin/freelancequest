@@ -633,17 +633,23 @@ function seedDatabase()
         $stmtB->execute([$b['name'], $b['slug'], $b['description'], $b['icon'], $b['category'], $b['xp_bonus']]);
     }
 
-    // 6. Resources Vault Items
+    // 6. Resources Vault Items across Course Levels
     $resources = [
-        ['level_number' => 1, 'title' => 'Virtual Assistant Starter Playbook (PDF)', 'description' => 'Complete beginner guide to setting up your VA career.', 'type' => 'pdf', 'file_content_or_url' => '/docs/PLATFORM_MANUAL.md', 'is_premium' => false],
-        ['level_number' => 2, 'title' => 'Google Workspace Keyboard Shortcuts Cheat Sheet', 'description' => 'Boost your typing speed and efficiency instantly.', 'type' => 'cheat_sheet', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => false],
-        ['level_number' => 3, 'title' => 'Client Onboarding SOP Checklist', 'description' => 'Professional checklist for onboarding new client projects.', 'type' => 'template', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => false],
+        ['level_number' => 1, 'title' => 'Virtual Assistant Starter Playbook', 'description' => 'Complete beginner guide to setting up your VA career and service menu.', 'type' => 'pdf', 'file_content_or_url' => '/docs/PLATFORM_MANUAL.md', 'is_premium' => false],
+        ['level_number' => 2, 'title' => 'Google Workspace Keyboard Shortcuts Cheat Sheet', 'description' => 'Boost your typing speed and cloud efficiency instantly.', 'type' => 'cheat_sheet', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => false],
+        ['level_number' => 3, 'title' => 'Client Onboarding SOP Checklist', 'description' => 'Professional checklist for onboarding new client projects without friction.', 'type' => 'template', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => false],
         ['level_number' => 4, 'title' => 'Canva & Social Media Content Calendar Template', 'description' => 'Monthly social content planning grid for Social Media VAs.', 'type' => 'template', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => false],
         ['level_number' => 5, 'title' => 'High-Converting ATS VA Resume Template', 'description' => 'ATS-friendly resume layout designed specifically for remote VAs.', 'type' => 'template', 'file_content_or_url' => '/resume-builder/print', 'is_premium' => true],
+        ['level_number' => 6, 'title' => 'Portfolio Case Study Builder Framework', 'description' => 'Structured template for writing Problem-Solution-Result case studies.', 'type' => 'template', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
+        ['level_number' => 7, 'title' => 'Scam Detection & Client Vetting Checklist', 'description' => 'Red flag screening checklist for evaluating job offers and client verification.', 'type' => 'checklist', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => false],
         ['level_number' => 8, 'title' => '10 Winning Proposal & Pitch Scripts', 'description' => 'Proven proposal templates that earned over $100k in freelancing.', 'type' => 'script', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
+        ['level_number' => 9, 'title' => 'STAR Interview Response Preparation Sheet', 'description' => 'Behavioral interview question prep worksheet using the STAR framework.', 'type' => 'worksheet', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
+        ['level_number' => 10, 'title' => 'High Ticket Loom Cold Audit Script', 'description' => '90-second video audit framework for pitching founders directly.', 'type' => 'script', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
         ['level_number' => 11, 'title' => 'Client Service Agreement & Contract Template', 'description' => 'Standard freelance agreement covering payment terms and scope limits.', 'type' => 'template', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => true],
-        ['level_number' => 12, 'title' => 'Hourly Rate & Retainer Calculator (Worksheet)', 'description' => 'Calculate your exact hourly rates and monthly retainer packages.', 'type' => 'calculator', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
+        ['level_number' => 12, 'title' => 'Hourly Rate & Retainer Calculator Worksheet', 'description' => 'Calculate your exact hourly rates and monthly retainer packages.', 'type' => 'calculator', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
+        ['level_number' => 13, 'title' => 'Monthly Client ROI Review Presentation Deck', 'description' => 'Slide deck framework for presenting monthly ROI to retainer accounts.', 'type' => 'template', 'file_content_or_url' => '/docs/TUTORIALS_AND_GUIDES.md', 'is_premium' => true],
         ['level_number' => 14, 'title' => 'Virtual Agency SOP Operations Manual', 'description' => 'Standard Operating Procedures for hiring subcontractors and managing agency workflows.', 'type' => 'manual', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => true],
+        ['level_number' => 15, 'title' => '6-Figure Business Automation Playbook', 'description' => 'Advanced Zapier, Make, and AI workflow integration manual.', 'type' => 'manual', 'file_content_or_url' => '/docs/SOPS_AND_CHECKLISTS.md', 'is_premium' => true],
     ];
 
     $stmtRes = $pdo->prepare("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (?, ?, ?, ?, ?, ?)");

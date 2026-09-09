@@ -5,9 +5,17 @@
             <h1 class="text-3xl font-extrabold text-white">ADMIN CONTROL CENTER</h1>
             <p class="text-slate-400 text-sm">System management, analytics, audit logs, and data exports.</p>
         </div>
-        <a href="/admin/export-data" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition flex items-center gap-2">
-            📥 EXPORT SYSTEM BACKUP (JSON)
-        </a>
+        <div class="flex flex-wrap items-center gap-3">
+            <form action="/admin/reseed-database" method="POST" onsubmit="return confirm('Are you sure you want to update and re-seed all course levels, lessons, quizzes, and resources?');">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition flex items-center gap-2">
+                    🔄 RE-SEED & UPDATE DATABASE
+                </button>
+            </form>
+            <a href="/admin/export-data" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition flex items-center gap-2">
+                📥 EXPORT SYSTEM BACKUP (JSON)
+            </a>
+        </div>
     </div>
 
     <!-- Analytics Cards -->
