@@ -9,15 +9,22 @@
 
     <?php foreach ($courses as $course): ?>
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-4 gap-4">
             <div>
                 <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest">COURSE LEVEL <?= $course['level_number'] ?></span>
                 <h2 class="text-xl font-extrabold text-white"><?= htmlspecialchars($course['title']) ?></h2>
                 <p class="text-xs text-slate-400"><?= htmlspecialchars($course['description']) ?></p>
             </div>
-            <span class="text-xs bg-slate-800 text-slate-300 font-bold px-3 py-1 rounded-full border border-slate-700">
-                <?= count($course['lessons']) ?> Lessons
-            </span>
+            <div class="flex items-center gap-3">
+                <?php if (!empty($course['certificate'])): ?>
+                    <a href="/verify/<?= htmlspecialchars($course['certificate']['certificate_code']) ?>" target="_blank" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs shadow-lg transition flex items-center gap-1.5">
+                        📜 DOWNLOAD LEVEL CERTIFICATE
+                    </a>
+                <?php endif; ?>
+                <span class="text-xs bg-slate-800 text-slate-300 font-bold px-3 py-1.5 rounded-full border border-slate-700">
+                    <?= count($course['lessons']) ?> Lessons
+                </span>
+            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

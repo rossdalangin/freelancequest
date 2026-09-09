@@ -16,10 +16,29 @@ class LearningController
 
         $stmtC = $pdo->query("SELECT * FROM courses");
         $courses = $stmtC->fetchAll();
+        $certService = new CertificateService();
+
         foreach ($courses as &$c) {
             $stmtL = $pdo->prepare("SELECT * FROM lessons WHERE course_id = ? ORDER BY sort_order ASC");
             $stmtL->execute([$c['id']]);
             $c['lessons'] = $stmtL->fetchAll();
+
+            // Check if user completed all lessons in this course
+            $totalLessons = count($c['lessons']);
+            $stmtComp = $pdo->prepare("SELECT COUNT(*) FROM lesson_progress lp JOIN lessons l ON lp.lesson_id = l.id WHERE lp.user_id = ? AND l.course_id = ? AND lp.completed = 1");
+            $stmtComp->execute([$user['id'], $c['id']]);
+            $completedLessons = (int)$stmtComp->fetchColumn();
+
+            $c['is_completed'] = ($totalLessons > 0 && $completedLessons >= $totalLessons);
+            $c['certificate'] = null;
+
+            if ($c['is_completed']) {
+                // Auto-issue certificate for completing all lessons in this course level
+                $c['certificate'] = $certService->generateCertificate($user['id'], $c['level_number'], $c['title'] . ' Completion Certificate', [
+                    'Course Level' => $c['level_number'],
+                    'Lessons Completed' => $totalLessons . '/' . $totalLessons
+                ]);
+            }
         }
 
         require __DIR__ . '/../../views/learning/index.php';
@@ -138,19 +157,27 @@ class LearningController
         $score = $total > 0 ? round(($correct / $total) * 100) : 0;
         $passed = $score >= $quiz['passing_score'];
 
+        // Check previous highest passed score to prevent unlimited points farming
+        $stmtPrev = $pdo->prepare("SELECT MAX(score) as max_score FROM quiz_attempts WHERE user_id = ? AND quiz_id = ? AND passed = 1");
+        $stmtPrev->execute([$user['id'], $quizId]);
+        $prevMaxScore = (int) ($stmtPrev->fetchColumn() ?? 0);
+
         $stmtIns = $pdo->prepare("INSERT INTO quiz_attempts (user_id, quiz_id, score, passed) VALUES (?, ?, ?, ?)");
         $stmtIns->execute([$user['id'], $quizId, $score, $passed ? 1 : 0]);
 
-        if ($passed) {
-            // Compute exact XP and Coins proportional to quiz score percentage
+        if ($passed && $score > $prevMaxScore) {
+            // Only award XP/Coins for score improvements above previous best score
+            $scoreDelta = $score - $prevMaxScore;
             $quizCoinReward = $quiz['coin_reward'] ?? 25;
             $quizXpReward = $quiz['xp_reward'] ?? 100;
 
-            $earnedXP = (int) round(($score / 100) * $quizXpReward);
-            $earnedCoins = (int) round(($score / 100) * $quizCoinReward);
+            $earnedXP = (int) round(($scoreDelta / 100) * $quizXpReward);
+            $earnedCoins = (int) round(($scoreDelta / 100) * $quizCoinReward);
 
-            $gameEngine = new GameEngineService();
-            $gameEngine->awardXPAndCoins($user['id'], $earnedXP, $earnedCoins);
+            if ($earnedXP > 0 || $earnedCoins > 0) {
+                $gameEngine = new GameEngineService();
+                $gameEngine->awardXPAndCoins($user['id'], $earnedXP, $earnedCoins);
+            }
         }
 
         header('Location: /dashboard');
