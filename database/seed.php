@@ -77,8 +77,11 @@ function seedDatabase()
     $stmtC->execute(['Specialist Tracks & Niche Mastery', 'specialist-tracks', 'Deep dive into specialized high-value VA niches.', 4, 'Specialist']);
     $c4 = $pdo->lastInsertId();
 
-    $stmtC->execute(['Client Acquisition & Business Mastery', 'client-acquisition-mastery', 'Advanced sales, negotiation, pricing, and agency building.', 10, 'Business']);
+    $stmtC->execute(['Candidate Branding & Resume Mastery', 'candidate-branding', 'ATS resumes, cover letters, and portfolio showcases.', 5, 'Branding']);
     $c5 = $pdo->lastInsertId();
+
+    $stmtC->execute(['Client Acquisition & Business Mastery', 'client-acquisition-mastery', 'Advanced sales, negotiation, pricing, and agency building.', 10, 'Business']);
+    $c6 = $pdo->lastInsertId();
 
     $lessonsData = [
         // Level 1
@@ -87,43 +90,56 @@ function seedDatabase()
         ['course_id' => $c1, 'level' => 1, 'title' => 'Types of Clients & Platforms', 'slug' => 'types-of-clients-and-platforms', 'summary' => 'Upwork, Fiverr, OnlineJobs.ph, and direct client outreach explained.', 'xp' => 50, 'coins' => 10],
         ['course_id' => $c1, 'level' => 1, 'title' => 'Common VA Career Paths & Niche Specializations', 'slug' => 'va-career-paths', 'summary' => 'Explore Admin, Social Media, Real Estate, E-commerce, and Executive VA roles.', 'xp' => 50, 'coins' => 10],
         ['course_id' => $c1, 'level' => 1, 'title' => 'Essential Digital Professionalism', 'slug' => 'digital-professionalism', 'summary' => 'Response speed, tone of voice, netiquette, and reliability.', 'xp' => 50, 'coins' => 10],
-        ['course_id' => $c1, 'level' => 1, 'title' => 'Setting Up Your Home Office & Workstation', 'slug' => 'home-office-setup', 'summary' => 'Hardware, backup internet, power backup, and ergonomics.', 'xp' => 50, 'coins' => 10],
-        ['course_id' => $c1, 'level' => 1, 'title' => 'Understanding Freelancing Terminology', 'slug' => 'freelancing-terminology', 'summary' => 'SOW, Retainer, Scope Creep, Hourly vs Fixed, Deliverables.', 'xp' => 50, 'coins' => 10],
-        ['course_id' => $c1, 'level' => 1, 'title' => 'Basic Cybersecurity & Password Hygiene', 'slug' => 'cybersecurity-basics', 'summary' => 'LastPass, 2FA, phishing awareness, protecting client credentials.', 'xp' => 50, 'coins' => 10],
-        ['course_id' => $c1, 'level' => 1, 'title' => 'Overcoming Imposter Syndrome as a Beginner', 'slug' => 'overcoming-imposter-syndrome', 'summary' => 'Building confidence through continuous action and competence.', 'xp' => 50, 'coins' => 10],
-        ['course_id' => $c1, 'level' => 1, 'title' => 'Level 1 Summary: Your Career Roadmap', 'slug' => 'level-1-summary', 'summary' => 'Putting foundational knowledge into practice.', 'xp' => 75, 'coins' => 20],
 
         // Level 2
         ['course_id' => $c2, 'level' => 2, 'title' => 'Mastering Google Workspace (Gmail & Drive)', 'slug' => 'google-workspace-mastery', 'summary' => 'Inbox Zero, cloud file organization, sharing permissions.', 'xp' => 60, 'coins' => 12],
         ['course_id' => $c2, 'level' => 2, 'title' => 'Google Docs Professional Document Formatting', 'slug' => 'google-docs-formatting', 'summary' => 'Creating clean corporate reports, proposals, and SOPs.', 'xp' => 60, 'coins' => 12],
         ['course_id' => $c2, 'level' => 2, 'title' => 'Google Sheets for Beginners: Formulas & Sorting', 'slug' => 'google-sheets-beginners', 'summary' => 'SUM, AVERAGE, VLOOKUP basics, data cleaning and filters.', 'xp' => 60, 'coins' => 12],
         ['course_id' => $c2, 'level' => 2, 'title' => 'Calendar Management & Scheduling Etiquette', 'slug' => 'calendar-management', 'summary' => 'Google Calendar, Calendly, time zones, avoiding double bookings.', 'xp' => 60, 'coins' => 12],
-        ['course_id' => $c2, 'level' => 2, 'title' => 'Professional Email Drafting & Inbox Zero Method', 'slug' => 'professional-email-drafting', 'summary' => 'Structuring clear, concise emails that clients love to read.', 'xp' => 60, 'coins' => 12],
-        ['course_id' => $c2, 'level' => 2, 'title' => 'Effective Internet Research Strategies', 'slug' => 'internet-research-strategies', 'summary' => 'Advanced Google search operators, source verification, fact checking.', 'xp' => 60, 'coins' => 12],
-        ['course_id' => $c2, 'level' => 2, 'title' => 'Task Management Tools (Asana, Trello, ClickUp)', 'slug' => 'task-management-tools', 'summary' => 'Creating task boards, assignees, due dates, and status updates.', 'xp' => 60, 'coins' => 12],
-        ['course_id' => $c2, 'level' => 2, 'title' => 'Time Tracking & Productivity Apps', 'slug' => 'time-tracking-apps', 'summary' => 'Clockify, Hubstaff, Toggl Track best practices.', 'xp' => 60, 'coins' => 12],
-        ['course_id' => $c2, 'level' => 2, 'title' => 'Slack & Microsoft Teams Etiquette', 'slug' => 'slack-teams-etiquette', 'summary' => 'Channel communication, async updates, thread management.', 'xp' => 60, 'coins' => 12],
-        ['course_id' => $c2, 'level' => 2, 'title' => 'Level 2 Review: Digital Productivity System', 'slug' => 'level-2-review', 'summary' => 'Synthesizing tool proficiency into daily workflow.', 'xp' => 80, 'coins' => 25],
 
         // Level 3
         ['course_id' => $c3, 'level' => 3, 'title' => 'Data Entry Techniques & Accuracy Control', 'slug' => 'data-entry-techniques', 'summary' => 'Speed vs accuracy, data validation rules, double checking.', 'xp' => 70, 'coins' => 15],
         ['course_id' => $c3, 'level' => 3, 'title' => 'Customer Support Fundamentals (Email & Chat)', 'slug' => 'customer-support-fundamentals', 'summary' => 'Empathy, macros, ticket resolution, handling angry buyers.', 'xp' => 70, 'coins' => 15],
         ['course_id' => $c3, 'level' => 3, 'title' => 'Lead Generation 101: Finding Prospect Contact Info', 'slug' => 'lead-generation-101', 'summary' => 'Apollo.io, Hunter.io, LinkedIn Sales Navigator techniques.', 'xp' => 70, 'coins' => 15],
         ['course_id' => $c3, 'level' => 3, 'title' => 'CRM Basics (HubSpot, Salesforce, Zoho)', 'slug' => 'crm-basics', 'summary' => 'Updating contact records, deal stages, and call notes.', 'xp' => 70, 'coins' => 15],
-        ['course_id' => $c3, 'level' => 3, 'title' => 'Executive Travel & Accommodation Booking', 'slug' => 'travel-booking-va', 'summary' => 'Itinerary creation, flights, hotels, time zone considerations.', 'xp' => 70, 'coins' => 15],
-        ['course_id' => $c3, 'level' => 3, 'title' => 'Meeting Preparation & Minute Taking (SOP)', 'slug' => 'meeting-prep-minutes', 'summary' => 'Agenda creation, recording action items, transcript summary.', 'xp' => 70, 'coins' => 15],
-        ['course_id' => $c3, 'level' => 3, 'title' => 'File Organization & Naming Conventions', 'slug' => 'file-organization-sop', 'summary' => 'Folder structures, version control (v1, v2_final), cloud backups.', 'xp' => 70, 'coins' => 15],
-        ['course_id' => $c3, 'level' => 3, 'title' => 'Social Media VA Basics (Canva & Scheduling)', 'slug' => 'social-media-va-basics', 'summary' => 'Creating graphics on Canva, scheduling posts on Buffer/Metricool.', 'xp' => 70, 'coins' => 15],
-        ['course_id' => $c3, 'level' => 3, 'title' => 'WordPress Publishing & Basic Content Updates', 'slug' => 'wordpress-publishing-basics', 'summary' => 'Gutenberg editor, adding featured images, publishing blogs.', 'xp' => 70, 'coins' => 15],
-        ['course_id' => $c3, 'level' => 3, 'title' => 'Level 3 Review: VA Apprenticeship Mastery', 'slug' => 'level-3-review', 'summary' => 'Becoming a fully competent generalist Virtual Assistant.', 'xp' => 100, 'coins' => 30],
 
-        // Level 4 Specialist
-        ['course_id' => $c4, 'level' => 4, 'title' => 'Executive VA Masterclass', 'slug' => 'executive-va-masterclass', 'summary' => 'High level C-suite support, inbox management, gatekeeping, confidential operations.', 'xp' => 120, 'coins' => 35],
+        // Level 4 Specialist Tracks
+        ['course_id' => $c4, 'level' => 4, 'title' => 'Executive VA Masterclass & Gatekeeping', 'slug' => 'executive-va-masterclass', 'summary' => 'High level C-suite support, inbox management, gatekeeping, confidential operations.', 'xp' => 120, 'coins' => 35],
         ['course_id' => $c4, 'level' => 4, 'title' => 'Social Media & Graphic Creation Specialist', 'slug' => 'social-media-specialist-track', 'summary' => 'Canva Pro design secrets, content calendars, analytics reporting, and community moderation.', 'xp' => 120, 'coins' => 35],
 
-        // Level 10-15 Advanced Business
-        ['course_id' => $c5, 'level' => 10, 'title' => 'High Ticket Cold Outreach & Pitching', 'slug' => 'cold-outreach-pitching', 'summary' => 'Finding decision makers, personalized Loom videos, cold email templates.', 'xp' => 150, 'coins' => 50],
-        ['course_id' => $c5, 'level' => 14, 'title' => 'Building & Scaling Your Virtual VA Agency', 'slug' => 'building-virtual-va-agency', 'summary' => 'Subcontracting, SOP systems, pricing packages, profit margins, team leadership.', 'xp' => 250, 'coins' => 100],
+        // Level 5 Job Ready Branding
+        ['course_id' => $c5, 'level' => 5, 'title' => 'ATS Resume & Headline Optimization', 'slug' => 'ats-resume-mastery', 'summary' => 'Formatting resumes that pass ATS screeners and impress hiring managers.', 'xp' => 130, 'coins' => 40],
+        ['course_id' => $c5, 'level' => 5, 'title' => 'LinkedIn Profile Positioning for Freelancers', 'slug' => 'linkedin-profile-mastery', 'summary' => 'Optimizing headlines, bios, featured media, and skill endorsements.', 'xp' => 130, 'coins' => 40],
+
+        // Level 6 Portfolio
+        ['course_id' => $c5, 'level' => 6, 'title' => 'Building Work Samples & Case Studies', 'slug' => 'work-samples-case-studies', 'summary' => 'Converting simulation mission deliverables into high-impact portfolio proof.', 'xp' => 140, 'coins' => 45],
+
+        // Level 7 Applications
+        ['course_id' => $c6, 'level' => 7, 'title' => 'Navigating Job Boards & Avoiding Scams', 'slug' => 'job-boards-scam-detection', 'summary' => 'Identifying verified client opportunities and avoiding common freelancing scams.', 'xp' => 140, 'coins' => 45],
+
+        // Level 8 Proposals
+        ['course_id' => $c6, 'level' => 8, 'title' => 'High-Converting Pitch & Cover Letter Writing', 'slug' => 'cover-letter-pitch-mastery', 'summary' => 'Structuring proposals that address client pain points and win interviews.', 'xp' => 150, 'coins' => 50],
+
+        // Level 9 Interviews
+        ['course_id' => $c6, 'level' => 9, 'title' => 'Client Interview Prep & STAR Framework', 'slug' => 'client-interview-star-framework', 'summary' => 'Answering situational interview questions with confidence and clarity.', 'xp' => 150, 'coins' => 50],
+
+        // Level 10 Outreach
+        ['course_id' => $c6, 'level' => 10, 'title' => 'High Ticket Cold Outreach & Pitching', 'slug' => 'cold-outreach-pitching', 'summary' => 'Finding decision makers, personalized Loom videos, cold email templates.', 'xp' => 150, 'coins' => 50],
+
+        // Level 11 Negotiation
+        ['course_id' => $c6, 'level' => 11, 'title' => 'Rate Negotiation & Service Agreements', 'slug' => 'rate-negotiation-agreements', 'summary' => 'Hourly vs retainer pricing, scope protection, and contract execution.', 'xp' => 160, 'coins' => 55],
+
+        // Level 12 Project Management
+        ['course_id' => $c6, 'level' => 12, 'title' => 'Virtual Project Management & Client Communication', 'slug' => 'virtual-project-management-sop', 'summary' => 'EOD updates, Slack etiquette, deadline tracking, and task prioritization.', 'xp' => 170, 'coins' => 60],
+
+        // Level 13 Retainers
+        ['course_id' => $c6, 'level' => 13, 'title' => 'Client Retention & Monthly Retainers', 'slug' => 'client-retention-retainers', 'summary' => 'Turning one-time projects into predictable $1,000+/mo recurring revenue.', 'xp' => 180, 'coins' => 70],
+
+        // Level 14 Agency
+        ['course_id' => $c6, 'level' => 14, 'title' => 'Building & Scaling Your Virtual VA Agency', 'slug' => 'building-virtual-va-agency', 'summary' => 'Subcontracting, SOP systems, pricing packages, profit margins, team leadership.', 'xp' => 250, 'coins' => 100],
+
+        // Level 15 Master
+        ['course_id' => $c6, 'level' => 15, 'title' => 'Apex Freelance Mastery & Business Systems', 'slug' => 'apex-freelance-mastery', 'summary' => 'Systemizing client acquisition, delegation, financial management, and sustainable growth.', 'xp' => 300, 'coins' => 150],
     ];
 
     $stmtLes = $pdo->prepare("INSERT INTO lessons (course_id, level_number, title, slug, summary, content, xp_reward, coin_reward, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
