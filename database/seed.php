@@ -132,7 +132,7 @@ function seedDatabase()
 
     $sort = 1;
     foreach ($lessonsData as $ld) {
-        $content = "## Master Blueprint: " . $ld['title'] . "\n\nThis comprehensive lesson covers actionable strategies, practical step-by-step Standard Operating Procedures (SOPs), real-world client examples, and practical workflows designed for modern Virtual Assistants and freelancers.\n\n### 1. Executive Overview & Objectives\n- **Primary Purpose**: Master the fundamental skills of " . strtolower($ld['title']) . " to maximize value delivered to clients.\n- **Client ROI**: Save busy founders and executives 5-10 hours weekly by streamlining workflows.\n- **Key Mindset**: Focus on proactive execution, zero-defect quality control, and crisp communication.\n\n### 2. Core Principles & Standard Operating Procedures (SOP)\n1. **Analyze Requirements First**: Read client instructions twice before execution. Highlight key deadlines and constraints.\n2. **Organize & Systematize**: Use standardized file naming conventions (`YYYY-MM-DD_Project_Title_v1.0`).\n3. **Proactive Updates**: Provide concise status summaries at the end of each workday (What was done, What is next, Blockers).\n4. **Quality Control Verification**: Double check all links, formulas, and attachments prior to submitting deliverable.\n\n### 3. Step-by-Step Practical Workflow\n- **Step A**: Log incoming task into task manager (Asana/Trello/ClickUp) with due date and scope notes.\n- **Step B**: Execute deliverable using approved tools (Google Workspace, Canva, CRM, Hubstaff).\n- **Step C**: Self-audit work product against client checklist.\n- **Step D**: Submit deliverable with clear summary and next step options for the client.\n\n### 4. Real-World Client Scenario & Pitfalls to Avoid\n* **Common Pitfall**: Waiting silently when stuck on instructions.\n* **Best Practice**: Ask clarifying questions early: *'Hi [Client], I am working on X. I have two quick options for Y: Option A (Faster) vs Option B (More detailed). Which do you prefer?'*\n\n### 5. Hands-on Practice Mission\nComplete the interactive scenario exercise below to apply these concepts and earn **+" . $ld['xp'] . " XP** and **+" . $ld['coins'] . " Coins**!";
+        $content = "## Executive Masterclass: " . $ld['title'] . "\n\nWelcome to **" . $ld['title'] . "**, a core module in the FREELANCEQUEST Virtual Assistant & Freelance Career Simulator. This masterclass provides actionable strategies, Standard Operating Procedures (SOPs), tool walkthroughs, and real-world client scenarios.\n\n### 1. Module Overview & Executive Objectives\n- **Primary Purpose**: Develop high-demand competence in **" . strtolower($ld['title']) . "** to deliver immediate operational ROI to clients.\n- **Client Value Proposition**: Eliminate 5-15 hours of weekly friction for busy founders, C-suite executives, and agencies.\n- **Core Mindset**: Transition from passive task-taker to proactive operations partner.\n\n### 2. Standard Operating Procedure (SOP) Blueprint\n1. **Scope Analysis**: Carefully review client briefs. Identify core deliverables, deadlines, and tool constraints before taking action.\n2. **File & Folder Systematization**: Maintain structured cloud organization (`/Client_Name/Project_Title/YYYY-MM-DD_Deliverable_v1.0`).\n3. **Asynchronous Communication Protocol**: Send structured daily end-of-day (EOD) updates via Slack/Email:\n   - *Done Today*: Deliverables completed with proof links.\n   - *Next*: High-priority tasks scheduled for tomorrow.\n   - *Blockers*: Clarifying questions or missing credentials required from client.\n4. **Zero-Defect Quality Control**: Verify all links, formula calculations, spelling, and formatting prior to deliverable submission.\n\n### 3. Essential Software & Digital Tools\n- **Google Workspace**: Gmail, Google Docs, Sheets, Calendar, Drive.\n- **Task Management**: Asana, Trello, ClickUp, Notion.\n- **Communication**: Slack, Microsoft Teams, Zoom, Loom.\n- **Specialized VA Software**: Canva Pro, Apollo.io, HubSpot CRM, LastPass.\n\n### 4. Real-World Client Case Study & Best Practices\n* **Scenario**: Client asks for urgent turn-around on a project with ambiguous instructions.\n* **Poor Response**: Waiting silently or guessing without confirmation.\n* **Proactive Response**: *'Hi [Client], I am executing " . $ld['title'] . " right now. To ensure we hit your deadline, I have drafted Option A (Faster) and Option B (Comprehensive). Please confirm which you prefer!'*\n\n### 5. Practical Mission Instructions\nReview the knowledge check quiz below and complete the interactive scenario exercise to earn **+" . $ld['xp'] . " XP** and **+" . $ld['coins'] . " Coins**!";
 
         $stmtLes->execute([$ld['course_id'], $ld['level'], $ld['title'], $ld['slug'], $ld['summary'], $content, $ld['xp'], $ld['coins'], $sort++]);
         $lesId = $pdo->lastInsertId();
@@ -152,7 +152,7 @@ function seedDatabase()
             "What is the core objective when executing tasks in '" . $ld['title'] . "'?",
             $options1,
             "Consistently saving the client time in " . strtolower($ld['title']),
-            "The primary value proposition of a Virtual Assistant is eliminating operational bottlenecks for the client."
+            "Explanation: The primary value proposition of a Virtual Assistant is eliminating operational bottlenecks and saving 5-15 hours weekly for the client."
         ]);
 
         $options2 = json_encode([
@@ -166,7 +166,7 @@ function seedDatabase()
             "Which Standard Operating Procedure (SOP) best practice applies to '" . $ld['title'] . "'?",
             $options2,
             "Following standardized SOPs and self-auditing deliverables prior to submission",
-            "Adhering to SOPs and verifying work accuracy ensures zero-defect quality control."
+            "Explanation: Adhering to structured SOPs and conducting self-audits prior to submission guarantees zero-defect quality control."
         ]);
 
         $options3 = json_encode([
@@ -180,7 +180,7 @@ function seedDatabase()
             "If an unexpected obstacle occurs while managing '" . $ld['title'] . "', what is the correct response?",
             $options3,
             "Notify the client immediately and propose two actionable solution options",
-            "Proactive communication paired with clear solutions builds client trust and retention."
+            "Explanation: Proactive communication paired with actionable solution options establishes high professional reliability and trust."
         ]);
     }
 
@@ -189,16 +189,26 @@ function seedDatabase()
     for ($i = 1; $i <= 50; $i++) {
         $levelNum = (($i - 1) % 15) + 1;
         $type = ($i % 3 == 0) ? 'interactive' : (($i % 3 == 1) ? 'proposal' : 'client_sim');
-        $scenario = "Client Alex asks you to handle an urgent task: '{$i} - We need to re-organize our customer leads spreadsheet and draft a quick follow-up proposal.'";
-        $instructions = "Review the client's request, identify key deliverables, format the output cleanly, and submit your response for automated evaluation.";
+
+        $scenarioTitle = match($i % 5) {
+            0 => "C-Suite Multi-Timezone Calendar Conflict Resolution",
+            1 => "High-Priority Inbox Zero Email Categorization",
+            2 => "B2B Contact Extraction & Lead Verification",
+            3 => "Canva Social Media Graphic & Content Schedule",
+            default => "WordPress Blog Formatting & SEO Optimization",
+        };
+
+        $scenario = "Client Alex Rivera (CEO, TechFlow Solutions) has submitted an urgent assignment: '{$scenarioTitle} (Task #{$i})'. Review the raw dataset below, resolve any operational conflicts, and produce a polished deliverable.";
+        $instructions = "1. Analyze the client requirements and constraints.\n2. Apply the relevant Standard Operating Procedure (SOP) covered in the academy.\n3. Draft your response clearly with exact deliverables and submit for evaluation.";
+
         $data = json_encode([
-            'client_name' => 'Alex Rivera (CEO, TechFlow)',
-            'task_type' => 'Data Formatting & Email Draft',
-            'sample_data' => "Lead Name: John Doe | Email: john@tech.com | Status: Pending\nLead Name: Sarah Smith | Email: sarah@biz.org | Status: Hot",
-            'correct_answer' => 'Properly formatted CSV / clean email draft',
+            'client_name' => 'Alex Rivera (CEO, TechFlow Solutions)',
+            'task_type' => $scenarioTitle,
+            'sample_data' => "Meeting Request A: 3:00 PM EST (12:00 PM PST)\nMeeting Request B: 3:15 PM EST (Overlap Conflict!)\nLead Record #1: Sarah Jenkins | Email: sarah@techflow.io | Status: Hot Prospect",
+            'expected_output' => 'Cleanly formatted SOP response / proposal pitch',
         ]);
 
-        $stmtM->execute([$levelNum, "Mission #{$i}: Real World Scenario Exercise {$i}", $type, $scenario, $instructions, $data, 150 + ($i * 10), 20 + ($i * 2)]);
+        $stmtM->execute([$levelNum, "Mission #{$i}: {$scenarioTitle}", $type, $scenario, $instructions, $data, 150 + ($i * 10), 20 + ($i * 2)]);
     }
 
     // 5. 20 Badges
