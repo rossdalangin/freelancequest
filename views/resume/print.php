@@ -69,6 +69,16 @@
                 </div>
             <?php endforeach; ?>
         </div>
+
+        <div class="space-y-3 pt-2">
+            <h3 class="text-xs font-black text-slate-900 uppercase tracking-wider border-b border-slate-200 pb-1">Education & Certifications</h3>
+            <?php foreach (($resume['education'] ?? []) as $edu): ?>
+                <div class="text-xs flex justify-between font-semibold text-slate-800">
+                    <span><?= htmlspecialchars($edu['degree'] ?? '', ENT_QUOTES, 'UTF-8') ?> &bull; <?= htmlspecialchars($edu['institution'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                    <span class="text-slate-500 font-normal"><?= htmlspecialchars($edu['year'] ?? '', ENT_QUOTES, 'UTF-8') ?></span>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 
 </body>

@@ -78,8 +78,52 @@ class ResumeBuilderController
         $skills = array_filter(array_map('trim', explode(',', $_POST['skills'] ?? '')));
         $tools = array_filter(array_map('trim', explode(',', $_POST['tools'] ?? '')));
 
-        $stmtUp = $pdo->prepare("UPDATE resumes SET full_name = ?, professional_title = ?, email = ?, phone = ?, location = ?, summary = ?, skills = ?, tools = ? WHERE user_id = ?");
-        $stmtUp->execute([$fullName, $title, $email, $phone, $location, $summary, json_encode($skills), json_encode($tools), $user['id']]);
+        // Experience parsing (Format: Role | Company | Period | Details)
+        $expRaw = $_POST['experience_text'] ?? '';
+        $experience = [];
+        $expLines = array_filter(array_map('trim', explode("\n", $expRaw)));
+        foreach ($expLines as $line) {
+            $parts = explode('|', $line);
+            if (count($parts) >= 4) {
+                $experience[] = [
+                    'role' => trim($parts[0]),
+                    'company' => trim($parts[1]),
+                    'period' => trim($parts[2]),
+                    'details' => trim($parts[3])
+                ];
+            } else {
+                $experience[] = [
+                    'role' => 'Virtual Assistant Specialist',
+                    'company' => 'Remote Client Operations',
+                    'period' => '2025 - Present',
+                    'details' => trim($line)
+                ];
+            }
+        }
+
+        // Education parsing (Format: Degree | Institution | Year)
+        $eduRaw = $_POST['education_text'] ?? '';
+        $education = [];
+        $eduLines = array_filter(array_map('trim', explode("\n", $eduRaw)));
+        foreach ($eduLines as $line) {
+            $parts = explode('|', $line);
+            if (count($parts) >= 3) {
+                $education[] = [
+                    'degree' => trim($parts[0]),
+                    'institution' => trim($parts[1]),
+                    'year' => trim($parts[2])
+                ];
+            } else {
+                $education[] = [
+                    'degree' => 'VA Masterclass Certification',
+                    'institution' => 'FreelanceQuest Academy',
+                    'year' => '2025'
+                ];
+            }
+        }
+
+        $stmtUp = $pdo->prepare("UPDATE resumes SET full_name = ?, professional_title = ?, email = ?, phone = ?, location = ?, summary = ?, skills = ?, tools = ?, experience = ?, education = ? WHERE user_id = ?");
+        $stmtUp->execute([$fullName, $title, $email, $phone, $location, $summary, json_encode($skills), json_encode($tools), json_encode($experience), json_encode($education), $user['id']]);
 
         $gameEngine = new GameEngineService();
         $gameEngine->awardXPAndCoins($user['id'], 200, 50);

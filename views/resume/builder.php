@@ -48,6 +48,26 @@
                 <label class="block text-xs font-bold text-slate-300 mb-1">Tools & Platforms (Comma Separated)</label>
                 <input type="text" name="tools" value="<?= htmlspecialchars(implode(', ', $resume['tools'] ?? []), ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-100">
             </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Work Experience (Format: Role | Company | Period | Details - One per line)</label>
+                <?php
+                    $expText = [];
+                    foreach (($resume['experience'] ?? []) as $ex) {
+                        $expText[] = ($ex['role'] ?? '') . ' | ' . ($ex['company'] ?? '') . ' | ' . ($ex['period'] ?? '') . ' | ' . ($ex['details'] ?? '');
+                    }
+                ?>
+                <textarea name="experience_text" rows="3" placeholder="Virtual Assistant Apprentice | FreelanceQuest | 2025 - Present | Managed calendar scheduling and inbox zero triage" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100"><?= htmlspecialchars(implode("\n", $expText), ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Education & Certifications (Format: Degree | Institution | Year)</label>
+                <?php
+                    $eduText = [];
+                    foreach (($resume['education'] ?? []) as $ed) {
+                        $eduText[] = ($ed['degree'] ?? '') . ' | ' . ($ed['institution'] ?? '') . ' | ' . ($ed['year'] ?? '');
+                    }
+                ?>
+                <textarea name="education_text" rows="2" placeholder="Virtual Assistant Certification | FreelanceQuest Academy | 2025" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100"><?= htmlspecialchars(implode("\n", $eduText), ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-4 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30">SAVE & UPDATE RESUME (+200 XP)</button>
         </form>
     </div>
