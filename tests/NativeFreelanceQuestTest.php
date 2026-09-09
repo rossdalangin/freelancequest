@@ -158,4 +158,19 @@ class NativeFreelanceQuestTest extends TestCase
         $appOutput = ob_get_clean();
         $this->assertStringContainsString('APPLICATION TRACKER DASHBOARD', $appOutput);
     }
+
+    public function testLegalAndCompliancePages()
+    {
+        $pageController = new \App\Controllers\PageController();
+
+        ob_start();
+        $pageController->terms();
+        $termsOutput = ob_get_clean();
+        $this->assertStringContainsString('TERMS AND CONDITIONS', $termsOutput);
+
+        ob_start();
+        $pageController->privacy();
+        $privacyOutput = ob_get_clean();
+        $this->assertStringContainsString('PRIVACY POLICY', $privacyOutput);
+    }
 }

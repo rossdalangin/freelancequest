@@ -51,6 +51,11 @@ $router->get('/', [HomeController::class, 'index']);
 $router->get('/about', [PageController::class, 'about']);
 $router->get('/features', [PageController::class, 'features']);
 $router->get('/faq', [PageController::class, 'faq']);
+$router->get('/terms', [PageController::class, 'terms']);
+$router->get('/privacy', [PageController::class, 'privacy']);
+$router->get('/disclaimer', [PageController::class, 'disclaimer']);
+$router->get('/contact', [PageController::class, 'contact']);
+$router->post('/contact', [PageController::class, 'submitContact']);
 
 // Auth Routes
 $router->get('/login', [AuthController::class, 'showLogin']);
@@ -107,10 +112,14 @@ $router->get('/resources', [ResourceVaultController::class, 'index']);
 
 $router->get('/community', [CommunityController::class, 'index']);
 $router->post('/community/post', [CommunityController::class, 'storePost']);
+$router->post('/community/post/{id}/upvote', [CommunityController::class, 'upvotePost']);
+$router->post('/community/post/{id}/delete', [CommunityController::class, 'deletePost']);
 $router->post('/community/post/{id}/comment', [CommunityController::class, 'storeComment']);
 
 $router->get('/pricing', [SubscriptionController::class, 'index']);
 $router->post('/pricing/subscribe', [SubscriptionController::class, 'subscribe']);
+$router->get('/checkout', [SubscriptionController::class, 'checkout']);
+$router->post('/checkout/process', [SubscriptionController::class, 'processCheckout']);
 
 $router->get('/admin', [AdminController::class, 'index']);
 $router->get('/admin/users', [AdminController::class, 'manageUsers']);

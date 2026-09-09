@@ -13,7 +13,13 @@ class CommunityController
         $user = AuthController::requireAuth();
         $pdo = Database::getConnection();
 
-        $stmtP = $pdo->query("SELECT cp.*, u.name as user_name, u.level as user_level FROM community_posts cp JOIN users u ON cp.user_id = u.id ORDER BY cp.id DESC LIMIT 20");
+        $groupSlug = $_GET['group'] ?? null;
+        if ($groupSlug) {
+            $stmtP = $pdo->prepare("SELECT cp.*, u.name as user_name, u.level as user_level FROM community_posts cp JOIN users u ON cp.user_id = u.id JOIN groups g ON cp.group_id = g.id WHERE g.slug = ? ORDER BY cp.id DESC LIMIT 20");
+            $stmtP->execute([$groupSlug]);
+        } else {
+            $stmtP = $pdo->query("SELECT cp.*, u.name as user_name, u.level as user_level FROM community_posts cp JOIN users u ON cp.user_id = u.id ORDER BY cp.id DESC LIMIT 20");
+        }
         $posts = $stmtP->fetchAll();
 
         foreach ($posts as &$post) {
@@ -54,6 +60,50 @@ class CommunityController
 
             $gameEngine = new GameEngineService();
             $gameEngine->awardXPAndCoins($user['id'], 50, 10);
+        }
+
+        header('Location: /community');
+        exit;
+    }
+
+    public function upvotePost(string $id)
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->prepare("UPDATE community_posts SET upvotes = upvotes + 1 WHERE id = ?");
+        $stmt->execute([$id]);
+
+        $gameEngine = new GameEngineService();
+        $gameEngine->awardXPAndCoins($user['id'], 10, 2);
+
+        header('Location: /community');
+        exit;
+    }
+
+    public function deletePost(string $id)
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        if (($user['role'] ?? '') === 'admin') {
+            $stmt = $pdo->prepare("DELETE FROM community_posts WHERE id = ?");
+            $stmt->execute([$id]);
+        } else {
+            $stmt = $pdo->prepare("DELETE FROM community_posts WHERE id = ? AND user_id = ?");
+            $stmt->execute([$id, $user['id']]);
         }
 
         header('Location: /community');

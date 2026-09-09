@@ -62,7 +62,37 @@ class SubscriptionController
         require __DIR__ . '/../../views/subscription/index.php';
     }
 
-    public function subscribe()
+    public function checkout()
+    {
+        $user = AuthController::requireAuth();
+
+        $planName = strtolower($_GET['plan'] ?? 'pro');
+        $paymentGateway = strtolower($_GET['gateway'] ?? 'paypal');
+
+        if (!in_array($planName, ['pro', 'master'])) {
+            header('Location: /pricing');
+            exit;
+        }
+
+        if (!in_array($paymentGateway, ['paypal', 'stripe', 'gcash'])) {
+            $paymentGateway = 'paypal';
+        }
+
+        $amount = $planName === 'master' ? 49.00 : 19.00;
+
+        // Admin Merchant Accounts
+        $paypalEmail = DataManagementService::getSetting('paypal_email', 'admin@freelancequest.com');
+        $stripeKey = DataManagementService::getSetting('stripe_key', 'pk_live_freelancequest_admin_key');
+        $gcashNumber = DataManagementService::getSetting('gcash_number', '09171234567');
+        $gcashName = DataManagementService::getSetting('gcash_name', 'FreelanceQuest Admin');
+
+        $error = $_SESSION['checkout_error'] ?? null;
+        unset($_SESSION['checkout_error']);
+
+        require __DIR__ . '/../../views/subscription/checkout.php';
+    }
+
+    public function processCheckout()
     {
         $user = AuthController::requireAuth();
 
@@ -71,39 +101,77 @@ class SubscriptionController
             die("Invalid CSRF Token.");
         }
 
+        if (!SecurityService::checkRateLimit('checkout_process', 10, 60)) {
+            http_response_code(429);
+            die("Rate limit exceeded.");
+        }
+
         $pdo = Database::getConnection();
 
-        $planName = $_POST['plan_name'] ?? 'pro';
+        $planName = strtolower($_POST['plan_name'] ?? 'pro');
         $paymentGateway = strtolower($_POST['payment_gateway'] ?? 'paypal');
-        if (!in_array($paymentGateway, ['paypal', 'stripe', 'gcash'])) {
-            $paymentGateway = 'paypal';
+        $referenceNumber = trim($_POST['reference_number'] ?? '');
+
+        if (!in_array($planName, ['pro', 'master'])) {
+            $planName = 'pro';
         }
 
-        $amount = $planName === 'master' ? 49.00 : ($planName === 'pro' ? 19.00 : 0.00);
+        $amount = $planName === 'master' ? 49.00 : 19.00;
 
-        if ($amount > 0) {
-            $txnId = strtoupper($paymentGateway) . '-' . strtoupper(bin2hex(random_bytes(6)));
-
-            // Record Payment
-            $stmtPay = $pdo->prepare("INSERT INTO payments (user_id, payment_gateway, transaction_id, amount, currency, status, details) VALUES (?, ?, ?, ?, 'USD', 'completed', ?)");
-            $stmtPay->execute([
-                $user['id'],
-                $paymentGateway,
-                $txnId,
-                $amount,
-                json_encode(['plan' => $planName, 'gateway' => $paymentGateway, 'date' => date('Y-m-d H:i:s')])
-            ]);
-
-            DataManagementService::logActivity($user['id'], 'MEMBERSHIP_UPGRADE_PAYMENT', "Upgraded to {$planName} via {$paymentGateway} (\${$amount}). Txn: {$txnId}");
+        if (empty($referenceNumber)) {
+            $_SESSION['checkout_error'] = 'Please enter your payment reference / receipt transaction number.';
+            header('Location: /checkout?plan=' . $planName . '&gateway=' . $paymentGateway);
+            exit;
         }
 
+        $txnId = strtoupper($paymentGateway) . '-' . strtoupper(bin2hex(random_bytes(4))) . '-' . preg_replace('/[^A-Za-z0-9]/', '', $referenceNumber);
+
+        // Record Payment in payments table
+        $stmtPay = $pdo->prepare("INSERT INTO payments (user_id, payment_gateway, transaction_id, amount, currency, status, details) VALUES (?, ?, ?, ?, 'USD', 'completed', ?)");
+        $stmtPay->execute([
+            $user['id'],
+            $paymentGateway,
+            $txnId,
+            $amount,
+            json_encode([
+                'plan' => $planName,
+                'gateway' => $paymentGateway,
+                'reference_number' => $referenceNumber,
+                'user_email' => $user['email'],
+                'created_at' => date('Y-m-d H:i:s')
+            ])
+        ]);
+
+        // Update user subscription tier
         $stmtUp = $pdo->prepare("UPDATE users SET subscription_tier = ?, subscription_ends_at = DATE('now', '+1 month') WHERE id = ?");
         $stmtUp->execute([$planName, $user['id']]);
 
+        // Record subscription history
         $stmtIns = $pdo->prepare("INSERT INTO subscriptions (user_id, plan_name, status, price, starts_at, ends_at) VALUES (?, ?, 'active', ?, DATE('now'), DATE('now', '+1 month'))");
         $stmtIns->execute([$user['id'], $planName, $amount]);
 
+        DataManagementService::logActivity($user['id'], 'MEMBERSHIP_CHECKOUT_COMPLETED', "Upgraded to {$planName} via {$paymentGateway} (\${$amount}). Ref: {$referenceNumber}, Txn: {$txnId}");
+
         header('Location: /dashboard');
+        exit;
+    }
+
+    public function subscribe()
+    {
+        $user = AuthController::requireAuth();
+
+        $planName = $_POST['plan_name'] ?? 'pro';
+        $paymentGateway = strtolower($_POST['payment_gateway'] ?? 'paypal');
+
+        if ($planName === 'free') {
+            $pdo = Database::getConnection();
+            $stmtUp = $pdo->prepare("UPDATE users SET subscription_tier = 'free', subscription_ends_at = NULL WHERE id = ?");
+            $stmtUp->execute([$user['id']]);
+            header('Location: /dashboard');
+            exit;
+        }
+
+        header('Location: /checkout?plan=' . urlencode($planName) . '&gateway=' . urlencode($paymentGateway));
         exit;
     }
 }
