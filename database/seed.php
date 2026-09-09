@@ -166,8 +166,32 @@ function seedDatabase()
 
         // Level 2: Digital Tools
         [
+            'course_id' => $courseIds[2], 'level' => 1, 'title' => 'Digital Communication & Netiquette', 'slug' => 'digital-communication-netiquette', 'summary' => 'Slack etiquette, async communication, and client update protocols.', 'xp' => 50, 'coins' => 10,
+            'content' => "<h2>Executive Masterclass: Digital Communication & Netiquette</h2><p>Effective remote communication prevents misunderstandings, aligns expectations, and builds client trust across time zones.</p><h3>1. Why This Topic is Needed & Important</h3><p>Client turnover in remote teams is most frequently caused by poor or delayed communication. Mastering asynchronous Slack etiquette and daily End-of-Day (EOD) updates ensures clients feel completely confident in your work without requiring real-time micromanagement.</p><h3>2. Standard Operating Procedure (SOP) Blueprint</h3><p>1. Acknowledge urgent messages within 15 minutes during work hours.<br>2. Format messages using clear bullet points and bold headers.<br>3. Send a structured End-of-Day (EOD) report summarizing completed tasks, next steps, and blockers.</p><h3>3. Real-World Example & Copy-Paste Script</h3><p><strong>Scenario:</strong> Client asks for an update on a pending research document.<br><strong>Response Script:</strong> 'Hi Client, I am 80% complete with the market research report. I am currently verifying 3 final vendor contact numbers. The full Google Sheet deliverable will be uploaded to your Drive folder by 4:00 PM EST today!'</p><h3>4. Pro Tips & Tricks for VAs</h3><ul><li>Use Loom video screen recordings to explain complex multi-step spreadsheets instead of typing 500-word emails.</li><li>Always link directly to the specific Google Drive folder or document when referencing deliverables in chat.</li></ul><h3>5. Common Pitfalls to Avoid</h3><p>Avoid single-word responses like 'Okay' or 'Done' without context or proof links.</p>",
+            'quiz' => [
+                [
+                    'question' => "Why is structured asynchronous communication essential for remote Virtual Assistants?",
+                    'options' => ["It keeps clients informed across time zones without requiring constant live status calls", "It allows VAs to work without ever completing assigned tasks", "It forces clients to pay higher hourly bonuses", "It eliminates the need for written service contracts"],
+                    'correct' => "It keeps clients informed across time zones without requiring constant live status calls",
+                    'explanation' => "Structured updates provide operational transparency without interrupting the client's day."
+                ],
+                [
+                    'question' => "What is the recommended response time for acknowledging urgent client messages during agreed work hours?",
+                    'options' => ["Within 15 minutes", "Within 3 to 5 business days", "Only when the task is fully finished", "Next week"],
+                    'correct' => "Within 15 minutes",
+                    'explanation' => "Fast receipt confirmation reduces client anxiety and establishes high professional reliability."
+                ],
+                [
+                    'question' => "Which tool is ideal for explaining complex multi-step spreadsheet tasks to clients quickly?",
+                    'options' => ["Loom video screen recordings", "10-page text PDF manuals", "Voice notes on personal WhatsApp", "Postal mail"],
+                    'correct' => "Loom video screen recordings",
+                    'explanation' => "Short video screen shares visually demonstrate your work step-by-step in 1 to 2 minutes."
+                ]
+            ]
+        ],
+        [
             'course_id' => $courseIds[2], 'level' => 2, 'title' => 'Mastering Google Workspace (Gmail & Drive)', 'slug' => 'google-workspace-mastery', 'summary' => 'Inbox Zero, cloud file organization, sharing permissions.', 'xp' => 60, 'coins' => 12,
-            'content' => "<h2>Executive Masterclass: Mastering Google Workspace (Gmail & Drive)</h2><p>Google Workspace is the standard cloud infrastructure for remote teams. Mastering Gmail filters and Drive permissions makes you an indispensable asset.</p><h3>1. Inbox Zero & Filtering Protocols</h3><p>Achieve Inbox Zero by categorizing incoming emails using Gmail labels, stars, and automated filters. Structure folders into Urgent, Waiting on Client, Archive, and Reference.</p><h3>2. Google Drive Systematization & Sharing Security</h3><p>Organize Google Drive using standardized naming conventions (/Client_Name/Project/YYYY-MM-DD_Deliverable_v1). Always verify permissions (Viewer vs Editor) before sending links to ensure client data security.</p>",
+            'content' => "<h2>Executive Masterclass: Mastering Google Workspace (Gmail & Drive)</h2><p>Google Workspace is the standard cloud infrastructure for remote teams. Mastering Gmail filters and Drive permissions makes you an indispensable asset.</p><h3>1. Why This Topic is Needed & Important</h3><p>CEOs receive 100+ unread emails daily. By organizing Gmail inboxes into labeled systems and structuring Google Drive permissions safely, VAs eliminate cognitive fatigue for busy executives.</p><h3>2. Standard Operating Procedure (SOP) Blueprint</h3><p>1. Triage emails into labels: Urgent, Waiting on Client, Billing, Archive.<br>2. Set up automated email filters for recurring newsletters and invoices.<br>3. Organize Google Drive folders into /Client_Name/Project_Title/YYYY-MM-DD_Deliverable_v1.0.</p><h3>3. Real-World Example & Copy-Paste Script</h3><p><strong>Scenario:</strong> Sharing confidential client document with external contractor.<br><strong>Action:</strong> Set Drive permission to 'Viewer' (Disable downloading/printing) and send script: 'Hi Partner, here is the view-only access link to the executive summary deck: [Link]. Please let me know if you have any questions!'</p><h3>4. Pro Tips & Tricks for VAs</h3><ul><li>Use Gmail 'Send Later' scheduling to deliver client updates during their local timezone business hours.</li><li>Create canned response templates in Gmail for recurring customer inquiry questions.</li></ul><h3>5. Common Pitfalls to Avoid</h3><p>Never grant 'Editor' or 'Owner' permissions to external parties when view-only access is sufficient.</p>",
             'quiz' => [
                 [
                     'question' => "What is the core principle of the Inbox Zero email management method?",
