@@ -153,6 +153,8 @@ $router->post('/admin/resources/{id}/edit', [AdminController::class, 'editResour
 $router->post('/admin/resources/{id}/delete', [AdminController::class, 'deleteResource']);
 $router->get('/admin/payments', [AdminController::class, 'managePayments']);
 $router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
+$router->get('/admin/certificates', [AdminController::class, 'manageCertificates']);
+$router->post('/admin/certificates/{id}/delete', [AdminController::class, 'revokeCertificate']);
 $router->get('/admin/logs', [AdminController::class, 'viewLogs']);
 $router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);

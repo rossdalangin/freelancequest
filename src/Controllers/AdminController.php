@@ -633,6 +633,36 @@ class AdminController
         require __DIR__ . '/../../views/admin/logs.php';
     }
 
+    public function manageCertificates()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT c.*, u.name as user_name, u.email as user_email FROM certificates c JOIN users u ON c.user_id = u.id ORDER BY c.id DESC");
+        $certificates = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/certificates.php';
+    }
+
+    public function revokeCertificate(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM certificates WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_CERTIFICATE_REVOKE', "Revoked certificate #{$id}");
+
+        header('Location: /admin/certificates');
+        exit;
+    }
+
     public function updateSettings()
     {
         $admin = $this->checkAdminAuth();

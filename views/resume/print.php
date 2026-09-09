@@ -21,16 +21,16 @@
         </button>
     </div>
 
-    <div class="resume-card bg-white max-w-4xl mx-auto p-10 rounded-2xl shadow-2xl space-y-6">
-        <div class="border-b-2 border-indigo-600 pb-4 flex justify-between items-start">
-            <div>
-                <h1 class="text-3xl font-black text-slate-900 uppercase tracking-tight"><?= htmlspecialchars($resume['full_name'] ?? 'Your Name', ENT_QUOTES, 'UTF-8') ?></h1>
-                <p class="text-indigo-600 font-bold text-base mt-1"><?= htmlspecialchars($resume['professional_title'] ?? 'Virtual Assistant', ENT_QUOTES, 'UTF-8') ?></p>
+    <div class="resume-card bg-white max-w-4xl mx-auto p-12 rounded-2xl shadow-2xl space-y-8 text-slate-800">
+        <div class="border-b-4 border-indigo-900 pb-6 flex justify-between items-start">
+            <div class="space-y-1">
+                <h1 class="text-4xl font-black text-indigo-950 uppercase tracking-tight font-serif"><?= htmlspecialchars($resume['full_name'] ?? 'Your Name', ENT_QUOTES, 'UTF-8') ?></h1>
+                <p class="text-indigo-700 font-extrabold text-lg uppercase tracking-wider"><?= htmlspecialchars($resume['professional_title'] ?? 'Virtual Assistant Specialist', ENT_QUOTES, 'UTF-8') ?></p>
             </div>
-            <div class="text-right text-xs text-slate-600 space-y-0.5">
-                <p><?= htmlspecialchars($resume['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
-                <p><?= htmlspecialchars($resume['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
-                <p><?= htmlspecialchars($resume['location'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+            <div class="text-right text-xs font-semibold text-slate-600 space-y-1 border-l-2 border-amber-500 pl-4">
+                <p><i class="fa-solid fa-envelope text-amber-600 mr-1"></i> <?= htmlspecialchars($resume['email'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                <p><i class="fa-solid fa-phone text-amber-600 mr-1"></i> <?= htmlspecialchars($resume['phone'] ?? '+1 (555) 019-2834', ENT_QUOTES, 'UTF-8') ?></p>
+                <p><i class="fa-solid fa-location-dot text-amber-600 mr-1"></i> <?= htmlspecialchars($resume['location'] ?? 'Remote / Global Support', ENT_QUOTES, 'UTF-8') ?></p>
             </div>
         </div>
 
