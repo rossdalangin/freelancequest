@@ -54,6 +54,25 @@
         <a href="/admin/logs" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">📜 Audit Logs</a>
     </div>
 
+    <!-- DEDICATED DATABASE SEED CONTROL CARD -->
+    <div class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/40 p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl">
+        <div class="space-y-1 max-w-2xl">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">⚡</span>
+                <h2 class="text-xl font-extrabold text-amber-400">DATABASE SEED & CONTENT REFRESH</h2>
+            </div>
+            <p class="text-slate-300 text-xs leading-relaxed">
+                Clicking this button completely refreshes the database schema and updates all seeds for all 15 course levels, masterclass lessons, knowledge check quizzes, interactive scenario missions, achievement badges, and downloadable vault resources.
+            </p>
+        </div>
+        <form action="/admin/reseed-database" method="POST" onsubmit="return confirm('Are you sure you want to re-seed and update all database contents for all 15 levels?');" class="w-full md:w-auto">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+            <button type="submit" class="w-full md:w-auto bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3.5 px-6 rounded-xl text-sm shadow-xl shadow-amber-500/20 transition flex items-center justify-center gap-2 border border-amber-400/50">
+                🔄 RE-SEED & UPDATE DATABASE NOW
+            </button>
+        </form>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- AI Course Builder -->
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
