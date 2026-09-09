@@ -29,7 +29,7 @@
     <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-2xl text-slate-200 text-sm leading-relaxed space-y-4 shadow-xl">
         <h2 class="text-xl font-bold text-white border-b border-slate-800 pb-3">LESSON MATERIAL</h2>
         <div class="prose prose-invert max-w-none space-y-4">
-            <?= nl2br(htmlspecialchars($lesson['content'], ENT_QUOTES, 'UTF-8')) ?>
+            <?= strip_tags($lesson['content'], '<h2><h3><h4><p><ul><ol><li><strong><em><br><code><pre><blockquote>') ?>
         </div>
     </div>
 

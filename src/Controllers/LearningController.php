@@ -48,8 +48,13 @@ class LearningController
             $stmtQn = $pdo->prepare("SELECT * FROM questions WHERE quiz_id = ?");
             $stmtQn->execute([$q['id']]);
             $q['questions'] = $stmtQn->fetchAll();
+            shuffle($q['questions']); // Randomize questions display order
             foreach ($q['questions'] as &$qn) {
-                $qn['options'] = json_decode($qn['options'], true);
+                $opts = json_decode($qn['options'], true);
+                if (is_array($opts)) {
+                    shuffle($opts); // Randomize options display order
+                }
+                $qn['options'] = $opts;
             }
         }
 
