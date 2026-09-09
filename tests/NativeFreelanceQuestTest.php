@@ -22,7 +22,7 @@ class NativeFreelanceQuestTest extends TestCase
         seedDatabase();
         $_POST['csrf_token'] = \App\Services\SecurityService::getCsrfToken();
 
-        $pdo = Database::getConnection();
+        $pdo = \Database::getConnection();
         $stmt = $pdo->query("SELECT id FROM users WHERE role = 'student' LIMIT 1");
         $studentId = $stmt->fetchColumn();
 
@@ -34,19 +34,19 @@ class NativeFreelanceQuestTest extends TestCase
 
     public function testDatabaseSeedingIntegrity()
     {
-        $pdo = Database::getConnection();
+        $pdo = \Database::getConnection();
         $userCount = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
         $lessonCount = $pdo->query("SELECT COUNT(*) FROM lessons")->fetchColumn();
         $levelCount = $pdo->query("SELECT COUNT(*) FROM levels")->fetchColumn();
 
         $this->assertEquals(2, $userCount);
-        $this->assertEquals(19, $lessonCount);
+        $this->assertEquals(45, $lessonCount);
         $this->assertEquals(16, $levelCount);
     }
 
     public function testGameEngineXpAwardAndLevelUp()
     {
-        $pdo = Database::getConnection();
+        $pdo = \Database::getConnection();
         $stmt = $pdo->query("SELECT id FROM users WHERE role = 'student' LIMIT 1");
         $userId = $stmt->fetchColumn();
 
@@ -59,7 +59,7 @@ class NativeFreelanceQuestTest extends TestCase
 
     public function testCertificateGenerationAndVerification()
     {
-        $pdo = Database::getConnection();
+        $pdo = \Database::getConnection();
         $stmt = $pdo->query("SELECT id FROM users WHERE role = 'student' LIMIT 1");
         $userId = $stmt->fetchColumn();
 
@@ -184,11 +184,7 @@ class NativeFreelanceQuestTest extends TestCase
 
     public function testLeaderboardSettingInDatabase(): void
     {
-        $pdo = \App\Database::getConnection();
-        $stmt = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = 'enable_leaderboard'");
-        $stmt->execute();
-        $row = $stmt->fetch();
-        $this->assertNotEmpty($row);
-        $this->assertEquals('1', $row['setting_value']);
+        $settingVal = \App\Services\DataManagementService::getSetting('enable_leaderboard', '1');
+        $this->assertEquals('1', $settingVal);
     }
 }

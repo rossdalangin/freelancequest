@@ -1,0 +1,35 @@
+281:                     'options' => ['Within 2-24 hours while discussions are fresh', 'After 3 months', 'Only if team members ask repeatedly', 'Never publish meeting minutes'],
+282:                     'correct' => "Within 2-24 hours while discussions are fresh",
+283:                     'explanation' => "Fast distribution ensures immediate momentum on assigned commitments."
+284:                 ],
+285:                 [
+286:                     'question' => "What AI transcription tools help VAs record and summarize executive calls accurately?",
+287:                     'options' => ['Otter.ai or Fireflies.ai', 'Windows Notepad', 'Microsoft Paint', 'Google Translate'],
+288:                     'correct' => "Otter.ai or Fireflies.ai",
+289:                     'explanation' => "AI transcription tools generate real-time transcripts and AI summary highlights."
+290:                 ]
+291:             ]
+292:         ],
+293:         // Level 3: Data Entry & Web Research Mastery
+294:         [
+295:             'course_id' => $courseIds[3], 'level' => 3, 'title' => 'Data Entry & Web Research Mastery', 'slug' => 'data-entry-web-research-mastery', 'summary' => 'Efficient web scraping, data cleaning, and structured spreadsheet reporting.', 'xp' => 100, 'coins' => 25,
+296:             'content' => "<h2>Executive Masterclass: Data Entry & Web Research Mastery</h2><p>Efficient web scraping, data cleaning, and structured spreadsheet reporting.</p><h3>1. Why This Topic is Needed & Important</h3><p>Gathering accurate data from the web and organizing it into spreadsheets provides market intelligence.</p><h3>2. Standard Operating Procedure (SOP) Blueprint</h3><p>1. Utilize Google Search operators (`site:`, `filetype:`).<br>2. Standardize Google Sheets columns.<br>3. Verify emails using NeverBounce.</p><h3>3. Real-World Example & Copy-Paste Script</h3><p><b>Search Operator:</b> `site:linkedin.com/in/ "CEO" "SaaS" "Austin"`</p><h3>4. Pro Tips & Tricks for VAs</h3><ul><li>Use conditional formatting in Google Sheets to highlight duplicate entries automatically.</li></ul><h3>5. Common Pitfalls to Avoid</h3><p>Avoid delivering unverified email lists or messy spreadsheets.</p>",
+297:             'quiz' => [
+298:                 [
+299:                     'question' => "Which Google search operator restricts results to a specific website like LinkedIn?",
+300:                     'options' => ['`site:linkedin.com/in/`', '`find:linkedin`', '`search_url=linkedin`', '`#linkedin`'],
+301:                     'correct' => "`site:linkedin.com/in/`",
+302:                     'explanation' => "The `site:` operator targets domain specific search queries directly."
+303:                 ],
+304:                 [
+305:                     'question' => "Why is email verification software (e.g. ZeroBounce) necessary before delivering lead lists?",
+306:                     'options' => ['It eliminates invalid emails, preventing high bounce rates that damage domain reputation', 'It automatically pays the client invoice', 'It converts emails into PDF images', 'It sends automated text messages'],
+307:                     'correct' => "It eliminates invalid emails, preventing high bounce rates that damage domain reputation",
+308:                     'explanation' => "Clean email lists maintain sender domain reputation and deliverability."
+309:                 ],
+310:                 [
+311:                     'question' => "What spreadsheet feature identifies duplicate rows automatically?",
+312:                     'options' => ['Conditional Formatting or Data Cleanup -> Remove Duplicates', 'Font Size Selector', 'Spell Check', 'Print Preview'],
+313:                     'correct' => "Conditional Formatting or Data Cleanup -> Remove Duplicates",
+314:                     'explanation' => "Data cleanup tools quickly purge repeated data entries."
+315:                 ]
