@@ -89,7 +89,7 @@ function seedDatabase()
         $courseIds[$lvl] = $pdo->lastInsertId();
     }
 
-        $lessonsMasterData = [
+            $lessonsMasterData = [
         // Level 1: What is Freelancing & Remote VA Work?
         [
             'course_id' => $courseIds[1], 'level' => 1, 'title' => 'What is Freelancing & Remote VA Work?', 'slug' => 'what-is-freelancing-and-remote-va-work', 'summary' => 'Understanding core concepts of freelancing, virtual assistance, and remote work.', 'xp' => 100, 'coins' => 25,
