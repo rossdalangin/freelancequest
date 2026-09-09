@@ -69,5 +69,24 @@
             </button>
         </form>
     </div>
+
+    <?php if (($user['role'] ?? '') === 'admin'): ?>
+    <!-- ADMIN DATABASE RE-SEED & UPDATE SECTION -->
+    <div class="bg-gradient-to-r from-amber-950/50 via-slate-900 to-slate-900 border border-amber-500/50 p-6 rounded-2xl space-y-4 shadow-xl">
+        <div class="flex items-center gap-2">
+            <span class="text-xl">⚡</span>
+            <div>
+                <h3 class="text-lg font-extrabold text-amber-400">ADMINISTRATOR SYSTEM TOOLS</h3>
+                <p class="text-xs text-slate-300">Re-seed and update all 15 course levels, masterclass lessons, quizzes, missions, and resources.</p>
+            </div>
+        </div>
+        <form action="/admin/reseed-database" method="POST" onsubmit="return confirm('Are you sure you want to update and re-seed all database content across all 15 levels?');">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+            <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3 rounded-xl text-xs shadow-lg transition flex items-center justify-center gap-2">
+                🔄 RE-SEED & UPDATE DATABASE NOW
+            </button>
+        </form>
+    </div>
+    <?php endif; ?>
 </div>
 <?php require __DIR__ . '/../layout/footer.php'; ?>

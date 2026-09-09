@@ -35,6 +35,27 @@
         </div>
     </div>
 
+    <?php if (($user['role'] ?? '') === 'admin'): ?>
+    <!-- ADMIN DATABASE RE-SEED QUICK CONTROL CARD -->
+    <div class="bg-gradient-to-r from-amber-950/50 via-slate-900 to-slate-900 border border-amber-500/50 p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl">
+        <div class="space-y-1">
+            <div class="flex items-center gap-2">
+                <span class="text-xl">⚡</span>
+                <h2 class="text-xl font-extrabold text-amber-400">ADMIN CONTROL: RE-SEED & UPDATE DATABASE</h2>
+            </div>
+            <p class="text-slate-300 text-xs">
+                As an Administrator, you can instantly refresh the database schema and seed all 15 course levels, masterclass lessons, quizzes, missions, and downloadable resources.
+            </p>
+        </div>
+        <form action="/admin/reseed-database" method="POST" onsubmit="return confirm('Are you sure you want to update and re-seed all database content across all 15 levels?');">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+            <button type="submit" class="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3 px-6 rounded-xl text-xs shadow-lg transition flex items-center gap-2 whitespace-nowrap">
+                🔄 RE-SEED & UPDATE DATABASE NOW
+            </button>
+        </form>
+    </div>
+    <?php endif; ?>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
