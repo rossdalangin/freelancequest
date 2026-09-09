@@ -64,6 +64,31 @@ class Database
                     ip_address TEXT,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
                 );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS jobs (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    title TEXT NOT NULL,
+                    company TEXT NOT NULL,
+                    category TEXT DEFAULT 'General VA',
+                    budget TEXT DEFAULT '$15 - $25/hr',
+                    job_type TEXT DEFAULT 'Part-Time',
+                    description TEXT NOT NULL,
+                    requirements TEXT,
+                    status TEXT DEFAULT 'open',
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS job_applications (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    job_id INTEGER REFERENCES jobs(id) ON DELETE CASCADE,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    cover_letter TEXT NOT NULL,
+                    proposed_rate TEXT NOT NULL,
+                    portfolio_url TEXT,
+                    status TEXT DEFAULT 'applied',
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
             }
         } catch (Exception $e) {
             // Ignore if schema check in progress

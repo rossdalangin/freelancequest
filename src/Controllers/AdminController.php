@@ -240,6 +240,33 @@ class AdminController
         exit;
     }
 
+    public function editQuestion(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $questionText = $_POST['question_text'] ?? '';
+        $options = array_filter(array_map('trim', explode("\n", $_POST['options'] ?? '')));
+        $correctOption = $_POST['correct_option'] ?? ($options[0] ?? '');
+        $explanation = $_POST['explanation'] ?? '';
+
+        if ($questionText && count($options) >= 2) {
+            $stmt = $pdo->prepare("UPDATE questions SET question_text = ?, options = ?, correct_option = ?, explanation = ? WHERE id = ?");
+            $stmt->execute([$questionText, json_encode(array_values($options)), $correctOption, $explanation, $id]);
+
+            DataManagementService::logActivity($admin['id'], 'ADMIN_QUESTION_EDIT', "Updated question #{$id}");
+        }
+
+        header('Location: /admin/quizzes');
+        exit;
+    }
+
     public function deleteQuestion(string $id)
     {
         $admin = $this->checkAdminAuth();
@@ -256,6 +283,87 @@ class AdminController
         DataManagementService::logActivity($admin['id'], 'ADMIN_QUESTION_DELETE', "Deleted question #{$id}");
 
         header('Location: /admin/quizzes');
+        exit;
+    }
+
+    public function manageCourses()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT * FROM courses ORDER BY level_number ASC, id DESC");
+        $courses = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/courses.php';
+    }
+
+    public function createCourse()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $slug = strtolower(str_replace(' ', '-', $title)) . '-' . rand(100, 999);
+        $description = $_POST['description'] ?? '';
+        $levelNum = $_POST['level_number'] ?? 1;
+        $category = $_POST['category'] ?? 'Foundations';
+
+        $stmt = $pdo->prepare("INSERT INTO courses (title, slug, description, level_number, category) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([$title, $slug, $description, $levelNum, $category]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_COURSE_CREATE', "Created course: {$title}");
+
+        header('Location: /admin/courses');
+        exit;
+    }
+
+    public function editCourse(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $title = $_POST['title'] ?? '';
+        $description = $_POST['description'] ?? '';
+        $levelNum = $_POST['level_number'] ?? 1;
+        $category = $_POST['category'] ?? 'Foundations';
+
+        $stmt = $pdo->prepare("UPDATE courses SET title = ?, description = ?, level_number = ?, category = ? WHERE id = ?");
+        $stmt->execute([$title, $description, $levelNum, $category, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_COURSE_EDIT', "Updated course #{$id}: {$title}");
+
+        header('Location: /admin/courses');
+        exit;
+    }
+
+    public function deleteCourse(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM courses WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_COURSE_DELETE', "Deleted course #{$id}");
+
+        header('Location: /admin/courses');
         exit;
     }
 

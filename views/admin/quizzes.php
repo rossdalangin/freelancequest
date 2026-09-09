@@ -48,7 +48,7 @@
 
     <!-- EXISTING QUIZZES LIST & EDIT -->
     <div class="space-y-6">
-        <h3 class="text-xl font-bold text-white">EXISTING QUIZZES (EDIT & MANAGE QUESTIONS)</h3>
+        <h3 class="text-xl font-bold text-white">EXISTING QUIZZES & QUESTION EDITING</h3>
 
         <?php foreach ($quizzes as $q): ?>
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
@@ -97,19 +97,47 @@
                 </div>
             </form>
 
-            <!-- QUESTIONS FOR THIS QUIZ -->
-            <div class="space-y-3 pt-2">
+            <!-- QUESTIONS FOR THIS QUIZ (WITH EDIT FORMS) -->
+            <div class="space-y-4 pt-2">
                 <h5 class="text-xs font-extrabold text-slate-400 uppercase tracking-wider">Quiz Questions (<?= count($q['questions']) ?>)</h5>
 
                 <?php foreach ($q['questions'] as $qn): ?>
-                <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-bold text-white"><?= htmlspecialchars($qn['question_text']) ?></p>
-                        <p class="text-[10px] text-emerald-400">✓ Correct: <?= htmlspecialchars($qn['correct_option']) ?></p>
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-indigo-400">Question #<?= $qn['id'] ?></span>
+                        <form action="/admin/questions/<?= $qn['id'] ?>/delete" method="POST" onsubmit="return confirm('Remove question?');">
+                            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                            <button type="submit" class="text-red-400 hover:underline text-xs font-bold">Remove Question</button>
+                        </form>
                     </div>
-                    <form action="/admin/questions/<?= $qn['id'] ?>/delete" method="POST">
+
+                    <!-- EDIT QUESTION FORM -->
+                    <form action="/admin/questions/<?= $qn['id'] ?>/edit" method="POST" class="space-y-3">
                         <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
-                        <button type="submit" class="text-red-400 hover:underline text-[10px] font-bold">Remove</button>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Question Text</label>
+                            <input type="text" name="question_text" value="<?= htmlspecialchars($qn['question_text']) ?>" required class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 mb-1">Options (One per line)</label>
+                            <textarea name="options" rows="3" required class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2"><?= htmlspecialchars(implode("\n", $qn['options'] ?? [])) ?></textarea>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 mb-1">Exact Correct Option Match</label>
+                                <input type="text" name="correct_option" value="<?= htmlspecialchars($qn['correct_option']) ?>" required class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 mb-1">Explanation</label>
+                                <input type="text" name="explanation" value="<?= htmlspecialchars($qn['explanation'] ?? '') ?>" class="w-full bg-slate-900 border border-slate-800 text-xs text-white rounded p-2">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded text-[11px]">
+                            UPDATE QUESTION
+                        </button>
                     </form>
                 </div>
                 <?php endforeach; ?>
@@ -132,7 +160,7 @@
                     </div>
 
                     <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs">
-                        SAVE QUESTION
+                        SAVE NEW QUESTION
                     </button>
                 </form>
             </div>

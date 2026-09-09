@@ -257,6 +257,51 @@ function seedDatabase()
     $pdo->exec("INSERT INTO users (name, email, password, role, username, headline, bio, level, xp, coins, streak_count, subscription_tier) VALUES ('Admin Boss', 'admin@freelancequest.com', '$pass', 'admin', 'adminboss', 'Lead Product Architect & Instructor', 'Building top tier VAs.', 15, 50000, 9999, 30, 'master');");
     $pdo->exec("INSERT INTO users (name, email, password, role, username, headline, bio, level, xp, coins, streak_count, subscription_tier) VALUES ('Maria Santos', 'maria@example.com', '$pass', 'student', 'mariasantos', 'Aspiring Administrative & Research VA', 'Eager to help founders.', 3, 1350, 280, 12, 'pro');");
 
+    // 8. Seed Job Postings
+    $jobs = [
+        [
+            'title' => 'Executive Virtual Assistant & Operations Partner',
+            'company' => 'TechFlow Solutions (USA)',
+            'category' => 'Executive Admin',
+            'budget' => '$18 - $25/hour',
+            'job_type' => 'Full-Time (30 hrs/week)',
+            'description' => 'We are seeking an organized, proactive Executive VA to handle C-suite calendar scheduling, inbox zero management, travel itineraries, and meeting minute summaries.',
+            'requirements' => '• 1+ years experience in executive administrative support' . "\n" . '• Mastery of Google Workspace, Calendly, and Slack' . "\n" . '• Impeccable English written and verbal communication',
+        ],
+        [
+            'title' => 'Social Media Content & Canva Graphic Designer',
+            'company' => 'BrightScale Media Agency',
+            'category' => 'Social Media',
+            'budget' => '$15 - $20/hour',
+            'job_type' => 'Part-Time (15 hrs/week)',
+            'description' => 'Looking for a creative Social Media VA to design carousel graphics in Canva, write engaging captions, and schedule posts on Metricool across Instagram and LinkedIn.',
+            'requirements' => '• Strong Canva Pro graphic design portfolio' . "\n" . '• Experience with social scheduling tools (Buffer/Metricool)' . "\n" . '• Basic knowledge of social analytics reporting',
+        ],
+        [
+            'title' => 'B2B Lead Generation & Research Specialist',
+            'company' => 'Apex Growth Partners',
+            'category' => 'Lead Generation',
+            'budget' => '$12 - $18/hour',
+            'job_type' => 'Project-Based (20 hrs/week)',
+            'description' => 'Extract and verify 500 decision-maker contacts (CEOs, Founders) in the SaaS industry using Apollo.io, LinkedIn Sales Navigator, and Hunter.io.',
+            'requirements' => '• High accuracy data entry skills' . "\n" . '• Familiarity with email lookup and verification tools' . "\n" . '• Clean Google Sheets formatting',
+        ],
+        [
+            'title' => 'WordPress Content Manager & Blog Publisher',
+            'company' => 'Digital Horizon Publishing',
+            'category' => 'Web & WordPress',
+            'budget' => '$15 - $22/hour',
+            'job_type' => 'Contract (10 hrs/week)',
+            'description' => 'Format and publish weekly articles on WordPress Gutenberg editor, optimize SEO tags, insert featured images, and manage comment moderation.',
+            'requirements' => '• Basic WordPress Gutenberg editor knowledge' . "\n" . '• Yoast SEO / RankMath keyword optimization' . "\n" . '• Basic image editing',
+        ],
+    ];
+
+    $stmtJ = $pdo->prepare("INSERT INTO jobs (user_id, title, company, category, budget, job_type, description, requirements) VALUES (1, ?, ?, ?, ?, ?, ?, ?)");
+    foreach ($jobs as $j) {
+        $stmtJ->execute([$j['title'], $j['company'], $j['category'], $j['budget'], $j['job_type'], $j['description'], $j['requirements']]);
+    }
+
     echo "Expanded database seeding completed successfully.\n";
 }
 

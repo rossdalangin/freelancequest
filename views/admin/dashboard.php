@@ -36,6 +36,7 @@
 
     <!-- ADMIN QUICK NAVIGATION -->
     <div class="flex flex-wrap items-center gap-3">
+        <a href="/admin/courses" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md">🎓 Manage Courses</a>
         <a href="/admin/lessons" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md">📚 Manage Lessons</a>
         <a href="/admin/quizzes" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md">🧠 Manage Quizzes</a>
         <a href="/admin/missions" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md">🎯 Manage Missions</a>

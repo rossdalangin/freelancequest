@@ -37,6 +37,7 @@ use App\Controllers\AdminController;
 use App\Controllers\ResourceVaultController;
 use App\Controllers\MarketingController;
 use App\Controllers\UserController;
+use App\Controllers\JobController;
 
 SecurityService::setSecurityHeaders();
 SecurityService::startSecureSession();
@@ -60,6 +61,14 @@ $router->post('/logout', [AuthController::class, 'logout']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/settings', [UserController::class, 'showSettings']);
 $router->post('/settings', [UserController::class, 'updateSettings']);
+
+// Job Marketplace Routes
+$router->get('/jobs', [JobController::class, 'index']);
+$router->get('/jobs/create', [JobController::class, 'showCreateForm']);
+$router->post('/jobs/create', [JobController::class, 'store']);
+$router->get('/jobs/{id}', [JobController::class, 'show']);
+$router->post('/jobs/{id}/apply', [JobController::class, 'apply']);
+$router->get('/my-applications', [JobController::class, 'myApplications']);
 
 $router->get('/onboarding', [OnboardingController::class, 'index']);
 $router->post('/onboarding', [OnboardingController::class, 'store']);
@@ -100,11 +109,17 @@ $router->post('/admin/lessons/create', [AdminController::class, 'createLesson'])
 $router->post('/admin/lessons/{id}/edit', [AdminController::class, 'editLesson']);
 $router->post('/admin/lessons/{id}/delete', [AdminController::class, 'deleteLesson']);
 
+$router->get('/admin/courses', [AdminController::class, 'manageCourses']);
+$router->post('/admin/courses/create', [AdminController::class, 'createCourse']);
+$router->post('/admin/courses/{id}/edit', [AdminController::class, 'editCourse']);
+$router->post('/admin/courses/{id}/delete', [AdminController::class, 'deleteCourse']);
+
 $router->get('/admin/quizzes', [AdminController::class, 'manageQuizzes']);
 $router->post('/admin/quizzes/create', [AdminController::class, 'createQuiz']);
 $router->post('/admin/quizzes/{id}/edit', [AdminController::class, 'editQuiz']);
 $router->post('/admin/quizzes/{id}/delete', [AdminController::class, 'deleteQuiz']);
 $router->post('/admin/quizzes/{id}/question/add', [AdminController::class, 'addQuizQuestion']);
+$router->post('/admin/questions/{id}/edit', [AdminController::class, 'editQuestion']);
 $router->post('/admin/questions/{id}/delete', [AdminController::class, 'deleteQuestion']);
 
 $router->get('/admin/missions', [AdminController::class, 'manageMissions']);

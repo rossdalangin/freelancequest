@@ -126,4 +126,21 @@ class NativeFreelanceQuestTest extends TestCase
         $this->assertStringContainsString('ACCOUNT & GAME SETTINGS', $output);
         $this->assertStringContainsString('Professional Headline', $output);
     }
+
+    public function testJobControllerRendersAndApplies()
+    {
+        $controller = new \App\Controllers\JobController();
+
+        // Test job index rendering
+        ob_start();
+        $controller->index();
+        $outputIndex = ob_get_clean();
+        $this->assertStringContainsString('CLIENT OPPORTUNITIES & JOB BOARD', $outputIndex);
+
+        // Test job detail rendering with "APPLY FOR THIS ROLE"
+        ob_start();
+        $controller->show("1");
+        $outputShow = ob_get_clean();
+        $this->assertStringContainsString('APPLY FOR THIS ROLE', $outputShow);
+    }
 }
