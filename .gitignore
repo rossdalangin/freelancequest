@@ -26,3 +26,7 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 database/database.sqlite
+
+# Self created tools & cache
+/home/jules/self_created_tools/
+*.sqlite
