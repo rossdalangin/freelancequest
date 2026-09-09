@@ -173,4 +173,22 @@ class NativeFreelanceQuestTest extends TestCase
         $privacyOutput = ob_get_clean();
         $this->assertStringContainsString('PRIVACY POLICY', $privacyOutput);
     }
+
+    public function testLeaderboardAndDatabaseBackupMethodsExist(): void
+    {
+        $this->assertTrue(class_exists('\App\Controllers\LeaderboardController'));
+        $this->assertTrue(method_exists('\App\Controllers\LeaderboardController', 'index'));
+        $this->assertTrue(method_exists('\App\Controllers\AdminController', 'exportDatabase'));
+        $this->assertTrue(method_exists('\App\Controllers\AdminController', 'importDatabase'));
+    }
+
+    public function testLeaderboardSettingInDatabase(): void
+    {
+        $pdo = \App\Database::getConnection();
+        $stmt = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = 'enable_leaderboard'");
+        $stmt->execute();
+        $row = $stmt->fetch();
+        $this->assertNotEmpty($row);
+        $this->assertEquals('1', $row['setting_value']);
+    }
 }

@@ -56,7 +56,39 @@
     </div>
     <?php endif; ?>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+    <!-- ADMIN DATABASE BACKUP & RESTORE BANNER (Visible to Admins) -->
+    <?php if (($_SESSION['user']['role'] ?? '') === 'admin'): ?>
+        <div class="bg-slate-800 rounded-2xl p-6 border border-amber-500/30 shadow-xl mb-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-700">
+                <div>
+                    <h3 class="text-lg font-extrabold text-amber-400 flex items-center gap-2">
+                        <span>🛡️</span> ADMIN DATABASE BACKUP & RESTORE ENGINE
+                    </h3>
+                    <p class="text-xs text-slate-400">Export your complete database snapshot or import a backup file directly from your dashboard.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="/admin/database/export" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow transition">
+                        <span>📥</span> Export Backup (.sqlite)
+                    </a>
+                    <a href="/settings" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-3 py-2 rounded-xl text-xs transition">
+                        ⚙️ Admin Settings
+                    </a>
+                </div>
+            </div>
+
+            <form action="/admin/database/import" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-center gap-3" onsubmit="return confirm('WARNING: Importing a database backup file will replace all current data. Proceed?');">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::generateCsrfToken() ?>">
+                <input type="file" name="backup_file" accept=".sqlite,.db" required class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer bg-slate-900/60 rounded-xl border border-slate-700 p-1">
+                <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs whitespace-nowrap shadow transition flex items-center justify-center gap-1.5">
+                    <span>🚀</span> Import Backup
+                </button>
+            </form>
+        </div>
+    <?php endif; ?>
+
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-4">

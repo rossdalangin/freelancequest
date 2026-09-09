@@ -747,4 +747,80 @@ class AdminController
         header('Location: /admin');
         exit;
     }
+
+    public function exportDatabase(): void
+    {
+        $this->requireAdmin();
+        $dbPath = __DIR__ . '/../../database/database.sqlite';
+
+        if (!file_exists($dbPath)) {
+            $_SESSION['flash_error'] = "Database file not found.";
+            $this->redirect('/settings');
+            return;
+        }
+
+        $filename = 'freelancequest-backup-' . date('Y-m-d-His') . '.sqlite';
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/vnd.sqlite3');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . filesize($dbPath));
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+
+        readfile($dbPath);
+        exit();
+    }
+
+    public function importDatabase(): void
+    {
+        $this->requireAdmin();
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->redirect('/settings');
+            return;
+        }
+
+        $this->validateCsrf();
+
+        if (!isset($_FILES['backup_file']) || $_FILES['backup_file']['error'] !== UPLOAD_ERR_OK) {
+            $_SESSION['flash_error'] = "File upload failed or no backup file provided.";
+            $this->redirect($_SERVER['HTTP_REFERER'] ?? '/settings');
+            return;
+        }
+
+        $fileTmpPath = $_FILES['backup_file']['tmp_name'];
+        $fileName = $_FILES['backup_file']['name'];
+        $fileSize = $_FILES['backup_file']['size'];
+
+        // Validate file extension or content
+        $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        if ($ext !== 'sqlite' && $ext !== 'db') {
+            $_SESSION['flash_error'] = "Invalid file type. Please upload a valid .sqlite or .db backup file.";
+            $this->redirect($_SERVER['HTTP_REFERER'] ?? '/settings');
+            return;
+        }
+
+        // Validate SQLite header
+        $header = file_get_contents($fileTmpPath, false, null, 0, 16);
+        if ($header !== "SQLite format 3 ") {
+            $_SESSION['flash_error'] = "Uploaded file is not a valid SQLite format 3 database.";
+            $this->redirect($_SERVER['HTTP_REFERER'] ?? '/settings');
+            return;
+        }
+
+        $targetDbPath = __DIR__ . '/../../database/database.sqlite';
+
+        // Safely replace database
+        try {
+            // Close active PDO connection if possible before overwriting
+            copy($fileTmpPath, $targetDbPath);
+            $_SESSION['flash_success'] = "Database backup imported successfully! All records have been updated.";
+        } catch (\Throwable $e) {
+            $_SESSION['flash_error'] = "Failed to import database backup: " . $e->getMessage();
+        }
+
+        $this->redirect($_SERVER['HTTP_REFERER'] ?? '/settings');
+    }
 }
