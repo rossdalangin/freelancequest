@@ -1,51 +1,34 @@
-# FREELANCEQUEST — High-Converting Sales Copy & Marketing Collateral
+# FREELANCEQUEST: High-Converting Landing Page Sales Copy
+
+## MAIN HERO HEADLINE
+# PLAY. LEARN. LEVEL UP. GET CLIENTS. GET PAID.
+
+### Subheadline
+**Your Freelancing Career Starts as a Game.** Master high-demand Virtual Assistant skills, build your ATS resume and public portfolio, practice client interviews, and land your first paying client — all while playing an addictive RPG simulator.
 
 ---
 
-## 1. Primary Value Proposition & Taglines
-
-### Primary Tagline
-> **PLAY. LEARN. LEVEL UP. GET CLIENTS. GET PAID.**
-
-### Alternative Taglines
-> *Your Freelancing Career Starts as a Game.*
-> *Stop Watching Course Videos. Start Playing Your Career.*
+## VALUE PROPOSITION CALLOUTS
+1. **Learn by Doing**: No boring 2-hour lecture videos. Solve real client problems, format spreadsheets, and draft pitches in interactive scenario missions.
+2. **Career Asset Engine**: Auto-generate a job-ready ATS resume, custom cover letters, and a live public showcase portfolio website (`freelancequest.com/p/yourname`).
+3. **From Beginner to Agency Owner**: Progress across 15 career levels with certified credentials, verifiable QR badges, and expert SOP blueprints.
 
 ---
 
-## 2. Homepage Sales Copy Outline
+## PRICING TIER COMPARISON
 
-### Hero Section
-- **Headline:** Turn Your Remote Work Ambitions Into Real Clients & Income
-- **Subheadline:** FREELANCEQUEST is the world's #1 gamified Virtual Assistant & freelancing career simulator. Master high-demand digital skills, build a client-ready portfolio, and win paid client contracts—100% by playing.
-- **CTA Primary:** START YOUR QUEST FOR FREE &rarr;
-- **CTA Secondary:** VIEW DEMO GAMEPLAY &rarr;
-
-### Social Proof Counter
-- **16** Career Progression Levels
-- **34+** Actionable Lessons
-- **50+** Real Client Simulation Missions
-- **100%** Learn By Doing
+| Feature | FREE PLAN | PRO PLAN ($19/mo) | MASTER PLAN ($49/mo) |
+|---|---|---|---|
+| Level Access | Levels 0 - 3 | Levels 0 - 10 | ALL 15 Levels |
+| Resume & Cover Letter Builder | Basic | Unlimited PDF Export | Unlimited + Priority AI Review |
+| Public Portfolio Website | Standard | Custom Slug & Branding | Premium Agency Templates |
+| Verifiable Certificates | 1 Included | Unlimited | Unlimited Certified Master |
+| Downloadable Vault Resources | Free Vault | Full Vault Access | Full Vault + Agency Manuals |
 
 ---
 
-## 3. Core Features & Benefits Copy
-
-### Feature 1: RPG Skill Tree Progression
-- **Benefit:** Unlock technical skills in Google Workspace, Canva, Lead Generation, WordPress, and Executive Admin as you complete interactive missions and earn XP.
-
-### Feature 2: Interactive Resume & Portfolio Builders
-- **Benefit:** Convert in-game mission achievements into ATS-optimized resumes and a live public portfolio showcase (`freelancequest.com/p/username`) that impresses real clients.
-
-### Feature 3: Job Board Marketplace & Proposal Generator
-- **Benefit:** Practice real client outreach with custom cover letters and apply directly for client positions with automated performance evaluation.
-
----
-
-## 4. Frequently Asked Questions (FAQ) Sales Copy
-
-### Q: Is FREELANCEQUEST suitable for absolute beginners?
-> **A:** Yes! Level 0 (Career Zero) assumes no prior remote work experience and guides you step-by-step through digital tools, communication etiquettes, and client acquisition.
-
-### Q: How does FREELANCEQUEST differ from video courses?
-> **A:** Passive video watching leads to low completion rates. FREELANCEQUEST uses interactive missions, simulated client scenarios, daily quests, and streak flames to build genuine competence.
+## FREQUENTLY ASKED QUESTIONS (FAQ)
+- **Q: Do I need prior experience to join FREELANCEQUEST?**
+  *A: Absolutely not! FREELANCEQUEST is specifically designed to take complete beginners from Level 0 to job-ready freelancers.*
+- **Q: Are certificates verifiable by real clients?**
+  *A: Yes! Every level certificate includes a unique verification code (`freelancequest.com/verify/FQ-1234`) where employers can verify your skill scores.*
