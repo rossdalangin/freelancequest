@@ -7,6 +7,7 @@ function initializeSchema()
     $pdo = Database::getConnection();
 
     $queries = [
+        "DROP TABLE IF EXISTS applications_tracker;",
         "DROP TABLE IF EXISTS job_applications;",
         "DROP TABLE IF EXISTS jobs;",
         "DROP TABLE IF EXISTS payments;",
@@ -353,6 +354,17 @@ function initializeSchema()
             proposed_rate TEXT NOT NULL,
             portfolio_url TEXT,
             status TEXT DEFAULT 'applied',
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE applications_tracker (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            company TEXT NOT NULL,
+            position TEXT NOT NULL,
+            applied_date TEXT NOT NULL,
+            status TEXT DEFAULT 'Applied',
+            notes TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );"
     ];

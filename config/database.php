@@ -89,6 +89,17 @@ class Database
                     status TEXT DEFAULT 'applied',
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
                 );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS applications_tracker (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    company TEXT NOT NULL,
+                    position TEXT NOT NULL,
+                    applied_date TEXT NOT NULL,
+                    status TEXT DEFAULT 'Applied',
+                    notes TEXT,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
             }
         } catch (Exception $e) {
             // Ignore if schema check in progress

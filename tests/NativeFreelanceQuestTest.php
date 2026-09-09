@@ -143,4 +143,19 @@ class NativeFreelanceQuestTest extends TestCase
         $outputShow = ob_get_clean();
         $this->assertStringContainsString('APPLY FOR THIS ROLE', $outputShow);
     }
+
+    public function testCoverLetterAndTrackerControllers()
+    {
+        $clController = new \App\Controllers\CoverLetterController();
+        ob_start();
+        $clController->index();
+        $clOutput = ob_get_clean();
+        $this->assertStringContainsString('COVER LETTER GENERATOR', $clOutput);
+
+        $appController = new \App\Controllers\ApplicationTrackerController();
+        ob_start();
+        $appController->index();
+        $appOutput = ob_get_clean();
+        $this->assertStringContainsString('APPLICATION TRACKER DASHBOARD', $appOutput);
+    }
 }

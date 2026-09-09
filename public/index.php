@@ -38,6 +38,8 @@ use App\Controllers\ResourceVaultController;
 use App\Controllers\MarketingController;
 use App\Controllers\UserController;
 use App\Controllers\JobController;
+use App\Controllers\CoverLetterController;
+use App\Controllers\ApplicationTrackerController;
 
 SecurityService::setSecurityHeaders();
 SecurityService::startSecureSession();
@@ -61,6 +63,15 @@ $router->post('/logout', [AuthController::class, 'logout']);
 $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/settings', [UserController::class, 'showSettings']);
 $router->post('/settings', [UserController::class, 'updateSettings']);
+
+// Cover Letter & Application Tracker Routes
+$router->get('/cover-letter-builder', [CoverLetterController::class, 'index']);
+$router->post('/cover-letter-builder/generate', [CoverLetterController::class, 'generate']);
+
+$router->get('/application-tracker', [ApplicationTrackerController::class, 'index']);
+$router->post('/application-tracker/add', [ApplicationTrackerController::class, 'add']);
+$router->post('/application-tracker/{id}/status', [ApplicationTrackerController::class, 'updateStatus']);
+$router->post('/application-tracker/{id}/delete', [ApplicationTrackerController::class, 'delete']);
 
 // Job Marketplace Routes
 $router->get('/jobs', [JobController::class, 'index']);

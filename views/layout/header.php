@@ -55,6 +55,8 @@
                 <a href="/dashboard" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-compass mr-1"></i> Dashboard</a>
                 <a href="/learn" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-book-open mr-1"></i> Academy</a>
                 <a href="/jobs" class="text-amber-400 hover:text-amber-300 font-bold transition"><i class="fa-solid fa-briefcase mr-1"></i> Job Board</a>
+                <a href="/cover-letter-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-envelope-open-text mr-1"></i> Cover Letter</a>
+                <a href="/application-tracker" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-chart-line mr-1"></i> Tracker</a>
                 <a href="/resume-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-file-invoice mr-1"></i> Resume</a>
                 <a href="/portfolio-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-user-gear mr-1"></i> Portfolio</a>
                 <a href="/community" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-users mr-1"></i> Community</a>
