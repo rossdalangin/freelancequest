@@ -57,9 +57,25 @@ class PortfolioController
         $title = $_POST['title'] ?? '';
         $tagline = $_POST['tagline'] ?? '';
         $about = $_POST['about'] ?? '';
+        $email = $_POST['email'] ?? $user['email'];
+        $linkedin = $_POST['linkedin'] ?? '';
 
-        $stmtUp = $pdo->prepare("UPDATE portfolios SET title = ?, tagline = ?, about = ? WHERE user_id = ?");
-        $stmtUp->execute([$title, $tagline, $about, $user['id']]);
+        $servicesRaw = $_POST['services_text'] ?? '';
+        $services = [];
+        $lines = array_filter(array_map('trim', explode("\n", $servicesRaw)));
+        foreach ($lines as $line) {
+            $parts = explode('|', $line);
+            if (count($parts) >= 2) {
+                $services[] = ['title' => trim($parts[0]), 'description' => trim($parts[1])];
+            } else {
+                $services[] = ['title' => trim($line), 'description' => 'Professional Virtual Assistant Service'];
+            }
+        }
+
+        $contactInfo = json_encode(['email' => $email, 'linkedin' => $linkedin]);
+
+        $stmtUp = $pdo->prepare("UPDATE portfolios SET title = ?, tagline = ?, about = ?, services = ?, contact_info = ? WHERE user_id = ?");
+        $stmtUp->execute([$title, $tagline, $about, json_encode($services), $contactInfo, $user['id']]);
 
         $gameEngine = new GameEngineService();
         $gameEngine->awardXPAndCoins($user['id'], 250, 60);

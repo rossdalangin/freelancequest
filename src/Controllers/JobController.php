@@ -15,9 +15,17 @@ class JobController
         $pdo = Database::getConnection();
 
         $category = $_GET['category'] ?? null;
-        if ($category) {
+        $search = $_GET['search'] ?? null;
+
+        if ($category && $search) {
+            $stmt = $pdo->prepare("SELECT j.*, (SELECT COUNT(*) FROM job_applications ja WHERE ja.job_id = j.id) as applicants_count FROM jobs j WHERE j.status = 'open' AND j.category = ? AND (j.title LIKE ? OR j.company LIKE ? OR j.description LIKE ?) ORDER BY j.id DESC");
+            $stmt->execute([$category, "%{$search}%", "%{$search}%", "%{$search}%"]);
+        } elseif ($category) {
             $stmt = $pdo->prepare("SELECT j.*, (SELECT COUNT(*) FROM job_applications ja WHERE ja.job_id = j.id) as applicants_count FROM jobs j WHERE j.status = 'open' AND j.category = ? ORDER BY j.id DESC");
             $stmt->execute([$category]);
+        } elseif ($search) {
+            $stmt = $pdo->prepare("SELECT j.*, (SELECT COUNT(*) FROM job_applications ja WHERE ja.job_id = j.id) as applicants_count FROM jobs j WHERE j.status = 'open' AND (j.title LIKE ? OR j.company LIKE ? OR j.description LIKE ?) ORDER BY j.id DESC");
+            $stmt->execute(["%{$search}%", "%{$search}%", "%{$search}%"]);
         } else {
             $stmt = $pdo->query("SELECT j.*, (SELECT COUNT(*) FROM job_applications ja WHERE ja.job_id = j.id) as applicants_count FROM jobs j WHERE j.status = 'open' ORDER BY j.id DESC");
         }

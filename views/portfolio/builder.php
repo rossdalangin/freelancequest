@@ -19,7 +19,27 @@
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-300 mb-1">About Me / Value Proposition</label>
-                <textarea name="about" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-100"><?= htmlspecialchars($portfolio['about'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+                <textarea name="about" rows="4" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-100"><?= htmlspecialchars($portfolio['about'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Services (Format: Title | Description - One per line)</label>
+                <?php
+                    $servicesText = [];
+                    foreach (($portfolio['services'] ?? []) as $s) {
+                        $servicesText[] = ($s['title'] ?? '') . ' | ' . ($s['description'] ?? '');
+                    }
+                ?>
+                <textarea name="services_text" rows="4" placeholder="Email Management | Inbox zero and priority triage&#10;Lead Generation | Verified B2B contact lists" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100"><?= htmlspecialchars(implode("\n", $servicesText), ENT_QUOTES, 'UTF-8') ?></textarea>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">Contact Email</label>
+                    <input type="email" name="email" value="<?= htmlspecialchars(($portfolio['contact_info']['email'] ?? $user['email']), ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-300 mb-1">LinkedIn Profile URL</label>
+                    <input type="text" name="linkedin" value="<?= htmlspecialchars(($portfolio['contact_info']['linkedin'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" placeholder="https://linkedin.com/in/username" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-sm text-slate-100">
+                </div>
             </div>
             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-4 rounded-xl text-sm transition shadow-lg shadow-indigo-600/30">SAVE & PUBLISH PORTFOLIO (+250 XP)</button>
         </form>
