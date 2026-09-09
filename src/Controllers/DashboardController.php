@@ -31,11 +31,11 @@ class DashboardController
         $stmtMission->execute([max(1, $user['level'])]);
         $currentMission = $stmtMission->fetch();
 
-        // Skill categories
-        $stmtCats = $pdo->query("SELECT * FROM skill_categories");
+        // Skill categories - query distinct skills per category to prevent duplicate skill names
+        $stmtCats = $pdo->query("SELECT * FROM skill_categories ORDER BY id ASC");
         $skillCategories = $stmtCats->fetchAll();
         foreach ($skillCategories as &$cat) {
-            $stmtS = $pdo->prepare("SELECT * FROM skills WHERE skill_category_id = ? LIMIT 3");
+            $stmtS = $pdo->prepare("SELECT MIN(id) as id, name, slug, description FROM skills WHERE skill_category_id = ? GROUP BY name ORDER BY id ASC");
             $stmtS->execute([$cat['id']]);
             $cat['skills'] = $stmtS->fetchAll();
         }

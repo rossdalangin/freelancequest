@@ -53,6 +53,7 @@
 
             <nav class="flex items-center gap-4 text-xs font-semibold">
                 <a href="/dashboard" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-compass mr-1"></i> Dashboard</a>
+                <a href="/leaderboard" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-trophy mr-1"></i> Leaderboard</a>
                 <a href="/learn" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-book-open mr-1"></i> Academy</a>
                 <a href="/jobs" class="text-amber-400 hover:text-amber-300 font-bold transition"><i class="fa-solid fa-briefcase mr-1"></i> Job Board</a>
                 <a href="/cover-letter-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-envelope-open-text mr-1"></i> Cover Letter</a>

@@ -40,6 +40,7 @@ use App\Controllers\UserController;
 use App\Controllers\JobController;
 use App\Controllers\CoverLetterController;
 use App\Controllers\ApplicationTrackerController;
+use App\Controllers\LeaderboardController;
 
 SecurityService::setSecurityHeaders();
 SecurityService::startSecureSession();
@@ -66,6 +67,7 @@ $router->post('/logout', [AuthController::class, 'logout']);
 
 // Game Protected Routes
 $router->get('/dashboard', [DashboardController::class, 'index']);
+$router->get('/leaderboard', [LeaderboardController::class, 'index']);
 $router->get('/settings', [UserController::class, 'showSettings']);
 $router->post('/settings', [UserController::class, 'updateSettings']);
 
@@ -160,6 +162,8 @@ $router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
 $router->get('/admin/export-data', [AdminController::class, 'exportData']);
 $router->post('/admin/reseed-database', [AdminController::class, 'reseedDatabase']);
+$router->get('/admin/database/export', [AdminController::class, 'exportDatabase']);
+$router->post('/admin/database/import', [AdminController::class, 'importDatabase']);
 
 $router->get('/marketing', [MarketingController::class, 'index']);
 $router->get('/marketing/doc/{doc}', [MarketingController::class, 'showDocument']);
