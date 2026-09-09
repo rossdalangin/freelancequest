@@ -4,7 +4,7 @@ Welcome to **FREELANCEQUEST**, the gamified Virtual Assistant & freelancing care
 
 ---
 
-## 1. System Overview
+## 1. System Overview & Core Philosophy
 
 FREELANCEQUEST combines the engagement mechanics of modern RPGs (XP, levels, skill trees, streak flames, badges, daily quests) with real-world freelancing skills training.
 
@@ -13,7 +13,7 @@ FREELANCEQUEST combines the engagement mechanics of modern RPGs (XP, levels, ski
 
 ---
 
-## 2. Career Progression Levels (Levels 0 – 15)
+## 2. Student Career Journey (Levels 0 – 15)
 
 - **Level 0: Career Zero** — Starting with zero remote experience.
 - **Level 1: Explorer** — Freelancing foundations, remote work basics, and career path options.
@@ -34,12 +34,47 @@ FREELANCEQUEST combines the engagement mechanics of modern RPGs (XP, levels, ski
 
 ---
 
-## 3. Platform Administration Guide
+## 3. Learner Career Tools & Features
+
+1. **Academy & Lesson Player (`/learn`)**:
+   - Access comprehensive text, video, and markdown lesson SOPs.
+   - Complete lesson-specific knowledge check quizzes with exact score-proportional XP and coin calculations.
+
+2. **Interactive Resume Builder (`/resume-builder`)**:
+   - Build ATS-optimized resumes with instant PDF print support (`/resume-builder/print`).
+
+3. **Public Portfolio Showcase (`/p/username`)**:
+   - Publish live portfolio pages featuring services, about bios, contact info, and work samples.
+
+4. **Cover Letter Generator (`/cover-letter-builder`)**:
+   - Generate tailored, high-converting pitch proposals for specific job opportunities.
+
+5. **Application Tracker Pipeline (`/application-tracker`)**:
+   - Track application pipeline conversion rates, interview conversion, and client offers.
+
+6. **Job Board Marketplace (`/jobs`)**:
+   - Browse open client opportunities, post jobs, and apply directly via the prominent "Apply for this role" submission form.
+
+7. **Verifiable Certificates (`/verify/code`)**:
+   - Issue verifiable credentials (`FQ-XXXX-1234`) with instant print views (`/verify/code/print`).
+
+8. **Resource Vault (`/resources`)**:
+   - Download valuable SOP templates, contract agreements, pitch scripts, and pricing calculators.
+
+---
+
+## 4. Platform Administration Guide
 
 ### Accessing Admin Control Center
-Navigate to `/admin` in your browser.
+Navigate to `/admin` in your browser. (Requires user role `admin`).
 
-### Key Admin Capabilities
-1. **Analytics Dashboard:** Monitor total active learners, published lessons, active missions, and quizzes.
-2. **AI Course Builder:** Enter any topic (e.g. *E-commerce Product Listing VA*) to generate an automated course module with outlines, lesson text, quizzes, and questions.
-3. **Learner Progression Tracking:** View real-time user levels, total XP, and subscription tier status.
+### Key Admin Capabilities & CRUD Management
+1. **Analytics Dashboard (`/admin`)**: Monitor total learners, published lessons, active missions, quizzes, and total payment transactions.
+2. **Curriculum Lessons (`/admin/lessons`)**: Full CRUD support to create, view, edit, and delete lessons.
+3. **Quizzes & Questions (`/admin/quizzes`)**: Full CRUD support for lesson quizzes, plus individual question editing and removal.
+4. **Interactive Missions (`/admin/missions`)**: Full CRUD support for scenario exercises and rewards.
+5. **Resource Vault (`/resources`)**: Full CRUD support for downloadable PDFs, templates, and scripts.
+6. **User & Membership Management (`/admin/users`)**: Update user roles (Student vs Admin) and subscription tiers (Free, Pro, Master).
+7. **Payments & Refunds (`/admin/payments`)**: Review PayPal, Stripe, and GCash transactions and execute refunds.
+8. **Payment Gateway Settings (`/admin`)**: Configure merchant payment receiving account details (PayPal Email, Stripe Key, GCash Number & Name).
+9. **System Audit Logs & Backup Export (`/admin/logs`, `/admin/export-data`)**: Review real-time system logs and download full JSON database backups.
