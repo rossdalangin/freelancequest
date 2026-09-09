@@ -40,7 +40,7 @@ class NativeFreelanceQuestTest extends TestCase
         $levelCount = $pdo->query("SELECT COUNT(*) FROM levels")->fetchColumn();
 
         $this->assertEquals(2, $userCount);
-        $this->assertEquals(34, $lessonCount);
+        $this->assertEquals(27, $lessonCount);
         $this->assertEquals(16, $levelCount);
     }
 
