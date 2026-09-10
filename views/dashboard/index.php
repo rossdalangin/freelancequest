@@ -58,7 +58,7 @@
 
 
     <!-- ADMIN DATABASE BACKUP & RESTORE BANNER (Visible to Admins) -->
-    <?php if (($_SESSION['user']['role'] ?? '') === 'admin'): ?>
+    <?php if (($user['role'] ?? '') === 'admin'): ?>
         <div class="bg-slate-800 rounded-2xl p-6 border border-amber-500/30 shadow-xl mb-8">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-700">
                 <div>
@@ -78,7 +78,7 @@
             </div>
 
             <form action="/admin/database/import" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-center gap-3" onsubmit="return confirm('WARNING: Importing a database backup file will replace all current data. Proceed?');">
-                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::generateCsrfToken() ?>">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
                 <input type="file" name="backup_file" accept=".sqlite,.db" required class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-amber-500 file:text-slate-950 hover:file:bg-amber-400 cursor-pointer bg-slate-900/60 rounded-xl border border-slate-700 p-1">
                 <button type="submit" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-5 py-2.5 rounded-xl text-xs whitespace-nowrap shadow transition flex items-center justify-center gap-1.5">
                     <span>🚀</span> Import Backup

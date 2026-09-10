@@ -39,6 +39,9 @@ class PortfolioController
         }
 
         $portfolio['services'] = json_decode($portfolio['services'], true) ?? [];
+        if (is_string($portfolio['contact_info'] ?? null)) {
+            $portfolio['contact_info'] = json_decode($portfolio['contact_info'], true) ?? [];
+        }
 
         require __DIR__ . '/../../views/portfolio/builder.php';
     }
