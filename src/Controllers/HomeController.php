@@ -22,6 +22,16 @@ class HomeController
         $stmtM = $pdo->query("SELECT COUNT(*) FROM missions");
         $totalMissions = $stmtM->fetchColumn() ?: 50;
 
+        $stmtRes = $pdo->query("SELECT COUNT(*) FROM resources");
+        $totalResources = $stmtRes->fetchColumn() ?: 15;
+
+        $stmtSk = $pdo->query("SELECT COUNT(*) FROM skills");
+        $totalSkills = $stmtSk->fetchColumn() ?: 24;
+
+        // Fetch all levels with descriptions and badges
+        $stmtAllLevels = $pdo->query("SELECT * FROM levels ORDER BY level_number ASC");
+        $careerLevels = $stmtAllLevels->fetchAll() ?: [];
+
         require __DIR__ . '/../../views/home.php';
     }
 }

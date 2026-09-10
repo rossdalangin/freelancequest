@@ -26,21 +26,29 @@
         </div>
 
         <!-- STATS BADGES -->
-        <div class="pt-8 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="pt-8 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-6 gap-6 text-center">
             <div>
                 <div class="text-3xl font-black text-amber-400"><?= $totalLevels ?></div>
                 <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Career Levels</div>
             </div>
             <div>
                 <div class="text-3xl font-black text-indigo-400"><?= $totalLessons ?></div>
-                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Practical Lessons</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Mastery Lessons</div>
             </div>
             <div>
                 <div class="text-3xl font-black text-emerald-400"><?= $totalMissions ?></div>
-                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Simulated Missions</div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Client Missions</div>
             </div>
             <div>
-                <div class="text-3xl font-black text-purple-400">100%</div>
+                <div class="text-3xl font-black text-cyan-400"><?= $totalResources ?></div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Resource Vault Files</div>
+            </div>
+            <div>
+                <div class="text-3xl font-black text-purple-400"><?= $totalSkills ?></div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Unlockable Skills</div>
+            </div>
+            <div>
+                <div class="text-3xl font-black text-rose-400">100%</div>
                 <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Learn By Doing</div>
             </div>
         </div>
@@ -89,52 +97,31 @@
     <!-- CAREER MAP ROADMAP -->
     <section class="bg-slate-900/40 border border-slate-800 p-8 sm:p-12 rounded-3xl space-y-8">
         <div class="text-center space-y-3">
-            <span class="text-xs text-amber-400 font-extrabold tracking-widest uppercase">16-Stage RPG Career Roadmap</span>
-            <h2 class="text-3xl font-black text-white">FROM CAREER ZERO TO FREELANCE MASTER</h2>
-            <p class="text-slate-400 text-sm max-w-xl mx-auto">Progress through distinct stages designed to make you 100% job-ready.</p>
+            <span class="text-xs text-amber-400 font-extrabold tracking-widest uppercase">COMPLETE CAREER PROGRESSION PATHWAY</span>
+            <h2 class="text-3xl font-black text-white">THE 16 RPG CAREER LEVELS</h2>
+            <p class="text-slate-400 text-sm max-w-2xl mx-auto">From complete beginner to building a high-earning virtual freelancing empire.</p>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">🌱</span>
-                <div class="text-xs font-bold text-slate-400">Level 0</div>
-                <div class="text-sm font-extrabold text-white">Career Zero</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <?php foreach ($careerLevels as $level): ?>
+            <div class="bg-slate-900 border border-slate-800/90 hover:border-indigo-500/50 p-5 rounded-2xl space-y-3 transition group flex flex-col justify-between shadow-lg">
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl group-hover:scale-110 transition transform"><?= $level['icon'] ?? '⚡' ?></span>
+                        <span class="text-[10px] font-extrabold bg-indigo-500/20 text-indigo-400 px-2.5 py-1 rounded-full uppercase border border-indigo-500/30">
+                            LEVEL <?= $level['level_number'] ?>
+                        </span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-white group-hover:text-indigo-300 transition"><?= htmlspecialchars($level['title']) ?></h3>
+                    <p class="text-xs text-amber-400 font-semibold line-clamp-1"><?= htmlspecialchars($level['subtitle'] ?? '') ?></p>
+                    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3"><?= htmlspecialchars($level['description'] ?? '') ?></p>
+                </div>
+                <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                    <span>Unlock: <?= $level['xp_required'] ?? ( $level['level_number'] * 1000 ) ?> XP</span>
+                    <span class="text-emerald-400 font-bold"><?= htmlspecialchars($level['certificate_name'] ?? 'Certificate') ?></span>
+                </div>
             </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">🧭</span>
-                <div class="text-xs font-bold text-slate-400">Level 1</div>
-                <div class="text-sm font-extrabold text-white">Explorer</div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">💻</span>
-                <div class="text-xs font-bold text-slate-400">Level 2</div>
-                <div class="text-sm font-extrabold text-white">Digital Survivor</div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">⚡</span>
-                <div class="text-xs font-bold text-slate-400">Level 3</div>
-                <div class="text-sm font-extrabold text-white">VA Apprentice</div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">📝</span>
-                <div class="text-xs font-bold text-slate-400">Level 5</div>
-                <div class="text-sm font-extrabold text-white">Job Ready</div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">🎨</span>
-                <div class="text-xs font-bold text-slate-400">Level 6</div>
-                <div class="text-sm font-extrabold text-white">Portfolio Builder</div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">🎙️</span>
-                <div class="text-xs font-bold text-slate-400">Level 9</div>
-                <div class="text-sm font-extrabold text-white">Interview Arena</div>
-            </div>
-            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-center space-y-1">
-                <span class="text-2xl">👑</span>
-                <div class="text-xs font-bold text-amber-400">Level 15</div>
-                <div class="text-sm font-extrabold text-white">Freelance Master</div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </section>
 
