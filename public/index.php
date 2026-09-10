@@ -160,6 +160,8 @@ $router->post('/admin/certificates/{id}/delete', [AdminController::class, 'revok
 $router->get('/admin/logs', [AdminController::class, 'viewLogs']);
 $router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
+$router->post('/admin/coupons/create', [AdminController::class, 'createCoupon']);
+$router->post('/admin/coupons/{id}/delete', [AdminController::class, 'deleteCoupon']);
 $router->get('/admin/export-data', [AdminController::class, 'exportData']);
 $router->post('/admin/reseed-database', [AdminController::class, 'reseedDatabase']);
 $router->get('/admin/database/export', [AdminController::class, 'exportDatabase']);

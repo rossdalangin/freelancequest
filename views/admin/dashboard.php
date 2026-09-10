@@ -87,10 +87,22 @@
 
         <!-- System & Payment Gateway Settings Form -->
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
-            <h2 class="text-xl font-extrabold text-white">⚙️ GAME & PAYMENT GATEWAY ACCOUNTS</h2>
+            <h2 class="text-xl font-extrabold text-white">⚙️ PRICING & GAME SETTINGS</h2>
             <form action="/admin/settings" method="POST" class="space-y-4">
                 <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-amber-400 mb-1">Pro Plan Monthly Price ($ USD)</label>
+                        <input type="text" name="pro_price" value="<?= htmlspecialchars($proPrice ?? '19.00', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-400 mb-1">Master Plan Monthly Price ($ USD)</label>
+                        <input type="text" name="master_price" value="<?= htmlspecialchars($masterPrice ?? '49.00', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100 font-bold">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-800 pt-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1">Global XP Multiplier</label>
                         <input type="text" name="xp_multiplier" value="<?= htmlspecialchars($xpMultiplier ?? '1.0', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
@@ -102,7 +114,7 @@
                 </div>
 
                 <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <h3 class="text-xs font-extrabold text-amber-400 uppercase tracking-wider">Admin Payment Receiving Accounts</h3>
+                    <h3 class="text-xs font-extrabold text-indigo-400 uppercase tracking-wider">Admin Payment Receiving Accounts</h3>
                     <div>
                         <label class="block text-xs font-bold text-slate-300 mb-1">PayPal Admin Merchant Email</label>
                         <input type="email" name="paypal_email" value="<?= htmlspecialchars($paypalEmail ?? 'admin@freelancequest.com', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-100">
@@ -123,9 +135,81 @@
                     </div>
                 </div>
 
-                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-6 rounded-xl text-xs shadow-lg">SAVE ALL SETTINGS & PAYMENT ACCOUNTS &rarr;</button>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-6 rounded-xl text-xs shadow-lg">SAVE PRICING & PAYMENT SETTINGS &rarr;</button>
             </form>
         </div>
+    </div>
+
+    <!-- COUPONS MANAGEMENT CARD -->
+    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <span>🎟️</span> DISCOUNT COUPONS MANAGEMENT
+                </h2>
+                <p class="text-xs text-slate-400">Create custom coupon codes to offer percentage or fixed dollar discounts during subscription checkout.</p>
+            </div>
+        </div>
+
+        <form action="/admin/coupons/create" method="POST" class="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Coupon Code</label>
+                <input type="text" name="code" required placeholder="FREELANCE50" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white uppercase font-mono font-bold">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Discount Percent (%)</label>
+                <input type="number" name="discount_percent" min="0" max="100" value="0" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 mb-1">Discount Amount ($)</label>
+                <input type="number" step="0.01" name="discount_amount" min="0" value="0.00" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2.5 text-xs text-white">
+            </div>
+            <div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-2.5 px-4 rounded-lg text-xs transition shadow-md">
+                    + CREATE COUPON
+                </button>
+            </div>
+        </form>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                    <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider font-bold">
+                        <th class="py-3 px-4">Coupon Code</th>
+                        <th class="py-3 px-4">Discount</th>
+                        <th class="py-3 px-4">Status</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-200">
+                    <?php foreach (($coupons ?? []) as $cpn): ?>
+                        <tr class="hover:bg-slate-950/50 transition">
+                            <td class="py-3 px-4 font-mono font-extrabold text-amber-400"><?= htmlspecialchars($cpn['code'], ENT_QUOTES, 'UTF-8') ?></td>
+                            <td class="py-3 px-4 font-bold">
+                                <?php if ($cpn['discount_percent'] > 0): ?>
+                                    <span class="text-emerald-400"><?= $cpn['discount_percent'] ?>% OFF</span>
+                                <?php elseif ($cpn['discount_amount'] > 0): ?>
+                                    <span class="text-emerald-400">$<?= number_format($cpn['discount_amount'], 2) ?> OFF</span>
+                                <?php else: ?>
+                                    <span class="text-slate-500">None</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">ACTIVE</span>
+                            </td>
+                            <td class="py-3 px-4 text-right">
+                                <form action="/admin/coupons/<?= $cpn['id'] ?>/delete" method="POST" class="inline" onsubmit="return confirm('Delete this coupon code?');">
+                                    <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                                    <button type="submit" class="bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded text-[11px] font-bold transition">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
     </div>
 
     <!-- Audit Logs -->

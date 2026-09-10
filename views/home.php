@@ -125,6 +125,35 @@
         </div>
     </section>
 
+    <!-- MEET THE FOUNDER SECTION -->
+    <section class="bg-slate-900 border border-slate-800/90 rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+            <div class="text-center md:text-left space-y-3 md:col-span-1">
+                <div class="w-28 h-28 mx-auto md:mx-0 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-4xl font-black text-slate-950 shadow-xl border-2 border-amber-400">
+                    RD
+                </div>
+                <div>
+                    <h3 class="text-2xl font-black text-white">Ross Dalangin</h3>
+                    <p class="text-xs font-bold text-amber-400 uppercase tracking-widest">Founder & Chief Architect</p>
+                </div>
+            </div>
+            <div class="space-y-4 md:col-span-2 text-slate-300 text-sm leading-relaxed">
+                <p>
+                    <strong class="text-white">Built by an educator and freelancing veteran.</strong> Ross Dalangin began his career as an IT and programming teacher at the young age of 19, dedicating nearly 10 years to shaping the next generation of software developers.
+                </p>
+                <p>
+                    With over <strong class="text-indigo-400 font-bold">20+ years of hands-on freelancing experience</strong> spanning lead generation, search engine optimization (SEO), custom software engineering, and web development, Ross designed FREELANCEQUEST to bridge the gap between academic learning and real client income.
+                </p>
+                <div class="pt-2 flex flex-wrap gap-2 text-[11px] font-mono text-slate-400">
+                    <span class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg">👨‍🏫 10 Yrs IT Educator</span>
+                    <span class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg">💻 20+ Yrs Freelancing Veteran</span>
+                    <span class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg">🚀 Software & Web Dev</span>
+                    <span class="bg-slate-950 border border-slate-800 px-3 py-1 rounded-lg">📈 Lead Gen & SEO Specialist</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CALL TO ACTION -->
     <section class="bg-gradient-to-r from-indigo-900 to-purple-900 border border-indigo-700/50 p-12 rounded-3xl text-center space-y-6 shadow-2xl">
         <h2 class="text-3xl sm:text-4xl font-black text-white">READY TO LEVEL UP YOUR CAREER?</h2>

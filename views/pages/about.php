@@ -8,6 +8,32 @@
         </p>
     </div>
 
+    <!-- FOUNDER STORY SECTION -->
+    <div class="bg-slate-900 border border-slate-800 p-8 sm:p-10 rounded-3xl space-y-6 shadow-2xl">
+        <div class="flex flex-col md:flex-row items-center gap-6 border-b border-slate-800 pb-6">
+            <div class="w-24 h-28 rounded-2xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-3xl font-black text-slate-950 shadow-xl border-2 border-amber-400 shrink-0">
+                RD
+            </div>
+            <div class="text-center md:text-left space-y-1">
+                <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">FOUNDER & CHIEF ARCHITECT</span>
+                <h2 class="text-3xl font-black text-white">Ross Dalangin</h2>
+                <p class="text-xs text-slate-400">Former IT Educator (10 Yrs) & Veteran Freelancer (20+ Yrs)</p>
+            </div>
+        </div>
+
+        <div class="space-y-4 text-slate-300 text-sm leading-relaxed">
+            <p>
+                The story of FREELANCEQUEST is rooted in real classroom instruction and decades of online client execution. <strong class="text-white">Ross Dalangin</strong> started his career as an IT and computer programming instructor at the age of 19, spending nearly a decade in higher education teaching algorithms, software engineering, and web development.
+            </p>
+            <p>
+                Parallel to his teaching career, Ross built a 20+ year freelancing practice delivering high-impact client solutions across <strong class="text-indigo-400">B2B Lead Generation, Search Engine Optimization (SEO), Software Engineering, and Full-Stack Web Development</strong>.
+            </p>
+            <p>
+                Recognizing that standard video-based courses fail to prepare students for real-world client demands, Ross synthesized his 10 years of educational pedagogy and 20 years of freelancing experience into **FREELANCEQUEST**—a platform designed to make career learning feel like an engaging video game.
+            </p>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-4 shadow-xl">
             <div class="text-3xl text-amber-400">🎯</div>

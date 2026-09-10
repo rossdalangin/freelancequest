@@ -7,6 +7,7 @@ function initializeSchema()
     $pdo = Database::getConnection();
 
     $queries = [
+        "DROP TABLE IF EXISTS coupons;",
         "DROP TABLE IF EXISTS applications_tracker;",
         "DROP TABLE IF EXISTS job_applications;",
         "DROP TABLE IF EXISTS jobs;",
@@ -321,6 +322,16 @@ function initializeSchema()
             key_name TEXT UNIQUE NOT NULL,
             value_text TEXT,
             updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE coupons (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            code TEXT UNIQUE NOT NULL,
+            discount_percent INTEGER DEFAULT 0,
+            discount_amount REAL DEFAULT 0.0,
+            valid_until TEXT,
+            is_active INTEGER DEFAULT 1,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );",
 
         "CREATE TABLE audit_logs (

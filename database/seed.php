@@ -1330,6 +1330,11 @@ function seedDatabase()
     $pdo->exec("INSERT INTO users (name, email, password, role, username, headline, bio, level, xp, coins, streak_count, subscription_tier) VALUES ('Admin Boss', 'admin@freelancequest.com', '$pass', 'admin', 'adminboss', 'Lead Product Architect & Instructor', 'Building top tier VAs.', 15, 50000, 9999, 30, 'master');");
     $pdo->exec("INSERT INTO users (name, email, password, role, username, headline, bio, level, xp, coins, streak_count, subscription_tier) VALUES ('Maria Santos', 'maria@example.com', '$pass', 'student', 'mariasantos', 'Aspiring Administrative & Research VA', 'Eager to help founders.', 3, 1350, 280, 12, 'pro');");
 
+    // Seed Default Coupons
+    $stmtCpn = $pdo->prepare("INSERT INTO coupons (code, discount_percent, discount_amount, is_active) VALUES (?, ?, ?, 1)");
+    $stmtCpn->execute(['FREELANCE50', 50, 0]);
+    $stmtCpn->execute(['WELCOME10', 0, 10.00]);
+
     // 8. Seed Job Postings
     $jobs = [
         [

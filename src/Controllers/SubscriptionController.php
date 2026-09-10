@@ -19,6 +19,9 @@ class SubscriptionController
         $gcashNumber = DataManagementService::getSetting('gcash_number', '09171234567');
         $gcashName = DataManagementService::getSetting('gcash_name', 'FreelanceQuest Admin');
 
+        $proPrice = DataManagementService::getSetting('pro_price', '19.00');
+        $masterPrice = DataManagementService::getSetting('master_price', '49.00');
+
         $plans = [
             [
                 'name' => 'free',
@@ -34,7 +37,7 @@ class SubscriptionController
             [
                 'name' => 'pro',
                 'title' => 'Pro Freelancer',
-                'price' => '$19/mo',
+                'price' => '$' . number_format((float)$proPrice, 2) . '/mo',
                 'features' => [
                     'Access to ALL 15 Career Levels',
                     'Unlimited Quizzes & Advanced Missions',
@@ -47,7 +50,7 @@ class SubscriptionController
             [
                 'name' => 'master',
                 'title' => 'Master Agency',
-                'price' => '$49/mo',
+                'price' => '$' . number_format((float)$masterPrice, 2) . '/mo',
                 'features' => [
                     'Everything in Pro Plan',
                     'AI Interview Arena Simulator',
@@ -78,7 +81,26 @@ class SubscriptionController
             $paymentGateway = 'paypal';
         }
 
-        $amount = $planName === 'master' ? 49.00 : 19.00;
+        $proPrice = (float) DataManagementService::getSetting('pro_price', '19.00');
+        $masterPrice = (float) DataManagementService::getSetting('master_price', '49.00');
+        $amount = $planName === 'master' ? $masterPrice : $proPrice;
+
+        // Check for applied coupon
+        $couponCode = strtoupper(trim($_GET['coupon'] ?? ''));
+        $appliedCoupon = null;
+        if (!empty($couponCode)) {
+            $stmtCpn = $pdo->prepare("SELECT * FROM coupons WHERE UPPER(code) = ? AND is_active = 1");
+            $stmtCpn->execute([$couponCode]);
+            $appliedCoupon = $stmtCpn->fetch();
+
+            if ($appliedCoupon) {
+                if ($appliedCoupon['discount_percent'] > 0) {
+                    $amount = $amount * (1 - ($appliedCoupon['discount_percent'] / 100));
+                } elseif ($appliedCoupon['discount_amount'] > 0) {
+                    $amount = max(0, $amount - $appliedCoupon['discount_amount']);
+                }
+            }
+        }
 
         // Admin Merchant Accounts
         $paypalEmail = DataManagementService::getSetting('paypal_email', 'admin@freelancequest.com');
@@ -116,7 +138,24 @@ class SubscriptionController
             $planName = 'pro';
         }
 
-        $amount = $planName === 'master' ? 49.00 : 19.00;
+        $proPrice = (float) DataManagementService::getSetting('pro_price', '19.00');
+        $masterPrice = (float) DataManagementService::getSetting('master_price', '49.00');
+        $amount = $planName === 'master' ? $masterPrice : $proPrice;
+
+        $couponCode = strtoupper(trim($_POST['coupon_code'] ?? ''));
+        if (!empty($couponCode)) {
+            $stmtCpn = $pdo->prepare("SELECT * FROM coupons WHERE UPPER(code) = ? AND is_active = 1");
+            $stmtCpn->execute([$couponCode]);
+            $appliedCoupon = $stmtCpn->fetch();
+
+            if ($appliedCoupon) {
+                if ($appliedCoupon['discount_percent'] > 0) {
+                    $amount = $amount * (1 - ($appliedCoupon['discount_percent'] / 100));
+                } elseif ($appliedCoupon['discount_amount'] > 0) {
+                    $amount = max(0, $amount - $appliedCoupon['discount_amount']);
+                }
+            }
+        }
 
         if (empty($referenceNumber)) {
             $_SESSION['checkout_error'] = 'Please enter your payment reference / receipt transaction number.';

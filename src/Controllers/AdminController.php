@@ -34,12 +34,17 @@ class AdminController
         // System Settings
         $xpMultiplier = DataManagementService::getSetting('xp_multiplier', '1.0');
         $streakBonus = DataManagementService::getSetting('streak_bonus_xp', '200');
+        $proPrice = DataManagementService::getSetting('pro_price', '19.00');
+        $masterPrice = DataManagementService::getSetting('master_price', '49.00');
 
         // Payment Account Settings
         $paypalEmail = DataManagementService::getSetting('paypal_email', 'admin@freelancequest.com');
         $stripeKey = DataManagementService::getSetting('stripe_key', 'pk_live_freelancequest_admin_key');
         $gcashNumber = DataManagementService::getSetting('gcash_number', '09171234567');
         $gcashName = DataManagementService::getSetting('gcash_name', 'FreelanceQuest Admin');
+
+        // Coupons
+        $coupons = $pdo->query("SELECT * FROM coupons ORDER BY id DESC")->fetchAll() ?: [];
 
         // Audit Logs
         $auditLogs = DataManagementService::getAuditLogs(10);
@@ -674,6 +679,8 @@ class AdminController
 
         $xpMult = $_POST['xp_multiplier'] ?? '1.0';
         $streakBonus = $_POST['streak_bonus_xp'] ?? '200';
+        $proPrice = $_POST['pro_price'] ?? '19.00';
+        $masterPrice = $_POST['master_price'] ?? '49.00';
 
         $paypalEmail = $_POST['paypal_email'] ?? '';
         $stripeKey = $_POST['stripe_key'] ?? '';
@@ -682,12 +689,59 @@ class AdminController
 
         DataManagementService::setSetting('xp_multiplier', $xpMult);
         DataManagementService::setSetting('streak_bonus_xp', $streakBonus);
+        DataManagementService::setSetting('pro_price', $proPrice);
+        DataManagementService::setSetting('master_price', $masterPrice);
         DataManagementService::setSetting('paypal_email', $paypalEmail);
         DataManagementService::setSetting('stripe_key', $stripeKey);
         DataManagementService::setSetting('gcash_number', $gcashNumber);
         DataManagementService::setSetting('gcash_name', $gcashName);
 
-        DataManagementService::logActivity($admin['id'], 'SYSTEM_SETTINGS_UPDATE', "Updated System & Payment Settings. PayPal: {$paypalEmail}, GCash: {$gcashNumber}");
+        DataManagementService::logActivity($admin['id'], 'SYSTEM_SETTINGS_UPDATE', "Updated Settings. Pro: \${$proPrice}, Master: \${$masterPrice}");
+
+        header('Location: /admin');
+        exit;
+    }
+
+    public function createCoupon()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $code = strtoupper(trim($_POST['code'] ?? ''));
+        $percent = (int)($_POST['discount_percent'] ?? 0);
+        $amount = (float)($_POST['discount_amount'] ?? 0);
+
+        if (!empty($code)) {
+            $stmt = $pdo->prepare("INSERT INTO coupons (code, discount_percent, discount_amount, is_active) VALUES (?, ?, ?, 1)");
+            $stmt->execute([$code, $percent, $amount]);
+
+            DataManagementService::logActivity($admin['id'], 'ADMIN_COUPON_CREATE', "Created coupon: {$code} ({$percent}% / \${$amount})");
+        }
+
+        header('Location: /admin');
+        exit;
+    }
+
+    public function deleteCoupon(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM coupons WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_COUPON_DELETE', "Deleted coupon #{$id}");
 
         header('Location: /admin');
         exit;
@@ -704,19 +758,120 @@ class AdminController
 
         $pdo = Database::getConnection();
 
-        $topic = $_POST['topic'] ?? 'Lead Generation';
-        $slug = 'ai-gen-' . strtolower(str_replace(' ', '-', $topic)) . '-' . rand(100, 999);
+        $topic = trim($_POST['topic'] ?? 'Lead Generation');
+        if (empty($topic)) {
+            $topic = 'Lead Generation';
+        }
 
-        $stmtC = $pdo->prepare("INSERT INTO courses (title, slug, description, level_number, category) VALUES (?, ?, ?, 4, 'AI Specialization')");
-        $stmtC->execute(['AI Generated: ' . $topic, $slug, 'Comprehensive module generated for ' . $topic]);
+        $cleanTopic = htmlspecialchars($topic, ENT_QUOTES, 'UTF-8');
+        $slugBase = strtolower(preg_replace('/[^a-z0-9]+/', '-', $topic));
+        $uniqueSuffix = rand(100, 999);
+        $courseSlug = 'ai-module-' . $slugBase . '-' . $uniqueSuffix;
+
+        // 1. Create Course Module
+        $stmtC = $pdo->prepare("INSERT INTO courses (title, slug, description, level_number, category) VALUES (?, ?, ?, 4, 'AI Masterclass')");
+        $stmtC->execute([
+            'AI Masterclass: ' . $topic,
+            $courseSlug,
+            'Comprehensive AI-generated masterclass curriculum covering tools, SOPs, and client execution for ' . $cleanTopic
+        ]);
         $courseId = $pdo->lastInsertId();
 
-        $stmtL = $pdo->prepare("INSERT INTO lessons (course_id, level_number, title, slug, summary, content, xp_reward, coin_reward) VALUES (?, 4, ?, ?, ?, ?, 100, 20)");
-        $stmtL->execute([$courseId, 'Intro to ' . $topic, 'intro-' . $slug, 'Foundations of ' . $topic, "## " . $topic . "\n\nPractical guide."]);
+        // 2. Build 3 Comprehensive Lessons with structured HTML content
+        $lessonsData = [
+            [
+                'title' => 'Foundations & Tooling for ' . $topic,
+                'slug' => 'foundations-' . $slugBase . '-' . $uniqueSuffix,
+                'summary' => 'Essential tools, concepts, and industry requirements for ' . $cleanTopic,
+                'content' => "<h2>Executive Masterclass: Foundations & Tooling for " . $cleanTopic . "</h2>
+                    <p>Welcome to the AI-generated masterclass for <strong>" . $cleanTopic . "</strong>. Mastering this core capability allows Virtual Assistants and freelancers to deliver high-impact results for global clients.</p>
+                    <h3>1. Why This Topic is Essential for Remote VAs</h3>
+                    <p>Clients actively hire specialists who possess structured workflows in " . $cleanTopic . " to increase efficiency, automate manual processes, and drive business growth.</p>
+                    <h3>2. Standard Operating Procedure (SOP) Blueprint</h3>
+                    <ul>
+                        <li><strong>Step 1:</strong> Audit current client requirements and establish key metrics.</li>
+                        <li><strong>Step 2:</strong> Configure industry-standard software tools and permission settings.</li>
+                        <li><strong>Step 3:</strong> Execute daily task workflows with automated quality checks.</li>
+                    </ul>
+                    <h3>3. Copy-Paste Client Script</h3>
+                    <p><em>'Hi [Client Name], I have set up our " . $cleanTopic . " operational workflow according to standard SOPs. I will provide daily updates on our execution status.'</em></p>",
+                'quiz_question' => "What is the primary operational benefit of mastering " . $cleanTopic . " for remote freelancers?",
+                'quiz_options' => ["Systematizing client workflows and delivering high-value business outcomes", "Working without internet access", "Eliminating the need for client communication", "Decreasing hourly rate potential"],
+                'correct_option' => "Systematizing client workflows and delivering high-value business outcomes",
+                'explanation' => "Structured SOPs in " . $cleanTopic . " increase service efficiency and client retention."
+            ],
+            [
+                'title' => 'Advanced SOP Execution & Best Practices for ' . $topic,
+                'slug' => 'advanced-sop-' . $slugBase . '-' . $uniqueSuffix,
+                'summary' => 'Step-by-step SOP execution, error prevention, and quality assurance.',
+                'content' => "<h2>Executive Masterclass: Advanced SOP Execution for " . $cleanTopic . "</h2>
+                    <p>Deep-dive into advanced operational techniques and quality assurance for <strong>" . $cleanTopic . "</strong>.</p>
+                    <h3>1. Advanced Execution Framework</h3>
+                    <p>Executing " . $cleanTopic . " requires strict adherence to quality benchmarks. Avoid common pitfalls by testing output deliverability prior to final presentation.</p>
+                    <h3>2. Error Handling & Quality Control Checklist</h3>
+                    <ul>
+                        <li>✓ Verify all input data entries for 100% accuracy.</li>
+                        <li>✓ Double-check time zone formats and delivery schedules.</li>
+                        <li>✓ Store deliverables in structured cloud storage folders.</li>
+                    </ul>",
+                'quiz_question' => "Which step ensures quality control prior to delivering " . $cleanTopic . " tasks to clients?",
+                'quiz_options' => ["Executing automated tests and double-checking accuracy against SOP benchmarks", "Publishing raw unedited files immediately", "Ignoring client feedback", "Deleting project backup files"],
+                'correct_option' => "Executing automated tests and double-checking accuracy against SOP benchmarks",
+                'explanation' => "Quality control benchmarks prevent operational mistakes and maintain client trust."
+            ],
+            [
+                'title' => 'Client Pitching & Monetization for ' . $topic,
+                'slug' => 'pitching-monetization-' . $slugBase . '-' . $uniqueSuffix,
+                'summary' => 'How to offer, price, and package ' . $cleanTopic . ' as a high-value retainer service.',
+                'content' => "<h2>Executive Masterclass: Monetizing " . $cleanTopic . " Services</h2>
+                    <p>Learn how to position <strong>" . $cleanTopic . "</strong> as a high-ticket $1,000+/mo recurring retainer offer.</p>
+                    <h3>1. Value-Based Pricing Strategy</h3>
+                    <p>Do not sell " . $cleanTopic . " by cheap hourly rates. Package your offer into results-focused monthly retainer tiers (Basic, Growth, Enterprise).</p>
+                    <h3>2. Proposal Pitch Formula</h3>
+                    <p><em>'I help growing companies scale their " . $cleanTopic . " operations, saving 15+ executive hours weekly while guaranteeing 99% task accuracy.'</em></p>",
+                'quiz_question' => "How should freelancers price their specialized " . $cleanTopic . " services?",
+                'quiz_options' => ["As value-based monthly retainer packages aligned with business outcomes", "By competing on being the cheapest option on freelancing sites", "By offering unlimited free labor", "By charging unpredictable random rates"],
+                'correct_option' => "As value-based monthly retainer packages aligned with business outcomes",
+                'explanation' => "Value-based retainers maximize freelancer earnings and provide cash flow predictability."
+            ]
+        ];
 
-        DataManagementService::logActivity($admin['id'], 'AI_COURSE_GENERATED', "Topic: {$topic}");
+        $stmtL = $pdo->prepare("INSERT INTO lessons (course_id, level_number, title, slug, summary, content, xp_reward, coin_reward, sort_order) VALUES (?, 4, ?, ?, ?, ?, 150, 30, ?)");
+        $stmtQz = $pdo->prepare("INSERT INTO quizzes (lesson_id, title, passing_score, xp_reward) VALUES (?, ?, 70, 100)");
+        $stmtQn = $pdo->prepare("INSERT INTO questions (quiz_id, question_text, options, correct_option, explanation) VALUES (?, ?, ?, ?, ?)");
 
-        header('Location: /admin');
+        $sort = 1;
+        foreach ($lessonsData as $les) {
+            $stmtL->execute([$courseId, $les['title'], $les['slug'], $les['summary'], $les['content'], $sort]);
+            $lessonId = $pdo->lastInsertId();
+
+            // Create Quiz & Question
+            $stmtQz->execute([$lessonId, 'Knowledge Check: ' . $les['title']]);
+            $quizId = $pdo->lastInsertId();
+
+            $stmtQn->execute([
+                $quizId,
+                $les['quiz_question'],
+                json_encode($les['quiz_options']),
+                $les['correct_option'],
+                $les['explanation']
+            ]);
+
+            $sort++;
+        }
+
+        // 3. Create Downloadable Resource File
+        $stmtR = $pdo->prepare("INSERT INTO resources (level_number, title, description, type, file_content_or_url, is_premium) VALUES (4, ?, ?, 'template', ?, 1)");
+        $stmtR->execute([
+            $cleanTopic . ' SOP & Execution Template',
+            'Official AI-generated action template and client script for ' . $cleanTopic,
+            '/downloads/level-04-social-media-content-calendar.md'
+        ]);
+
+        DataManagementService::logActivity($admin['id'], 'AI_COURSE_GENERATED', "Generated 3 lessons, quizzes, and resources for topic: {$topic}");
+
+        $_SESSION['flash_success'] = "AI Course Module for '{$topic}' generated successfully with 3 lessons, quizzes, and resources!";
+        header('Location: /admin/courses');
         exit;
     }
 
