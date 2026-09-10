@@ -643,6 +643,75 @@ class AdminController
         require __DIR__ . '/../../views/admin/logs.php';
     }
 
+    public function managePages()
+    {
+        $admin = $this->checkAdminAuth();
+
+        $pagesList = [
+            'about' => [
+                'title' => 'About Us Page',
+                'url' => '/about',
+                'content' => DataManagementService::getSetting('page_content_about', '')
+            ],
+            'features' => [
+                'title' => 'Features Page',
+                'url' => '/features',
+                'content' => DataManagementService::getSetting('page_content_features', '')
+            ],
+            'faq' => [
+                'title' => 'FAQ Page',
+                'url' => '/faq',
+                'content' => DataManagementService::getSetting('page_content_faq', '')
+            ],
+            'terms' => [
+                'title' => 'Terms of Service Page',
+                'url' => '/terms',
+                'content' => DataManagementService::getSetting('page_content_terms', '')
+            ],
+            'privacy' => [
+                'title' => 'Privacy Policy Page',
+                'url' => '/privacy',
+                'content' => DataManagementService::getSetting('page_content_privacy', '')
+            ],
+            'disclaimer' => [
+                'title' => 'Earnings Disclaimer Page',
+                'url' => '/disclaimer',
+                'content' => DataManagementService::getSetting('page_content_disclaimer', '')
+            ],
+            'contact' => [
+                'title' => 'Contact Page Info',
+                'url' => '/contact',
+                'content' => DataManagementService::getSetting('page_content_contact', '')
+            ],
+        ];
+
+        require __DIR__ . '/../../views/admin/pages.php';
+    }
+
+    public function updatePageContent()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pageSlug = trim($_POST['page_slug'] ?? '');
+        $pageContent = trim($_POST['page_content'] ?? '');
+
+        $validSlugs = ['about', 'features', 'faq', 'terms', 'privacy', 'disclaimer', 'contact'];
+
+        if (in_array($pageSlug, $validSlugs)) {
+            DataManagementService::setSetting('page_content_' . $pageSlug, $pageContent);
+            DataManagementService::logActivity($admin['id'], 'ADMIN_PAGE_UPDATE', "Updated public page content for: {$pageSlug}");
+            $_SESSION['flash_success'] = "Updated page content for " . strtoupper($pageSlug) . " successfully!";
+        }
+
+        header('Location: /admin/pages');
+        exit;
+    }
+
     public function manageCertificates()
     {
         $admin = $this->checkAdminAuth();
