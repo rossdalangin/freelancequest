@@ -147,31 +147,64 @@
         </div>
 
         <div class="space-y-8">
+            <!-- ENHANCED RPG SKILL TREE CARD -->
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-4">
                     <div class="flex items-center gap-2">
-                        <span class="text-purple-400 text-xl">⚡</span>
-                        <h2 class="text-xl font-extrabold text-white">SKILL TREE</h2>
+                        <span class="text-amber-400 text-xl">🌳</span>
+                        <h2 class="text-xl font-extrabold text-white">RPG SKILL TREE</h2>
                     </div>
+                    <span class="bg-indigo-500/20 text-indigo-400 font-extrabold text-[10px] px-2.5 py-1 rounded-full border border-indigo-500/30 uppercase">
+                        ACTIVE BRANCHES
+                    </span>
                 </div>
 
-                <div class="space-y-4">
+                <div class="space-y-6">
                     <?php foreach ($skillCategories as $cat): ?>
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-xs font-extrabold" style="color: <?= $cat['color'] ?>">
-                                <span><?= strtoupper(htmlspecialchars($cat['name'])) ?></span>
-                                <span><?= count($cat['skills']) ?> Skills</span>
+                        <div class="space-y-3 bg-slate-950 p-4 rounded-xl border border-slate-800/80 hover:border-slate-700 transition">
+                            <div class="flex justify-between items-center text-xs font-extrabold">
+                                <span class="flex items-center gap-1.5" style="color: <?= $cat['color'] ?>">
+                                    <i class="fa-solid fa-bolt text-[10px]"></i>
+                                    <?= strtoupper(htmlspecialchars($cat['name'])) ?>
+                                </span>
+                                <span class="text-slate-400 font-mono text-[11px]"><?= $cat['mastery_percentage'] ?>% Mastery</span>
                             </div>
-                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+
+                            <!-- Category Mastery Progress Bar -->
+                            <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800/60">
+                                <div class="h-2 rounded-full transition-all duration-500" style="width: <?= $cat['mastery_percentage'] ?>%; background-color: <?= $cat['color'] ?>;"></div>
+                            </div>
+
+                            <!-- Skills Node List -->
+                            <div class="space-y-2.5 pt-1">
                                 <?php foreach ($cat['skills'] as $sk): ?>
-                                    <div class="flex justify-between items-center text-xs">
-                                        <span class="text-slate-300 font-semibold"><?= htmlspecialchars($sk['name']) ?></span>
-                                        <span class="text-emerald-400 font-mono font-bold">Lvl 1 (Active)</span>
+                                    <div class="bg-slate-900/90 border border-slate-800 p-3 rounded-lg flex items-center justify-between gap-3 hover:border-indigo-500/30 transition">
+                                        <div class="space-y-0.5">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold text-xs text-slate-200"><?= htmlspecialchars($sk['name']) ?></span>
+                                                <span class="text-[9px] font-black px-1.5 py-0.2 rounded uppercase <?= $sk['is_unlocked'] ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-500' ?>">
+                                                    <?= $sk['level_tier'] ?>
+                                                </span>
+                                            </div>
+                                            <p class="text-[10px] text-slate-400 line-clamp-1"><?= htmlspecialchars($sk['description']) ?></p>
+                                        </div>
+
+                                        <div class="text-right whitespace-nowrap">
+                                            <span class="text-xs font-mono font-bold <?= $sk['is_unlocked'] ? 'text-amber-400' : 'text-slate-600' ?>">
+                                                <?= $sk['proficiency'] ?>%
+                                            </span>
+                                        </div>
                                     </div>
                                 <?php endforeach; ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
+                </div>
+
+                <div class="pt-2">
+                    <a href="/learn" class="block text-center w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs transition border border-slate-700">
+                        🎓 COMPLETE LESSONS TO UNLOCK MORE SKILLS &rarr;
+                    </a>
                 </div>
             </div>
         </div>
