@@ -30,3 +30,4 @@ database/database.sqlite
 # Self created tools & cache
 /home/jules/self_created_tools/
 *.sqlite
+database/database.sqlite
