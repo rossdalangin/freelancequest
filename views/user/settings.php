@@ -22,6 +22,25 @@
         </div>
     <?php endif; ?>
 
+    <!-- REFERRAL & INVITE FRIENDS CARD -->
+    <div class="bg-slate-900 border border-indigo-500/30 p-6 rounded-2xl space-y-3 shadow-xl">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🤝</span>
+                <div>
+                    <h2 class="text-lg font-extrabold text-white">REFER FRIENDS & EARN REWARDS</h2>
+                    <p class="text-xs text-slate-400">Share your invite link with friends. Earn <strong class="text-indigo-400">+250 XP</strong> and <strong class="text-amber-400">+50 Coins</strong> for every friend who registers!</p>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+            <input type="text" readonly id="referral_link_input" value="http://127.0.0.1:8000/register?ref=<?= htmlspecialchars($user['username'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-indigo-400 font-mono font-bold select-all">
+            <button onclick="navigator.clipboard.writeText(document.getElementById('referral_link_input').value); alert('Referral link copied to clipboard!');" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-4 py-3 rounded-xl text-xs whitespace-nowrap shadow transition">
+                COPY LINK
+            </button>
+        </div>
+    </div>
+
     <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-6 shadow-xl">
         <form action="/settings" method="POST" class="space-y-6">
             <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
@@ -66,6 +85,36 @@
 
             <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black py-3.5 rounded-xl text-xs transition shadow-xl shadow-indigo-600/30">
                 SAVE ACCOUNT SETTINGS &rarr;
+            </button>
+        </form>
+    </div>
+
+    <!-- SUBMIT GAME TESTIMONIAL CARD -->
+    <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-6 shadow-xl">
+        <div class="flex items-center gap-2 border-b border-slate-800 pb-4">
+            <span class="text-2xl">🌟</span>
+            <div>
+                <h2 class="text-xl font-extrabold text-white">SUBMIT YOUR GAME TESTIMONIAL</h2>
+                <p class="text-xs text-slate-400">Share your experience playing FREELANCEQUEST to earn <strong class="text-indigo-400">+150 XP</strong> and <strong class="text-amber-400">+30 Coins</strong>!</p>
+            </div>
+        </div>
+
+        <form action="/settings/testimonial" method="POST" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+            <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Rating</label>
+                <select name="rating" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-amber-400 font-bold focus:outline-none focus:border-indigo-500">
+                    <option value="5">⭐⭐⭐⭐⭐ 5 Stars - Exceptional Experience!</option>
+                    <option value="4">⭐⭐⭐⭐ 4 Stars - Great Learning Game</option>
+                    <option value="3">⭐⭐⭐ 3 Stars - Good & Helpful</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-300 uppercase mb-2">Your Experience / Review</label>
+                <textarea name="review_text" rows="3" required placeholder="How has playing FreelanceQuest helped you learn freelancing, build your portfolio, or land client opportunities?" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-indigo-500"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl text-xs transition shadow-lg">
+                SUBMIT TESTIMONIAL (+150 XP) &rarr;
             </button>
         </form>
     </div>

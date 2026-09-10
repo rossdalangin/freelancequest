@@ -70,6 +70,7 @@ $router->get('/dashboard', [DashboardController::class, 'index']);
 $router->get('/leaderboard', [LeaderboardController::class, 'index']);
 $router->get('/settings', [UserController::class, 'showSettings']);
 $router->post('/settings', [UserController::class, 'updateSettings']);
+$router->post('/settings/testimonial', [UserController::class, 'submitTestimonial']);
 
 // Cover Letter & Application Tracker Routes
 $router->get('/cover-letter-builder', [CoverLetterController::class, 'index']);
@@ -162,6 +163,8 @@ $router->post('/admin/settings', [AdminController::class, 'updateSettings']);
 $router->post('/admin/ai-course-builder', [AdminController::class, 'generateAiCourse']);
 $router->post('/admin/coupons/create', [AdminController::class, 'createCoupon']);
 $router->post('/admin/coupons/{id}/delete', [AdminController::class, 'deleteCoupon']);
+$router->post('/admin/testimonials/{id}/toggle', [AdminController::class, 'toggleTestimonialApproval']);
+$router->post('/admin/testimonials/{id}/delete', [AdminController::class, 'deleteTestimonial']);
 $router->get('/admin/export-data', [AdminController::class, 'exportData']);
 $router->post('/admin/reseed-database', [AdminController::class, 'reseedDatabase']);
 $router->get('/admin/database/export', [AdminController::class, 'exportDatabase']);

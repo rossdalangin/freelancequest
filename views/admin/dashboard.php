@@ -113,6 +113,16 @@
                     </div>
                 </div>
 
+                <div class="border-t border-slate-800 pt-3">
+                    <label class="flex items-center gap-3 cursor-pointer bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <input type="checkbox" name="show_homepage_testimonials" value="1" <?= ($showHomepageTestimonials ?? '1') === '1' ? 'checked' : '' ?> class="w-4 h-4 text-indigo-600 rounded">
+                        <div>
+                            <span class="text-xs font-bold text-white block">Display User Testimonials Section on Homepage</span>
+                            <span class="text-[11px] text-slate-400">Toggle ON to display approved user/gamer reviews on the public home page.</span>
+                        </div>
+                    </label>
+                </div>
+
                 <div class="border-t border-slate-800 pt-4 space-y-3">
                     <h3 class="text-xs font-extrabold text-indigo-400 uppercase tracking-wider">Admin Payment Receiving Accounts</h3>
                     <div>
@@ -137,6 +147,60 @@
 
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3 px-6 rounded-xl text-xs shadow-lg">SAVE PRICING & PAYMENT SETTINGS &rarr;</button>
             </form>
+        </div>
+    </div>
+
+    <!-- HOMEPAGE TESTIMONIALS MODERATION CARD -->
+    <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <span>🌟</span> USER TESTIMONIALS MODERATION
+                </h2>
+                <p class="text-xs text-slate-400">Review, approve, or hide user game reviews before they display on the public homepage.</p>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-xs">
+                <thead>
+                    <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider font-bold">
+                        <th class="py-3 px-4">User</th>
+                        <th class="py-3 px-4">Rating</th>
+                        <th class="py-3 px-4">Review Text</th>
+                        <th class="py-3 px-4">Homepage Status</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-200">
+                    <?php foreach (($testimonialsList ?? []) as $tst): ?>
+                        <tr class="hover:bg-slate-950/50 transition">
+                            <td class="py-3 px-4 font-bold text-indigo-400"><?= htmlspecialchars($tst['user_name'], ENT_QUOTES, 'UTF-8') ?> (@<?= htmlspecialchars($tst['user_username'], ENT_QUOTES, 'UTF-8') ?>)</td>
+                            <td class="py-3 px-4 text-amber-400 font-bold"><?= str_repeat('⭐', $tst['rating']) ?></td>
+                            <td class="py-3 px-4 text-slate-300 max-w-xs truncate"><?= htmlspecialchars($tst['review_text'], ENT_QUOTES, 'UTF-8') ?></td>
+                            <td class="py-3 px-4">
+                                <?php if ($tst['is_approved']): ?>
+                                    <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded text-[10px] font-bold uppercase">VISIBLE (APPROVED)</span>
+                                <?php else: ?>
+                                    <span class="bg-slate-800 text-slate-400 border border-slate-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase">HIDDEN</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="py-3 px-4 text-right space-x-2">
+                                <form action="/admin/testimonials/<?= $tst['id'] ?>/toggle" method="POST" class="inline">
+                                    <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                                    <button type="submit" class="bg-indigo-600/30 hover:bg-indigo-600/60 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded text-[11px] font-bold transition">
+                                        <?= $tst['is_approved'] ? 'Hide' : 'Approve' ?>
+                                    </button>
+                                </form>
+                                <form action="/admin/testimonials/<?= $tst['id'] ?>/delete" method="POST" class="inline" onsubmit="return confirm('Delete testimonial?');">
+                                    <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                                    <button type="submit" class="bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 border border-rose-500/30 px-2.5 py-1 rounded text-[11px] font-bold transition">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 

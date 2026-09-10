@@ -36,6 +36,11 @@ class AdminController
         $streakBonus = DataManagementService::getSetting('streak_bonus_xp', '200');
         $proPrice = DataManagementService::getSetting('pro_price', '19.00');
         $masterPrice = DataManagementService::getSetting('master_price', '49.00');
+        $showHomepageTestimonials = DataManagementService::getSetting('show_homepage_testimonials', '1');
+
+        // Testimonials
+        $stmtTst = $pdo->query("SELECT t.*, u.name as user_name, u.username as user_username FROM testimonials t JOIN users u ON t.user_id = u.id ORDER BY t.id DESC");
+        $testimonialsList = $stmtTst->fetchAll() ?: [];
 
         // Payment Account Settings
         $paypalEmail = DataManagementService::getSetting('paypal_email', 'admin@freelancequest.com');
@@ -681,6 +686,7 @@ class AdminController
         $streakBonus = $_POST['streak_bonus_xp'] ?? '200';
         $proPrice = $_POST['pro_price'] ?? '19.00';
         $masterPrice = $_POST['master_price'] ?? '49.00';
+        $showTestimonials = isset($_POST['show_homepage_testimonials']) ? '1' : '0';
 
         $paypalEmail = $_POST['paypal_email'] ?? '';
         $stripeKey = $_POST['stripe_key'] ?? '';
@@ -691,12 +697,58 @@ class AdminController
         DataManagementService::setSetting('streak_bonus_xp', $streakBonus);
         DataManagementService::setSetting('pro_price', $proPrice);
         DataManagementService::setSetting('master_price', $masterPrice);
+        DataManagementService::setSetting('show_homepage_testimonials', $showTestimonials);
         DataManagementService::setSetting('paypal_email', $paypalEmail);
         DataManagementService::setSetting('stripe_key', $stripeKey);
         DataManagementService::setSetting('gcash_number', $gcashNumber);
         DataManagementService::setSetting('gcash_name', $gcashName);
 
         DataManagementService::logActivity($admin['id'], 'SYSTEM_SETTINGS_UPDATE', "Updated Settings. Pro: \${$proPrice}, Master: \${$masterPrice}");
+
+        header('Location: /admin');
+        exit;
+    }
+
+    public function toggleTestimonialApproval(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmtCheck = $pdo->prepare("SELECT is_approved FROM testimonials WHERE id = ?");
+        $stmtCheck->execute([$id]);
+        $tst = $stmtCheck->fetch();
+
+        if ($tst) {
+            $newStatus = $tst['is_approved'] ? 0 : 1;
+            $stmtUp = $pdo->prepare("UPDATE testimonials SET is_approved = ? WHERE id = ?");
+            $stmtUp->execute([$newStatus, $id]);
+
+            DataManagementService::logActivity($admin['id'], 'ADMIN_TESTIMONIAL_TOGGLE', "Updated testimonial #{$id} approval status to {$newStatus}");
+        }
+
+        header('Location: /admin');
+        exit;
+    }
+
+    public function deleteTestimonial(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM testimonials WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_TESTIMONIAL_DELETE', "Deleted testimonial #{$id}");
 
         header('Location: /admin');
         exit;

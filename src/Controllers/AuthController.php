@@ -113,6 +113,21 @@ class AuthController
         $stmt->execute([$name, $email, $username, $hash]);
 
         $newUserId = $pdo->lastInsertId();
+
+        // Referral reward processing
+        $refCode = trim($_POST['ref'] ?? $_GET['ref'] ?? '');
+        if (!empty($refCode)) {
+            $stmtRef = $pdo->prepare("SELECT id FROM users WHERE username = ? OR email = ?");
+            $stmtRef->execute([$refCode, $refCode]);
+            $referrer = $stmtRef->fetch();
+
+            if ($referrer && $referrer['id'] != $newUserId) {
+                $gameEngine = new \App\Services\GameEngineService();
+                $gameEngine->awardXPAndCoins($referrer['id'], 250, 50);
+                \App\Services\DataManagementService::logActivity($referrer['id'], 'REFERRAL_REWARD', "Awarded +250 XP and +50 Coins for inviting new user: {$username}");
+            }
+        }
+
         $_SESSION['user_id'] = $newUserId;
 
         header('Location: /onboarding');

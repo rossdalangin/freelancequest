@@ -125,6 +125,42 @@
         </div>
     </section>
 
+    <!-- GAMER & FREELANCER TESTIMONIALS SECTION -->
+    <?php if (!empty($showTestimonials) && !empty($testimonials)): ?>
+    <section class="space-y-8">
+        <div class="text-center space-y-3">
+            <span class="text-xs text-amber-400 font-extrabold tracking-widest uppercase">REAL GAMER & FREELANCER REVIEWS</span>
+            <h2 class="text-3xl font-black text-white">WHAT PLAYERS ARE SAYING</h2>
+            <p class="text-slate-400 text-sm max-w-xl mx-auto">Discover how learners are transforming gameplay into real client contracts and income.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php foreach ($testimonials as $t): ?>
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 hover:border-indigo-500/50 transition flex flex-col justify-between shadow-xl">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="text-amber-400 text-sm font-bold">
+                            <?= str_repeat('⭐', $t['rating']) ?>
+                        </div>
+                        <span class="text-[10px] font-extrabold bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded uppercase">
+                            LVL <?= $t['user_level'] ?? 1 ?>
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed italic">"<?= htmlspecialchars($t['review_text'], ENT_QUOTES, 'UTF-8') ?>"</p>
+                </div>
+                <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                    <div>
+                        <h4 class="font-extrabold text-white text-xs"><?= htmlspecialchars($t['user_name'], ENT_QUOTES, 'UTF-8') ?></h4>
+                        <span class="text-[10px] text-slate-400 font-mono">@<?= htmlspecialchars($t['user_username'], ENT_QUOTES, 'UTF-8') ?></span>
+                    </div>
+                    <span class="text-[10px] text-emerald-400 font-bold">Verified Player</span>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
+    <?php endif; ?>
+
     <!-- MEET THE FOUNDER SECTION -->
     <section class="bg-slate-900 border border-slate-800/90 rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">

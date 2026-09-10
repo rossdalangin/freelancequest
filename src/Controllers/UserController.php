@@ -68,4 +68,40 @@ class UserController
         header('Location: /settings');
         exit;
     }
+
+    public function submitTestimonial()
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $rating = (int)($_POST['rating'] ?? 5);
+        $reviewText = trim($_POST['review_text'] ?? '');
+
+        if ($rating < 1 || $rating > 5) {
+            $rating = 5;
+        }
+
+        if (empty($reviewText)) {
+            $_SESSION['settings_error'] = 'Testimonial review text cannot be empty.';
+            header('Location: /settings');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("INSERT INTO testimonials (user_id, rating, review_text, is_approved) VALUES (?, ?, ?, 1)");
+        $stmt->execute([$user['id'], $rating, $reviewText]);
+
+        $gameEngine = new \App\Services\GameEngineService();
+        $gameEngine->awardXPAndCoins($user['id'], 150, 30);
+
+        DataManagementService::logActivity($user['id'], 'TESTIMONIAL_SUBMITTED', "Submitted {$rating}-star testimonial for FreelanceQuest");
+
+        $_SESSION['settings_success'] = 'Thank you for your testimonial! Your review was submitted and +150 XP was awarded.';
+        header('Location: /settings');
+        exit;
+    }
 }

@@ -7,6 +7,7 @@ function initializeSchema()
     $pdo = Database::getConnection();
 
     $queries = [
+        "DROP TABLE IF EXISTS testimonials;",
         "DROP TABLE IF EXISTS coupons;",
         "DROP TABLE IF EXISTS applications_tracker;",
         "DROP TABLE IF EXISTS job_applications;",
@@ -331,6 +332,15 @@ function initializeSchema()
             discount_amount REAL DEFAULT 0.0,
             valid_until TEXT,
             is_active INTEGER DEFAULT 1,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE testimonials (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            rating INTEGER DEFAULT 5,
+            review_text TEXT NOT NULL,
+            is_approved INTEGER DEFAULT 1,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );",
 

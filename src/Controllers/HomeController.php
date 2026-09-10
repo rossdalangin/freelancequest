@@ -32,6 +32,15 @@ class HomeController
         $stmtAllLevels = $pdo->query("SELECT * FROM levels ORDER BY level_number ASC");
         $careerLevels = $stmtAllLevels->fetchAll() ?: [];
 
+        // Check if testimonials setting is ON
+        $showTestimonials = \App\Services\DataManagementService::getSetting('show_homepage_testimonials', '1') === '1';
+        $testimonials = [];
+
+        if ($showTestimonials) {
+            $stmtTst = $pdo->query("SELECT t.*, u.name as user_name, u.username as user_username, u.level as user_level, u.role as user_role FROM testimonials t JOIN users u ON t.user_id = u.id WHERE t.is_approved = 1 ORDER BY t.id DESC LIMIT 6");
+            $testimonials = $stmtTst->fetchAll() ?: [];
+        }
+
         require __DIR__ . '/../../views/home.php';
     }
 }
