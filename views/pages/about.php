@@ -1,28 +1,39 @@
 <?php require __DIR__ . '/../layout/header.php'; ?>
-<div class="max-w-4xl mx-auto space-y-12 py-6">
+<div class="max-w-5xl mx-auto space-y-16 py-6">
     <div class="text-center space-y-4">
         <span class="text-xs font-black bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-4 py-1.5 rounded-full uppercase tracking-widest">ABOUT FREELANCEQUEST</span>
-        <h1 class="text-4xl font-black text-white">REINVENTING FREELANCE EDUCATION</h1>
-        <p class="text-slate-300 text-base max-w-2xl mx-auto leading-relaxed">
-            FREELANCEQUEST was created with a single core philosophy: **LEARN BY DOING.** Traditional courses force learners to watch passive videos. We turn freelancing into an interactive RPG game.
+        <h1 class="text-4xl sm:text-5xl font-black text-white">REINVENTING FREELANCE & VIRTUAL ASSISTANT EDUCATION</h1>
+        <p class="text-slate-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed font-medium">
+            FREELANCEQUEST was built on one uncompromising principle: <strong class="text-amber-400 font-extrabold">LEARN BY DOING.</strong> Traditional online courses leave students stranded with passive video lectures. We transform freelancing into an interactive RPG career game where every mission creates real, marketable skills.
         </p>
     </div>
 
-    <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-6 shadow-xl">
-        <h2 class="text-2xl font-bold text-amber-400">OUR MISSION</h2>
-        <p class="text-slate-300 text-sm leading-relaxed">
-            To take complete beginners from zero experience to skilled, confident Virtual Assistants and freelancers who know exactly how to acquire clients, write proposals, deliver high-quality work, and earn sustainable online income.
-        </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-4 shadow-xl">
+            <div class="text-3xl text-amber-400">🎯</div>
+            <h2 class="text-2xl font-black text-white">Our Mission</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                To take anyone—regardless of prior background—from absolute zero to a confident, skilled Virtual Assistant and freelancer who possesses a professional resume, portfolio website, client communication expertise, and real income-generating capabilities.
+            </p>
+        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-800">
-            <div>
-                <h3 class="font-bold text-white mb-2">🎮 Gamified Learning Engine</h3>
-                <p class="text-xs text-slate-400">Earn XP, level up skills, maintain streaks, and collect verifiable completion badges.</p>
-            </div>
-            <div>
-                <h3 class="font-bold text-white mb-2">💼 Real-World Career Assets</h3>
-                <p class="text-xs text-slate-400">Generate printable resumes and public portfolio websites as you progress through missions.</p>
-            </div>
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl space-y-4 shadow-xl">
+            <div class="text-3xl text-indigo-400">💡</div>
+            <h2 class="text-2xl font-black text-white">The Gamified Difference</h2>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                By pairing skill-tree mechanics, XP rewards, and simulated client missions with real career tools (ATS Resume Builder, Portfolio Publisher, Application Tracker), learners build competence naturally while having fun.
+            </p>
+        </div>
+    </div>
+
+    <!-- REGISTER CONVERSION CTA -->
+    <div class="bg-gradient-to-r from-amber-500/20 via-slate-900 to-indigo-900/40 border border-amber-500/30 p-10 rounded-3xl text-center space-y-6 shadow-2xl">
+        <h2 class="text-3xl font-black text-white">START YOUR FREELANCE CAREER TODAY</h2>
+        <p class="text-slate-300 text-sm max-w-xl mx-auto">Join thousands of aspiring Virtual Assistants and remote professionals building their future on FreelanceQuest.</p>
+        <div>
+            <a href="/register" class="inline-block bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-sm px-8 py-4 rounded-xl shadow-lg transition transform hover:scale-105">
+                REGISTER FOR FREE NOW &rarr;
+            </a>
         </div>
     </div>
 </div>
