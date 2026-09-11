@@ -1,10 +1,10 @@
 <?php require __DIR__ . '/layout/header.php'; ?>
 <div class="space-y-24 py-6">
 
-    <!-- HERO SECTION -->
-    <section class="relative overflow-hidden bg-slate-900/60 border border-slate-800/80 rounded-3xl p-8 sm:p-14 text-center space-y-8 shadow-2xl backdrop-blur-sm">
-        <div class="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-extrabold text-xs px-4 py-2 rounded-full uppercase tracking-widest shadow-inner">
-            <span>🎮 THE #1 VIRTUAL ASSISTANT & FREELANCING CAREER SIMULATOR</span>
+    <!-- HIGH-CONVERTING HERO SECTION -->
+    <section class="relative overflow-hidden bg-slate-900/80 border border-slate-800/90 rounded-3xl p-8 sm:p-14 text-center space-y-8 shadow-2xl backdrop-blur-md">
+        <div class="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-indigo-500/10 border border-amber-500/30 text-amber-400 font-extrabold text-xs px-4 py-2 rounded-full uppercase tracking-widest shadow-inner">
+            <span>🚀 YOUR CAREER STARTS AS A GAME</span>
         </div>
 
         <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-none max-w-4xl mx-auto">
@@ -12,16 +12,16 @@
             <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-indigo-400 bg-clip-text text-transparent">GET CLIENTS. GET PAID.</span>
         </h1>
 
-        <p class="text-slate-300 text-base sm:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
-            Transform from absolute beginner to high-earning Virtual Assistant & Freelancer in an entertaining, RPG-style career simulation game.
+        <p class="text-slate-200 text-base sm:text-xl max-w-2xl mx-auto font-normal leading-relaxed">
+            Stop watching boring 50-hour video courses that leave you stuck. <strong class="text-white">FREELANCEQUEST</strong> lets you practice real Virtual Assistant tasks, build your resume & portfolio, pass simulated client calls, and win real online income in an exciting RPG game.
         </p>
 
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <a href="/register" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-base px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/25 transition transform hover:-translate-y-0.5">
-                START YOUR QUEST FOR FREE &rarr;
+            <a href="/register" class="w-full sm:w-auto bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-base px-8 py-4 rounded-2xl shadow-2xl shadow-amber-500/30 transition transform hover:-translate-y-0.5 border border-amber-400/50">
+                START YOUR FREE CAREER QUEST &rarr;
             </a>
-            <a href="/login" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold text-base px-8 py-4 rounded-2xl border border-slate-700 transition">
-                CONTINUE GAME &rarr;
+            <a href="/about" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-100 font-bold text-base px-8 py-4 rounded-2xl border border-slate-700 transition">
+                READ FOUNDER STORY &rarr;
             </a>
         </div>
 
@@ -50,6 +50,59 @@
             <div>
                 <div class="text-3xl font-black text-rose-400">100%</div>
                 <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Learn By Doing</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY FREELANCEQUEST WORKS (HUMANIZED & CLEAR STORYTELLING) -->
+    <section class="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 rounded-3xl p-8 sm:p-12 space-y-8 shadow-2xl">
+        <div class="max-w-3xl mx-auto text-center space-y-3">
+            <span class="text-xs text-amber-400 font-extrabold tracking-widest uppercase">WHY TRADITIONAL COURSES FAIL</span>
+            <h2 class="text-3xl sm:text-4xl font-black text-white">"WHY CAN'T I GET A FREELANCE CLIENT AFTER WATCHING HOURS OF VIDEOS?"</h2>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                If you have ever bought an expensive online course, watched 50 hours of lectures, and still felt terrified when trying to apply for real client jobs... <strong class="text-amber-400">you are not alone.</strong>
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4">
+            <div class="space-y-4 bg-slate-950/80 p-6 rounded-2xl border border-rose-500/30">
+                <h3 class="text-lg font-bold text-rose-400 flex items-center gap-2">
+                    <span>❌</span> The Old Way (Passive Video Fatigue)
+                </h3>
+                <ul class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                        <span class="text-rose-400">✕</span>
+                        <span>Watching endless lectures without ever touching real client software or spreadsheets.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-rose-400">✕</span>
+                        <span>No portfolio or work samples to prove to clients that you actually know what you are doing.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-rose-400">✕</span>
+                        <span>Freezing up in fear during live client discovery calls because you never practiced objection handling.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="space-y-4 bg-slate-950/80 p-6 rounded-2xl border border-emerald-500/30">
+                <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
+                    <span>✅</span> The FREELANCEQUEST Way (Interactive Simulation)
+                </h3>
+                <ul class="space-y-2.5 text-xs text-slate-300 leading-relaxed">
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-400">✓</span>
+                        <span>Practice real client assignments: inbox filtering, calendar booking, lead generation, and social scheduling.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-400">✓</span>
+                        <span>Build your ATS Resume and live public portfolio (`freelancequest.com/p/yourname`) directly in the game.</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-emerald-400">✓</span>
+                        <span>Practice interview calls in our AI Interview Arena until you feel 100% confident before talking to real CEOs.</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </section>
