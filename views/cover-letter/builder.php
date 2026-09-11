@@ -39,9 +39,14 @@
                     <textarea name="experience" rows="3" required placeholder="1+ years in executive administrative support and inbox management" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-indigo-500">Managed C-suite calendar scheduling, travel itineraries, and inbox zero organization with 99% accuracy.</textarea>
                 </div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black py-3 rounded-xl text-xs transition shadow-lg shadow-amber-500/20">
-                    GENERATE PROPOSAL LETTER (+100 XP) &rarr;
-                </button>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <button type="submit" name="mode" value="kiss" class="w-full bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-black py-3 px-4 rounded-xl text-xs transition shadow-lg shadow-amber-500/20 border border-amber-400/50 flex items-center justify-center gap-1.5">
+                        <span>⚡</span> GENERATE KISS METHOD LETTER (+100 XP)
+                    </button>
+                    <button type="submit" name="mode" value="standard" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
+                        <span>📄</span> Standard Proposal Letter
+                    </button>
+                </div>
             </form>
         </div>
 
@@ -49,7 +54,14 @@
         <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 shadow-xl flex flex-col justify-between">
             <div>
                 <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-                    <h3 class="text-lg font-bold text-white">GENERATED PROPOSAL COPY</h3>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">GENERATED PROPOSAL COPY</h3>
+                        <?php if (!empty($generatedLetter)): ?>
+                            <span class="text-[10px] font-extrabold text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded border border-amber-500/30 uppercase tracking-wider">
+                                <?= htmlspecialchars($letterMode ?? 'KISS Method') ?>
+                            </span>
+                        <?php endif; ?>
+                    </div>
                     <?php if (!empty($generatedLetter)): ?>
                     <button onclick="navigator.clipboard.writeText(document.getElementById('letterOutput').innerText); alert('Cover letter copied to clipboard!');" class="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold px-3 py-1 rounded text-xs border border-slate-700">
                         📋 COPY TEXT
