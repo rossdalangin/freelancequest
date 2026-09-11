@@ -63,7 +63,7 @@
                         <?php endif; ?>
                     </div>
                     <?php if (!empty($generatedLetter)): ?>
-                    <button onclick="navigator.clipboard.writeText(document.getElementById('letterOutput').innerText); alert('Cover letter copied to clipboard!');" class="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold px-3 py-1 rounded text-xs border border-slate-700">
+                    <button id="copyBtn" onclick="copyCoverLetterText();" class="bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold px-3 py-1 rounded text-xs border border-slate-700 transition">
                         📋 COPY TEXT
                     </button>
                     <?php endif; ?>
@@ -83,4 +83,59 @@
         </div>
     </div>
 </div>
+
+<script>
+function copyCoverLetterText() {
+    const outputElem = document.getElementById('letterOutput');
+    const btn = document.getElementById('copyBtn');
+    if (!outputElem) return;
+
+    const textToCopy = outputElem.innerText || outputElem.textContent;
+
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showCopySuccess(btn);
+        }).catch(err => {
+            fallbackCopyText(textToCopy, btn);
+        });
+    } else {
+        fallbackCopyText(textToCopy, btn);
+    }
+}
+
+function fallbackCopyText(text, btn) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        document.execCommand('copy');
+        showCopySuccess(btn);
+    } catch (err) {
+        alert('Copying failed. Please manually select and copy the text.');
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
+
+function showCopySuccess(btn) {
+    if (!btn) return;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '✅ COPIED!';
+    btn.classList.add('bg-emerald-600', 'text-white');
+    btn.classList.remove('bg-slate-800', 'text-amber-400');
+
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.classList.remove('bg-emerald-600', 'text-white');
+        btn.classList.add('bg-slate-800', 'text-amber-400');
+    }, 2000);
+}
+</script>
+
 <?php require __DIR__ . '/../layout/footer.php'; ?>
