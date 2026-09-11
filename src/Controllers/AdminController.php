@@ -648,18 +648,28 @@ class AdminController
         $admin = $this->checkAdminAuth();
 
         $pagesList = [
+            'home_hero' => [
+                'title' => 'Homepage Hero & Tagline Section',
+                'url' => '/',
+                'content' => DataManagementService::getSetting('page_content_home_hero', '')
+            ],
             'about' => [
-                'title' => 'About Us Page',
+                'title' => 'About Us Page & Founder Story',
                 'url' => '/about',
                 'content' => DataManagementService::getSetting('page_content_about', '')
             ],
             'features' => [
-                'title' => 'Features Page',
+                'title' => 'Platform Features & Gameplay Section',
                 'url' => '/features',
                 'content' => DataManagementService::getSetting('page_content_features', '')
             ],
+            'pricing_hero' => [
+                'title' => 'Pricing & Membership Plans Section',
+                'url' => '/pricing',
+                'content' => DataManagementService::getSetting('page_content_pricing_hero', '')
+            ],
             'faq' => [
-                'title' => 'FAQ Page',
+                'title' => 'Frequently Asked Questions (FAQ)',
                 'url' => '/faq',
                 'content' => DataManagementService::getSetting('page_content_faq', '')
             ],
@@ -679,7 +689,7 @@ class AdminController
                 'content' => DataManagementService::getSetting('page_content_disclaimer', '')
             ],
             'contact' => [
-                'title' => 'Contact Page Info',
+                'title' => 'Contact & Support Section',
                 'url' => '/contact',
                 'content' => DataManagementService::getSetting('page_content_contact', '')
             ],
@@ -700,7 +710,7 @@ class AdminController
         $pageSlug = trim($_POST['page_slug'] ?? '');
         $pageContent = trim($_POST['page_content'] ?? '');
 
-        $validSlugs = ['about', 'features', 'faq', 'terms', 'privacy', 'disclaimer', 'contact'];
+        $validSlugs = ['home_hero', 'about', 'features', 'pricing_hero', 'faq', 'terms', 'privacy', 'disclaimer', 'contact'];
 
         if (in_array($pageSlug, $validSlugs)) {
             DataManagementService::setSetting('page_content_' . $pageSlug, $pageContent);
