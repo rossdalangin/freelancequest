@@ -1,0 +1,239 @@
+================================================================================
+FREELANCEQUEST — FULL SYSTEM MASTER DOCUMENTATION FILE
+================================================================================
+Product Name: FREELANCEQUEST
+Tagline: PLAY. LEARN. LEVEL UP. GET CLIENTS. GET PAID.
+Alternative Tagline: Your Career Starts as a Game.
+Core Philosophy: LEARN BY DOING (Interactive RPG Career Simulation)
+Founder & Lead Architect: Ross Dalangin
+  - Former IT & Programming Teacher for ~10 years (started teaching at age 19)
+  - 20+ Years Veteran Remote Freelancer (Lead Generation, SEO, Web & Software Development)
+
+--------------------------------================--------------------------------
+1. PRODUCT OVERVIEW & CORE PHILOSOPHY
+--------------------------------================--------------------------------
+FREELANCEQUEST is a complete web-based gamified learning platform that teaches
+people how to become successful Virtual Assistants (VAs) and freelancers while
+making the learning experience feel like an entertaining RPG video game.
+
+The system takes a complete beginner from "I don't know how freelancing works"
+to "I have skills, an ATS resume, a live portfolio, proposals, interview practice,
+clients, income, and a sustainable freelancing career."
+
+Simultaneous System Functions:
+ 1. Learning Management System (LMS)
+ 2. RPG Career Simulator
+ 3. Skills-Training Platform
+ 4. Job-Application Simulator
+ 5. Public Portfolio Builder (`/p/username`)
+ 6. ATS Resume & CV Builder (`/resume-builder`)
+ 7. Cover Letter Generator (`/cover-letter-builder` with KISS method)
+ 8. AI Interview Simulator Arena
+ 9. B2B Client Sourcing & Lead Generation Engine
+10. Freelance Business & Agency Simulator
+11. Professional Community Platform (`/community`)
+12. Resource Vault (`/resources` with 32 downloadable SOPs & templates)
+13. Verifiable Certification System (`/verify/FQ-XXXX-1234`)
+14. Monetizable SaaS Platform (Free, Pro $19/mo, Master $49/mo)
+15. Admin CMS & Database Control Center (`/admin`)
+
+--------------------------------================--------------------------------
+2. TECHNOLOGY STACK & ARCHITECTURE
+--------------------------------================--------------------------------
+- Backend Engine: Pure Native PHP 8.3 (Framework-Free Architecture)
+- Architecture Pattern: Custom Front-Controller MVC with Regex Router
+- Database Engine: SQLite (`database/database.sqlite`) via PDO Prepared Statements
+- Frontend Styling: HTML5, Tailwind CSS, FontAwesome Icons, Vanilla JavaScript
+- Security Safeguards: CSRF Tokens, Rate Limiting, CSP Headers, Session Renewal, XSS Escaping
+
+--------------------------------================--------------------------------
+3. DATABASE SCHEMA & ARCHITECTURE (31 TABLES)
+--------------------------------================--------------------------------
+1. `users` — Learner profiles, roles (student, admin), level, XP, coins, streak_count, subscription_tier.
+2. `levels` — 16 RPG career levels (0 to 15), required XP, certificates, icons.
+3. `skill_categories` — Technical, Business & Sales, Professional Skills.
+4. `skills` — Specific skills linked to categories.
+5. `user_skills` — Learner proficiency and mastery ratings.
+6. `courses` — 16 Course Modules mapped to Levels 0–15.
+7. `lessons` — 96 Masterclass Lessons (6 per level) with rich HTML content.
+8. `lesson_progress` — User completion records and completion timestamps.
+9. `quizzes` — 96 Knowledge Check Quizzes linked to lessons.
+10. `questions` — 288 Multiple Choice Questions (3 per quiz) with option arrays and explanations.
+11. `quiz_attempts` — User quiz scores and improvement tracking.
+12. `missions` — 50 Interactive Scenario Missions (calendar, inbox, lead gen, social media).
+13. `mission_attempts` — User scenario submissions and score evaluations.
+14. `daily_quests` — Generated daily missions for XP/coin bonuses.
+15. `badges` — 20 Achievement Badges with XP bonuses.
+16. `user_badges` — Awarded badges per user.
+17. `certificates` — Issued level completion certificates with unique verification codes.
+18. `resources` — 32 Downloadable Vault Resources mapped across Levels 0–15.
+19. `resumes` — ATS Resume Builder entries (contact info, skills, experience, education).
+20. `portfolios` — Public portfolio websites with custom slugs, tagline, about, and services.
+21. `portfolio_items` — Case studies, work samples, and screenshots.
+22. `groups` — Community discussion groups.
+23. `community_posts` — Forum posts, questions, and success stories.
+24. `comments` — User comments on community posts.
+25. `subscriptions` — Active user subscription records (Free, Pro, Master).
+26. `payments` — Transaction logs (PayPal, Stripe, GCash) and reference numbers.
+27. `settings` — System settings (pricing, XP multipliers, payment gateways, page content).
+28. `coupons` — Discount coupons (percentage or fixed dollar discounts).
+29. `testimonials` — User reviews submitted for homepage moderation.
+30. `audit_logs` — System audit logs for admin activity tracking.
+31. `jobs` / `job_applications` / `applications_tracker` — Job board postings and pipeline tracker.
+
+--------------------------------================--------------------------------
+4. CAREER PROGRESSION ROADMAP (16 RPG CAREER LEVELS)
+--------------------------------================--------------------------------
+LEVEL 0: CAREER ZERO (The Uninitiated)
+ - Course: Orientation & Remote Mindset
+ - Lessons: Intro Roadmap, Hardware Infrastructure, Imposter Syndrome, Habits, Goals, Platform Tools.
+ - Certificate: Freelancing Career Orientation Certificate
+
+LEVEL 1: EXPLORER (The Discovery Phase)
+ - Course: Freelancing & VA Foundations
+ - Lessons: VA Work Intro, Marketplaces vs Direct Sourcing, Remote Mindset, Security, Hardware, Time Tracking.
+ - Certificate: Freelancing Foundations Certificate
+
+LEVEL 2: DIGITAL SURVIVOR (Core Digital Tools)
+ - Course: Digital Productivity & Workspace Tools
+ - Lessons: Google Workspace Architecture, Inbox Zero, Calendar Scheduling, Docs SOP, Forms, Slides.
+ - Certificate: Digital Productivity Certificate
+
+LEVEL 3: VA APPRENTICE (Core Administrative Support)
+ - Course: Core Administrative Support
+ - Lessons: Calendar & Email Best Practices, Meeting Minutes, Data Entry, CRM Hygiene, Travel Planning, Zendesk.
+ - Certificate: Virtual Assistant Fundamentals
+
+LEVEL 4: SPECIALIST (Choose Your Niche Track)
+ - Course: Specialist Tracks & Niche Specialization
+ - Lessons: Social Media Scheduling, B2B Lead Scraping, WordPress VA, Content Calendars, Technical SEO, Apollo.io.
+ - Certificate: VA Specialist Certification
+
+LEVEL 5: JOB READY (Professional Candidate Branding)
+ - Course: Candidate Branding & Resume Mastery
+ - Lessons: ATS Resume Optimization, Authority LinkedIn Profile, USP Creation, Upwork Profiles, Headshots, ATS Scanners.
+ - Certificate: Job Ready Candidate Certificate
+
+LEVEL 6: PORTFOLIO BUILDER (Visual Proof of Competence)
+ - Course: Portfolio Development & Case Studies
+ - Lessons: Case Studies Creation, No-Code Portfolio Site, Client Testimonials, Case Study Portfolios, WordPress/Canva Sites, Loom Walkthroughs.
+ - Certificate: Certified Portfolio Developer
+
+LEVEL 7: APPLICATION ACADEMY (Opportunity Finding)
+ - Course: Opportunity Hunting & Job Boards
+ - Lessons: Job Post Auditing, Spotting Scams, Application Pipeline, Job Board Strategy, Security Safeguards, Application SOP.
+ - Certificate: Freelance Job Acquisition Certificate
+
+LEVEL 8: PROPOSAL MASTER (Winning Client Interest)
+ - Course: Proposal Writing & High-Converting Pitches
+ - Lessons: Hook-Problem-Solution Blueprint, Job Requirements Deconstruction, A/B Testing Proposals, Opener Hooks, Mini Audits, CTA Mastery.
+ - Certificate: Master Proposal Writer
+
+LEVEL 9: INTERVIEW ARENA (Closing the Deal)
+ - Course: Client Interview Arena & Objection Handling
+ - Lessons: Discovery Call Structure, Objection Handling, AI Interview Practice, STAR Method, Technical Skills Testing, Post-Interview SOP.
+ - Certificate: Interview Specialist Certification
+
+LEVEL 10: CLIENT ACQUISITION (Active Prospecting)
+ - Course: Direct Cold Outreach & Lead Prospecting
+ - Lessons: Cold Outreach Pitching, LinkedIn Social Selling, Cold Email DNS Infrastructure, Personalization SOP, InMail Networking, Loom Audits.
+ - Certificate: Client Acquisition Specialist
+
+LEVEL 11: CLIENT NEGOTIATOR (Rates & Agreements)
+ - Course: Rate Negotiation & Service Agreements
+ - Lessons: Value-Based Pricing, Monthly Retainers, Scope Creep Defense, Value vs Hourly Mechanics, Contract Statements, Rate Increases.
+ - Certificate: Freelance Negotiation Specialist
+
+LEVEL 12: PROJECT MANAGER (Service Delivery)
+ - Course: Virtual Project Management & Client Operations
+ - Lessons: Async Communication, Crisis Management, SOP Creation, Async Loom SOP, PM Workspaces (ClickUp/Asana/Notion), Outage SOPs.
+ - Certificate: Virtual Project Management Specialist
+
+LEVEL 13: FREELANCER PRO (Retention & Retainers)
+ - Course: Client Retention & Recurring Retainers
+ - Lessons: Retention & Expansion, Zapier/Make Automation, Subcontracting Delegation, Monthly ROI Reports, Retainer Expansion, AI Agents.
+ - Certificate: Professional Freelancer Certificate
+
+LEVEL 14: FREELANCE BUSINESS OWNER (Agency & Systems)
+ - Course: Virtual Agency Building & Systems
+ - Lessons: Transitioning to Agency Founder, Agency Finances & Taxes, Inbound Organic Lead Engines, SOP Library Creation, Subcontractor Vetting, Agency Margins.
+ - Certificate: Virtual Agency Specialist
+
+LEVEL 15: FREELANCE MASTER (Apex Industry Leader)
+ - Course: Apex Freelance Mastery & Business Automation
+ - Lessons: Freelance Master Mindset, AI-Augmented Strategy, Wealth & Exit Strategy, High-Ticket B2B Sales, Authority Branding, Autonomous Systems.
+ - Certificate: FREELANCE MASTER CERTIFIED
+
+--------------------------------================--------------------------------
+5. CURRICULUM SUMMARY: 96 LESSONS & 288 QUIZ QUESTIONS
+--------------------------------================--------------------------------
+- Every single course level (Levels 0 through 15) contains 6 masterclass lessons.
+- Every lesson includes:
+  1. Plain-language explanation ("In Simple Terms")
+  2. Monetization rationale ("Why This Skill Matters")
+  3. Step-by-Step Standard Operating Procedure (SOP) Blueprint
+  4. Copy-Paste Client Communication Scripts
+  5. 4 Pro Tips & Insider Tricks
+  6. Common Beginner Pitfalls & Solutions
+- Every lesson contains a 3-question Knowledge Check Quiz (288 total questions) with:
+  - 4 multiple choice options
+  - Verified correct answer choice
+  - Explanatory feedback for every question
+  - Zero duplicate question phrasing across the entire database
+
+--------------------------------================--------------------------------
+6. RESOURCE VAULT (32 DOWNLOADABLE CAREER ASSETS)
+--------------------------------================--------------------------------
+All 16 levels contain 2 dedicated downloadable Markdown/text files in `public/downloads/`:
+- Level 0: Career Zero Roadmap & Daily Habit Tracker, Hardware & ISP Contingency Checklist
+- Level 1: VA Starter Playbook & Service Menu, Workplace Security & Password SOP
+- Level 2: Google Workspace Keyboard Shortcuts Cheat Sheet, Inbox Zero Rules Template
+- Level 3: Client Onboarding SOP Checklist, Executive Meeting Minutes & Action Tracker
+- Level 4: Canva & Social Content Calendar, B2B Lead Scraping Verification SOP
+- Level 5: High-Converting ATS VA Resume Template, LinkedIn Profile Headline Swipe File
+- Level 6: Portfolio Case Study Builder Framework, Testimonial Request Scripts
+- Level 7: Scam Detection & Client Vetting Checklist, Job Application Pipeline Tracker
+- Level 8: 10 Winning Proposal Pitch Scripts, Proposal Scoring & A/B Testing Sheet
+- Level 9: STAR Interview Response Preparation Sheet, Discovery Call Playbook
+- Level 10: High Ticket Loom Cold Audit Script, Cold Email Infrastructure Setup Guide
+- Level 11: Client Service Agreement & Contract Template, Scope Creep Change Order Form
+- Level 12: Hourly Rate & Retainer Calculator Worksheet, Async Loom & EOD Update SOP
+- Level 13: Monthly Client ROI Review Presentation Deck, Zapier & Make Templates
+- Level 14: Virtual Agency SOP Operations Manual, Subcontractor NDA & Contract Template
+- Level 15: 6-Figure Business Automation Playbook, Thought Leadership Newsletter Guide
+
+--------------------------------================--------------------------------
+7. SPECIALIST FEATURE HIGHLIGHTS
+--------------------------------================--------------------------------
+- ATS Resume Builder (`/resume-builder`): Real-time input preview, printable layout, ATS formatting.
+- Public Portfolio Builder (`/portfolio-builder`): Custom public URLs (`/p/username`), LinkedIn link support, case studies, service cards.
+- Cover Letter Generator (`/cover-letter-builder`): Generates Standard Proposal Letters and ⚡ KISS Method Letters (Short, Direct & High-Trust) with cross-browser clipboard copying.
+- RPG Skill Tree Dashboard (`/dashboard`): Dynamic category mastery progress bars, skill proficiency tracking, and rank tiers (Novice, Adept, Pro, Master).
+- Global Leaderboard (`/leaderboard`): Ranked student leaderboard sortable by Level, XP, or Coins with 10-per-page pagination.
+- Referral Engine (`/register?ref=USERNAME`): Awards +250 XP and +50 Coins to referrers upon successful friend registration.
+- Admin Control Center (`/admin`):
+  - Reseed & Update Database Button
+  - Database Backup Export (.sqlite binary & JSON) and Upload Import (.sqlite)
+  - Page Content Management System (CMS) for Homepage, About, Features, Pricing, FAQ, Legal, Contact
+  - Pricing & Coupon Management System
+  - User Testimonial Moderation Engine
+  - AI Course Generator Engine
+  - System Audit Logs
+
+--------------------------------================--------------------------------
+8. DEPLOYMENT & LOCAL SETUP INSTRUCTIONS
+--------------------------------================--------------------------------
+Localhost Setup (XAMPP / PHP CLI):
+1. Navigate to project root directory.
+2. Initialize database schema and seeds: `php database/seed.php`
+3. Start development server: `php -S localhost:8000 -t public`
+4. Access platform in browser: `http://localhost:8000`
+
+cPanel / Web Server Deployment:
+1. Upload project files to web server root directory (`public_html`).
+2. Set document root to point to the `public/` directory.
+3. Ensure write permissions on `database/database.sqlite`.
+
+================================================================================
+END OF FREELANCEQUEST MASTER SYSTEM DOCUMENTATION
+================================================================================
