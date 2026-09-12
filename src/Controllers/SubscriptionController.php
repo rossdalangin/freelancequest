@@ -189,7 +189,13 @@ class SubscriptionController
         $stmtIns = $pdo->prepare("INSERT INTO subscriptions (user_id, plan_name, status, price, starts_at, ends_at) VALUES (?, ?, 'active', ?, DATE('now'), DATE('now', '+1 month'))");
         $stmtIns->execute([$user['id'], $planName, $amount]);
 
+        // Award in-game XP bonus for upgrading membership
+        $gameEngine = new \App\Services\GameEngineService();
+        $gameEngine->awardXPAndCoins($user['id'], 200, 50);
+
         DataManagementService::logActivity($user['id'], 'MEMBERSHIP_CHECKOUT_COMPLETED', "Upgraded to {$planName} via {$paymentGateway} (\${$amount}). Ref: {$referenceNumber}, Txn: {$txnId}");
+
+        $_SESSION['flash_success'] = "🎉 CONGRATULATIONS! Your payment was verified and your " . strtoupper($planName) . " plan is now ACTIVE (+200 XP Bonus)!";
 
         header('Location: /dashboard');
         exit;

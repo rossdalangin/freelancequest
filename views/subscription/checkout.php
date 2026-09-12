@@ -69,11 +69,19 @@
                 <label class="block text-xs font-extrabold text-slate-300 uppercase mb-2">
                     Payment Reference / Receipt Transaction ID <span class="text-red-400">*</span>
                 </label>
-                <input type="text" name="reference_number" required placeholder="e.g., 900123456789 or PAYPAL-TXN-88392" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
+                <input type="text" id="refInput" name="reference_number" required placeholder="e.g., 900123456789 or PAYPAL-TXN-88392" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500 font-mono">
             </div>
 
-            <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black py-4 rounded-xl text-sm transition shadow-xl shadow-amber-500/20">
-                VERIFY TRANSACTION & ACTIVATE <?= strtoupper($planName) ?> &rarr;
+            <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800 space-y-2">
+                <span class="text-[11px] font-bold text-amber-400 uppercase tracking-wider block">⚡ Instant Demo / Simulator One-Click Authorization</span>
+                <p class="text-[11px] text-slate-400">Testing in sandbox mode? Click below to auto-generate a verified test transaction reference and activate instantly:</p>
+                <button type="button" onclick="document.getElementById('refInput').value = 'DEMO-AUTH-' + Math.floor(100000 + Math.random() * 900000);" class="bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-bold px-3 py-1.5 rounded-lg border border-slate-700 transition">
+                    🎲 Generate Sandbox Test Reference
+                </button>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black py-4 rounded-xl text-sm transition shadow-xl shadow-amber-500/20 border border-amber-400/50">
+                COMPLETE TRANSACTION & ACTIVATE <?= strtoupper($planName) ?> PLAN &rarr;
             </button>
         </form>
     </div>
