@@ -53,6 +53,33 @@
             </div>
         </div>
 
+        <?php if (!empty($allApplications) && ($job['user_id'] == $user['id'] || ($user['role'] ?? '') === 'admin')): ?>
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4 mb-6">
+                <h3 class="text-lg font-black text-white flex items-center gap-2">
+                    <span>📋</span> APPLICANTS INBOX (<?= count($allApplications) ?>)
+                </h3>
+                <div class="space-y-3">
+                    <?php foreach ($allApplications as $app): ?>
+                        <div class="bg-slate-950 p-4 rounded-xl border <?= !empty($app['is_boosted']) ? 'border-amber-500/50 bg-amber-500/[0.02]' : 'border-slate-800' ?> space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-white text-xs"><?= htmlspecialchars($app['applicant_name']) ?></span>
+                                    <span class="text-[10px] text-slate-400">LVL <?= $app['applicant_level'] ?></span>
+                                    <?php if (!empty($app['is_boosted'])): ?>
+                                        <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[10px] font-extrabold uppercase rounded">
+                                            ⚡ Priority Applicant
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                                <span class="font-bold text-emerald-400 text-xs"><?= htmlspecialchars($app['proposed_rate']) ?></span>
+                            </div>
+                            <p class="text-xs text-slate-300 line-clamp-2"><?= htmlspecialchars($app['cover_letter']) ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+
         <?php if (!empty($existingApplication)): ?>
             <div class="bg-emerald-500/10 border border-emerald-500/30 p-6 rounded-xl space-y-2">
                 <span class="text-xs font-black text-emerald-400 uppercase tracking-wider">✓ APPLICATION SUBMITTED</span>

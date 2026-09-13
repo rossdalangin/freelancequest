@@ -90,6 +90,11 @@ $router->post('/jobs/create', [JobController::class, 'store']);
 $router->get('/jobs/{id}', [JobController::class, 'show']);
 $router->post('/jobs/{id}/apply', [JobController::class, 'apply']);
 $router->get('/my-applications', [JobController::class, 'myApplications']);
+$router->post('/jobs/application/{id}/boost', [JobController::class, 'boostApplication']);
+
+$router->post('/user/streak-shield', [UserController::class, 'buyStreakShield']);
+$router->post('/resume/theme', [ResumeBuilderController::class, 'updateTheme']);
+$router->post('/portfolio/theme', [PortfolioController::class, 'updateTheme']);
 
 // Support Tickets & Helpdesk Routes
 $router->get('/support', [SupportTicketController::class, 'index']);

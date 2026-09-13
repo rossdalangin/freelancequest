@@ -69,6 +69,35 @@ class UserController
         exit;
     }
 
+    public function buyStreakShield()
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $shieldCost = 150;
+        if (($user['coins'] ?? 0) < $shieldCost) {
+            $_SESSION['settings_error'] = "Insufficient coins! Purchasing a Streak Shield requires {$shieldCost} coins. You have {$user['coins']} coins.";
+            header('Location: /dashboard');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+
+        // Deduct 150 coins and increase streak count by +7 days
+        $stmtDeduct = $pdo->prepare("UPDATE users SET coins = coins - ?, streak_count = streak_count + 7 WHERE id = ?");
+        $stmtDeduct->execute([$shieldCost, $user['id']]);
+
+        DataManagementService::logActivity($user['id'], 'STREAK_SHIELD_ACTIVATED', "Activated Streak Shield for 150 coins (+7 streak days)");
+
+        $_SESSION['settings_success'] = "🔥 Streak Shield Activated! +7 days added to your daily streak for 150 coins!";
+        header('Location: /dashboard');
+        exit;
+    }
+
     public function submitTestimonial()
     {
         $user = AuthController::requireAuth();

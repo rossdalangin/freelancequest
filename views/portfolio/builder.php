@@ -7,6 +7,22 @@
             <p class="text-xs text-slate-400">Build your public showcase website to display services, case studies, and work samples.</p>
         </div>
 
+        <!-- COIN THEME UNLOCK SELECTOR -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider block">🎨 Portfolio Website Visual Theme (Unlockable with Coins)</span>
+            <form action="/portfolio/theme" method="POST" class="flex items-center gap-3">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                <select name="theme" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white">
+                    <option value="default" <?= ($portfolio['theme'] ?? 'default') === 'default' ? 'selected' : '' ?>>Dark Modern Slate (Free)</option>
+                    <option value="gold" <?= ($portfolio['theme'] ?? '') === 'gold' ? 'selected' : '' ?>>Executive Gold (100 Coins)</option>
+                    <option value="emerald" <?= ($portfolio['theme'] ?? '') === 'emerald' ? 'selected' : '' ?>>Cyber Emerald (100 Coins)</option>
+                </select>
+                <button type="submit" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs transition">
+                    Apply Theme
+                </button>
+            </form>
+        </div>
+
         <form action="/portfolio-builder" method="POST" id="portfolioForm" class="space-y-4">
             <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
             <div>

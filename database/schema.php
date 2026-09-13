@@ -249,7 +249,8 @@ function initializeSchema()
             experience TEXT,
             education TEXT,
             certifications TEXT,
-            tools TEXT
+            tools TEXT,
+            theme TEXT DEFAULT 'default'
         );",
 
         "CREATE TABLE portfolios (
@@ -261,7 +262,8 @@ function initializeSchema()
             about TEXT,
             services TEXT,
             contact_info TEXT,
-            is_published INTEGER DEFAULT 1
+            is_published INTEGER DEFAULT 1,
+            theme TEXT DEFAULT 'default'
         );",
 
         "CREATE TABLE portfolio_items (
@@ -379,6 +381,7 @@ function initializeSchema()
             proposed_rate TEXT NOT NULL,
             portfolio_url TEXT,
             status TEXT DEFAULT 'applied',
+            is_boosted INTEGER DEFAULT 0,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );",
 

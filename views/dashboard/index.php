@@ -88,7 +88,61 @@
     <?php endif; ?>
 
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- SYSTEM COINS PERKS & UTILITIES HUB -->
+    <div class="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border border-amber-500/30 rounded-2xl p-6 shadow-xl space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-3">
+            <div>
+                <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+                    <span>🪙</span> SYSTEM COINS PERKS & REWARDS HUB
+                </h2>
+                <p class="text-xs text-slate-400 mt-0.5">Use your earned game coins to unlock premium features, boost job applications, restore streaks, and download SOPs.</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 px-4 py-2 rounded-xl text-amber-400 font-bold text-xs flex items-center gap-2">
+                <i class="fa-solid fa-coins text-amber-400"></i>
+                <span>Balance: <?= number_format($user['coins'] ?? 0) ?> Coins</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+            <!-- Spend Option 1: Shop SOPs & Templates -->
+            <a href="/shop" class="bg-slate-950/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-xl transition group">
+                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🛍️</div>
+                <h3 class="text-xs font-bold text-white group-hover:text-amber-400 transition-colors">Digital SOPs & Templates</h3>
+                <p class="text-[11px] text-slate-400 mt-1">Unlock client onboarding SOPs and pitch bundles starting at 300 Coins.</p>
+            </a>
+
+            <!-- Spend Option 2: Level Unlocks -->
+            <a href="/learn" class="bg-slate-950/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-xl transition group">
+                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🔓</div>
+                <h3 class="text-xs font-bold text-white group-hover:text-amber-400 transition-colors">Unlock Level 4+ Courses</h3>
+                <p class="text-[11px] text-slate-400 mt-1">Permanently unlock restricted course levels for 500 Coins without subscription.</p>
+            </a>
+
+            <!-- Spend Option 3: Proposal Priority Boost -->
+            <a href="/my-applications" class="bg-slate-950/80 border border-slate-800 hover:border-amber-500/50 p-4 rounded-xl transition group">
+                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">⚡</div>
+                <h3 class="text-xs font-bold text-white group-hover:text-amber-400 transition-colors">Priority Proposal Boost</h3>
+                <p class="text-[11px] text-slate-400 mt-1">Spend 50 Coins on the Job Board to get highlighted at the top of client inboxes.</p>
+            </a>
+
+            <!-- Spend Option 4: Streak Shield -->
+            <div class="bg-slate-950/80 border border-slate-800 p-4 rounded-xl flex flex-col justify-between">
+                <div>
+                    <div class="text-2xl mb-2">🔥</div>
+                    <h3 class="text-xs font-bold text-white">Streak Shield (+7 Days)</h3>
+                    <p class="text-[11px] text-slate-400 mt-1">Restore or protect your daily streak for 150 Coins.</p>
+                </div>
+                <form action="/user/streak-shield" method="POST" class="mt-3">
+                    <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                    <button type="submit" class="w-full py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs transition">
+                        Restore (+150 Coins)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div class="lg:col-span-2 space-y-8">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-4">

@@ -12,6 +12,22 @@
             </a>
         </div>
 
+        <!-- COIN THEME UNLOCK SELECTOR -->
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider block">🎨 Resume Visual Theme (Unlockable with Coins)</span>
+            <form action="/resume/theme" method="POST" class="flex items-center gap-3">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                <select name="theme" class="bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-white">
+                    <option value="default" <?= ($resume['theme'] ?? 'default') === 'default' ? 'selected' : '' ?>>Standard ATS Clean (Free)</option>
+                    <option value="gold" <?= ($resume['theme'] ?? '') === 'gold' ? 'selected' : '' ?>>Pro Executive Gold (100 Coins)</option>
+                    <option value="emerald" <?= ($resume['theme'] ?? '') === 'emerald' ? 'selected' : '' ?>>Tech Founder Emerald (100 Coins)</option>
+                </select>
+                <button type="submit" class="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-xs transition">
+                    Apply Theme
+                </button>
+            </form>
+        </div>
+
         <form action="/resume-builder" method="POST" id="resumeForm" class="space-y-4">
             <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
             <div>

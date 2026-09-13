@@ -33,12 +33,29 @@
                 <?php else: ?>
                     <?php foreach ($applications as $app): ?>
                     <tr>
-                        <td class="p-4 font-bold text-white"><?= htmlspecialchars($app['job_title']) ?></td>
+                        <td class="p-4 font-bold text-white">
+                            <div class="flex items-center gap-2">
+                                <span><?= htmlspecialchars($app['job_title']) ?></span>
+                                <?php if (!empty($app['is_boosted'])): ?>
+                                    <span class="px-2 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[10px] font-extrabold uppercase">
+                                        ⚡ Priority Applicant
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </td>
                         <td class="p-4 text-slate-300"><?= htmlspecialchars($app['job_company']) ?></td>
                         <td class="p-4 font-bold text-emerald-400"><?= htmlspecialchars($app['proposed_rate']) ?></td>
                         <td class="p-4 font-extrabold text-amber-400 uppercase"><?= htmlspecialchars($app['status']) ?></td>
                         <td class="p-4 text-slate-400"><?= htmlspecialchars($app['created_at']) ?></td>
-                        <td class="p-4">
+                        <td class="p-4 flex items-center gap-2">
+                            <?php if (empty($app['is_boosted'])): ?>
+                                <form action="/jobs/application/<?= $app['id'] ?>/boost" method="POST" class="inline">
+                                    <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
+                                    <button type="submit" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-lg text-[11px] transition shadow">
+                                        ⚡ Boost (+50 Coins)
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                             <a href="/jobs/<?= $app['job_id'] ?>" class="text-indigo-400 hover:underline font-bold">View Job &rarr;</a>
                         </td>
                     </tr>

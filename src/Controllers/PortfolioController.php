@@ -46,6 +46,47 @@ class PortfolioController
         require __DIR__ . '/../../views/portfolio/builder.php';
     }
 
+    public function updateTheme()
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $theme = $_POST['theme'] ?? 'default';
+        $themeCost = ($theme === 'default') ? 0 : 100;
+
+        $pdo = Database::getConnection();
+
+        if ($themeCost > 0) {
+            $stmtPurchased = $pdo->prepare("SELECT id FROM user_purchases WHERE user_id = ? AND item_type = 'portfolio_theme' AND transaction_id LIKE ?");
+            $stmtPurchased->execute([$user['id'], "%{$theme}%"]);
+            if (!$stmtPurchased->fetch()) {
+                if (($user['coins'] ?? 0) < $themeCost) {
+                    $_SESSION['portfolio_error'] = "Insufficient coins! Unlocking premium Portfolio themes requires {$themeCost} coins.";
+                    header('Location: /portfolio-builder');
+                    exit;
+                }
+
+                $stmtDeduct = $pdo->prepare("UPDATE users SET coins = coins - ? WHERE id = ?");
+                $stmtDeduct->execute([$themeCost, $user['id']]);
+
+                $txnId = 'COIN-THM-PRT-' . strtoupper($theme) . '-' . rand(100, 999);
+                $stmtIns = $pdo->prepare("INSERT INTO user_purchases (user_id, item_type, item_id, payment_method, amount_paid, coins_spent, transaction_id) VALUES (?, 'portfolio_theme', 1, 'coins', 0.0, ?, ?)");
+                $stmtIns->execute([$user['id'], $themeCost, $txnId]);
+            }
+        }
+
+        $stmtUp = $pdo->prepare("UPDATE portfolios SET theme = ? WHERE user_id = ?");
+        $stmtUp->execute([$theme, $user['id']]);
+
+        $_SESSION['portfolio_success'] = "Portfolio website theme updated to '" . ucfirst($theme) . "'!";
+        header('Location: /portfolio-builder');
+        exit;
+    }
+
     public function update()
     {
         $user = AuthController::requireAuth();

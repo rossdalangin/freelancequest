@@ -49,6 +49,15 @@ class JobController
             return;
         }
 
+        // Fetch all job applications for job poster / employer view ordered by priority boost
+        $stmtAllApps = $pdo->prepare("SELECT ja.*, u.name as applicant_name, u.email as applicant_email, u.level as applicant_level
+            FROM job_applications ja
+            JOIN users u ON ja.user_id = u.id
+            WHERE ja.job_id = ?
+            ORDER BY ja.is_boosted DESC, ja.id DESC");
+        $stmtAllApps->execute([$id]);
+        $allApplications = $stmtAllApps->fetchAll();
+
         // Check if user already applied
         $stmtApp = $pdo->prepare("SELECT * FROM job_applications WHERE job_id = ? AND user_id = ?");
         $stmtApp->execute([$id, $user['id']]);
@@ -156,6 +165,53 @@ class JobController
         DataManagementService::logActivity($user['id'], 'JOB_POSTED', "Posted new job: {$title}");
 
         header('Location: /jobs/' . $newJobId);
+        exit;
+    }
+
+    public function boostApplication(string $id)
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $boostCost = 50;
+        if (($user['coins'] ?? 0) < $boostCost) {
+            $_SESSION['job_app_error'] = "Insufficient coins! Boosting your proposal requires {$boostCost} coins. You currently have {$user['coins']} coins.";
+            header('Location: /my-applications');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->prepare("SELECT * FROM job_applications WHERE id = ? AND user_id = ?");
+        $stmt->execute([$id, $user['id']]);
+        $app = $stmt->fetch();
+
+        if (!$app) {
+            http_response_code(404);
+            die("Application not found.");
+        }
+
+        if (!empty($app['is_boosted'])) {
+            $_SESSION['job_app_success'] = "This proposal is already boosted as a Priority Applicant!";
+            header('Location: /my-applications');
+            exit;
+        }
+
+        // Deduct coins & boost application
+        $stmtDeduct = $pdo->prepare("UPDATE users SET coins = coins - ? WHERE id = ?");
+        $stmtDeduct->execute([$boostCost, $user['id']]);
+
+        $stmtBoost = $pdo->prepare("UPDATE job_applications SET is_boosted = 1 WHERE id = ?");
+        $stmtBoost->execute([$id]);
+
+        DataManagementService::logActivity($user['id'], 'JOB_PROPOSAL_BOOSTED', "Boosted job application #{$id} for 50 coins");
+
+        $_SESSION['job_app_success'] = "⚡ Proposal boosted! Your application now displays with the Priority Applicant badge at the top of the client inbox.";
+        header('Location: /my-applications');
         exit;
     }
 

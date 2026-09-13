@@ -87,6 +87,7 @@ class Database
                     proposed_rate TEXT NOT NULL,
                     portfolio_url TEXT,
                     status TEXT DEFAULT 'applied',
+                    is_boosted INTEGER DEFAULT 0,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
                 );");
 
