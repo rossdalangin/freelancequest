@@ -59,6 +59,14 @@ class LearningController
             return;
         }
 
+        // Check subscription level restriction: Levels 4+ require Pro or Master subscription
+        $userTier = strtolower($user['subscription_tier'] ?? 'free');
+        if ((int)$lesson['level_number'] >= 4 && !in_array($userTier, ['pro', 'master']) && ($user['role'] ?? '') !== 'admin') {
+            $_SESSION['checkout_error'] = "🔒 Course Level " . $lesson['level_number'] . " is locked on Free Tier. Upgrade to Pro or Master to unlock all 16 levels!";
+            header('Location: /pricing');
+            exit;
+        }
+
         $stmtQ = $pdo->prepare("SELECT * FROM quizzes WHERE lesson_id = ?");
         $stmtQ->execute([$lesson['id']]);
         $quizzes = $stmtQ->fetchAll();
@@ -103,6 +111,13 @@ class LearningController
         $stmtL = $pdo->prepare("SELECT * FROM lessons WHERE slug = ?");
         $stmtL->execute([$slug]);
         $lesson = $stmtL->fetch();
+
+        // Enforce subscription lock on complete action
+        $userTier = strtolower($user['subscription_tier'] ?? 'free');
+        if ((int)$lesson['level_number'] >= 4 && !in_array($userTier, ['pro', 'master']) && ($user['role'] ?? '') !== 'admin') {
+            header('Location: /pricing');
+            exit;
+        }
 
         $stmtCheck = $pdo->prepare("SELECT * FROM lesson_progress WHERE user_id = ? AND lesson_id = ?");
         $stmtCheck->execute([$user['id'], $lesson['id']]);
