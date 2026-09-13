@@ -41,6 +41,7 @@ use App\Controllers\JobController;
 use App\Controllers\CoverLetterController;
 use App\Controllers\ApplicationTrackerController;
 use App\Controllers\LeaderboardController;
+use App\Controllers\SupportTicketController;
 
 SecurityService::setSecurityHeaders();
 SecurityService::startSecureSession();
@@ -88,6 +89,14 @@ $router->post('/jobs/create', [JobController::class, 'store']);
 $router->get('/jobs/{id}', [JobController::class, 'show']);
 $router->post('/jobs/{id}/apply', [JobController::class, 'apply']);
 $router->get('/my-applications', [JobController::class, 'myApplications']);
+
+// Support Tickets & Helpdesk Routes
+$router->get('/support', [SupportTicketController::class, 'index']);
+$router->get('/support/create', [SupportTicketController::class, 'showCreateForm']);
+$router->post('/support/create', [SupportTicketController::class, 'store']);
+$router->get('/support/tickets/{id}', [SupportTicketController::class, 'show']);
+$router->post('/support/tickets/{id}/reply', [SupportTicketController::class, 'reply']);
+$router->post('/support/tickets/{id}/close', [SupportTicketController::class, 'close']);
 
 $router->get('/onboarding', [OnboardingController::class, 'index']);
 $router->post('/onboarding', [OnboardingController::class, 'store']);
@@ -155,6 +164,9 @@ $router->get('/admin/resources', [AdminController::class, 'manageResources']);
 $router->post('/admin/resources/create', [AdminController::class, 'createResource']);
 $router->post('/admin/resources/{id}/edit', [AdminController::class, 'editResource']);
 $router->post('/admin/resources/{id}/delete', [AdminController::class, 'deleteResource']);
+$router->get('/admin/tickets', [SupportTicketController::class, 'adminTickets']);
+$router->post('/admin/tickets/{id}/status', [SupportTicketController::class, 'adminUpdateStatus']);
+
 $router->get('/admin/payments', [AdminController::class, 'managePayments']);
 $router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
 $router->get('/admin/certificates', [AdminController::class, 'manageCertificates']);

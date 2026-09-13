@@ -100,6 +100,27 @@ class Database
                     notes TEXT,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
                 );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS support_tickets (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ticket_number TEXT UNIQUE NOT NULL,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    subject TEXT NOT NULL,
+                    category TEXT DEFAULT 'General Inquiry',
+                    priority TEXT DEFAULT 'Medium',
+                    status TEXT DEFAULT 'open',
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS support_ticket_replies (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ticket_id INTEGER REFERENCES support_tickets(id) ON DELETE CASCADE,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    message TEXT NOT NULL,
+                    is_admin_reply INTEGER DEFAULT 0,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
             }
         } catch (Exception $e) {
             // Ignore if schema check in progress
