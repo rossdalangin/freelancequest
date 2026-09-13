@@ -9,6 +9,8 @@
                 <a href="/resources" class="hover:text-slate-200">Resource Vault</a>
                 <a href="/pricing" class="hover:text-slate-200">Pricing</a>
                 <a href="/community" class="hover:text-slate-200">Community</a>
+                <a href="/shop" class="text-amber-400 hover:text-amber-300 font-bold"><i class="fa-solid fa-cart-shopping mr-1"></i> Shop</a>
+                <a href="/support" class="hover:text-slate-200"><i class="fa-solid fa-headset mr-1"></i> Support</a>
                 <a href="/terms" class="hover:text-slate-200">Terms</a>
                 <a href="/privacy" class="hover:text-slate-200">Privacy</a>
                 <a href="/disclaimer" class="hover:text-slate-200">Disclaimer</a>
