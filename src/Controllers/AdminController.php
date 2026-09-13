@@ -1158,4 +1158,97 @@ class AdminController
         header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/admin'));
         exit;
     }
+
+    public function manageProducts()
+    {
+        $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
+        $products = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/products.php';
+    }
+
+    public function createProduct()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $title = trim($_POST['title'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $category = $_POST['category'] ?? 'SOP Vault';
+        $priceUsd = (float)($_POST['price_usd'] ?? 19.00);
+        $priceCoins = (int)($_POST['price_coins'] ?? 300);
+        $fileUrl = trim($_POST['file_url'] ?? '');
+        $imageUrl = trim($_POST['image_url'] ?? '📦');
+
+        if (empty($title) || empty($description) || empty($fileUrl)) {
+            $_SESSION['flash_error'] = 'Please fill in product title, description, and download file URL.';
+            header('Location: /admin/products');
+            exit;
+        }
+
+        $slug = preg_replace('/[^a-z0-9-]+/', '-', strtolower($title)) . '-' . rand(100, 999);
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("INSERT INTO products (title, slug, description, category, price_usd, price_coins, file_url, image_url, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)");
+        $stmt->execute([$title, $slug, $description, $category, $priceUsd, $priceCoins, $fileUrl, $imageUrl]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_PRODUCT_CREATED', "Created digital product: {$title}");
+        $_SESSION['flash_success'] = "Digital product '{$title}' created successfully.";
+        header('Location: /admin/products');
+        exit;
+    }
+
+    public function editProduct(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $title = trim($_POST['title'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $category = $_POST['category'] ?? 'SOP Vault';
+        $priceUsd = (float)($_POST['price_usd'] ?? 19.00);
+        $priceCoins = (int)($_POST['price_coins'] ?? 300);
+        $fileUrl = trim($_POST['file_url'] ?? '');
+        $imageUrl = trim($_POST['image_url'] ?? '📦');
+        $isActive = isset($_POST['is_active']) ? 1 : 0;
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("UPDATE products SET title = ?, description = ?, category = ?, price_usd = ?, price_coins = ?, file_url = ?, image_url = ?, is_active = ? WHERE id = ?");
+        $stmt->execute([$title, $description, $category, $priceUsd, $priceCoins, $fileUrl, $imageUrl, $isActive, $id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_PRODUCT_UPDATED', "Updated digital product #{$id}: {$title}");
+        $_SESSION['flash_success'] = "Product #{$id} updated successfully.";
+        header('Location: /admin/products');
+        exit;
+    }
+
+    public function deleteProduct(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM products WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_PRODUCT_DELETED', "Deleted digital product #{$id}");
+        $_SESSION['flash_success'] = "Digital product deleted.";
+        header('Location: /admin/products');
+        exit;
+    }
 }

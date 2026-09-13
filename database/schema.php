@@ -9,6 +9,8 @@ function initializeSchema()
     $queries = [
         "DROP TABLE IF EXISTS testimonials;",
         "DROP TABLE IF EXISTS coupons;",
+        "DROP TABLE IF EXISTS user_purchases;",
+        "DROP TABLE IF EXISTS products;",
         "DROP TABLE IF EXISTS support_ticket_replies;",
         "DROP TABLE IF EXISTS support_tickets;",
         "DROP TABLE IF EXISTS applications_tracker;",
@@ -409,6 +411,32 @@ function initializeSchema()
             user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             message TEXT NOT NULL,
             is_admin_reply INTEGER DEFAULT 0,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            slug TEXT UNIQUE NOT NULL,
+            description TEXT NOT NULL,
+            category TEXT DEFAULT 'SOP Vault',
+            price_usd REAL DEFAULT 19.00,
+            price_coins INTEGER DEFAULT 300,
+            file_url TEXT NOT NULL,
+            image_url TEXT,
+            is_active INTEGER DEFAULT 1,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE user_purchases (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            item_type TEXT DEFAULT 'product',
+            item_id INTEGER NOT NULL,
+            payment_method TEXT DEFAULT 'coins',
+            amount_paid REAL DEFAULT 0.0,
+            coins_spent INTEGER DEFAULT 0,
+            transaction_id TEXT UNIQUE NOT NULL,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );"
     ];

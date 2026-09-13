@@ -121,6 +121,32 @@ class Database
                     is_admin_reply INTEGER DEFAULT 0,
                     created_at TEXT DEFAULT CURRENT_TIMESTAMP
                 );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS products (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT NOT NULL,
+                    slug TEXT UNIQUE NOT NULL,
+                    description TEXT NOT NULL,
+                    category TEXT DEFAULT 'SOP Vault',
+                    price_usd REAL DEFAULT 19.00,
+                    price_coins INTEGER DEFAULT 300,
+                    file_url TEXT NOT NULL,
+                    image_url TEXT,
+                    is_active INTEGER DEFAULT 1,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS user_purchases (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+                    item_type TEXT DEFAULT 'product',
+                    item_id INTEGER NOT NULL,
+                    payment_method TEXT DEFAULT 'coins',
+                    amount_paid REAL DEFAULT 0.0,
+                    coins_spent INTEGER DEFAULT 0,
+                    transaction_id TEXT UNIQUE NOT NULL,
+                    created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                );");
             }
         } catch (Exception $e) {
             // Ignore if schema check in progress

@@ -61,6 +61,7 @@
                 <a href="/resume-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-file-invoice mr-1"></i> Resume</a>
                 <a href="/portfolio-builder" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-user-gear mr-1"></i> Portfolio</a>
                 <a href="/community" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-users mr-1"></i> Community</a>
+                <a href="/shop" class="text-amber-400 hover:text-amber-300 font-bold transition"><i class="fa-solid fa-cart-shopping mr-1"></i> Shop</a>
                 <a href="/support" class="text-slate-300 hover:text-indigo-400 transition"><i class="fa-solid fa-headset mr-1"></i> Support</a>
                 <a href="/pricing" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-3 py-1.5 rounded-lg shadow-md transition">⚡ PRO</a>
                 <a href="/settings" class="text-slate-300 hover:text-white transition"><i class="fa-solid fa-gear"></i> Settings</a>

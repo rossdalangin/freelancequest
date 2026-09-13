@@ -51,7 +51,8 @@
         <a href="/admin/resources" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md">📁 Manage Resources</a>
         <a href="/admin/pages" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2.5 rounded-xl text-xs shadow-md">📄 Manage Pages CMS</a>
         <a href="/admin/users" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">👥 Users & Plans</a>
-        <a href="/admin/tickets" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2.5 rounded-xl text-xs shadow-md">🎧 Help Desk Tickets</a>
+        <a href="/admin/products" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2.5 rounded-xl text-xs shadow-md">🛍️ Digital Shop Products</a>
+        <a href="/admin/tickets" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-4 py-2.5 rounded-xl text-xs shadow-md">🎧 Help Desk Tickets</a>
         <a href="/admin/payments" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">💳 Payments & Refunds</a>
         <a href="/admin/certificates" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">📜 Manage Certificates</a>
         <a href="/admin/logs" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs border border-slate-700">📋 Audit Logs</a>

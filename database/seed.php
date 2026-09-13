@@ -4790,6 +4790,55 @@ function seedDatabase()
         $stmtJ->execute([$j['title'], $j['company'], $j['category'], $j['budget'], $j['job_type'], $j['description'], $j['requirements']]);
     }
 
+    // Seed Digital Shop Products
+    $products = [
+        [
+            'title' => 'Executive Client Onboarding & SOP Vault',
+            'slug' => 'executive-client-onboarding-sop-vault',
+            'description' => 'Complete collection of 25+ standard operating procedure blueprints, intake forms, NDA agreements, and client onboarding email templates used by 6-figure VAs.',
+            'category' => 'SOP Vault',
+            'price_usd' => 19.00,
+            'price_coins' => 300,
+            'file_url' => '/downloads/onboarding_sop_vault.pdf',
+            'image_url' => '📦'
+        ],
+        [
+            'title' => 'High-Converting Pitch & Proposal Template Bundle',
+            'slug' => 'high-converting-pitch-proposal-template-bundle',
+            'description' => '10 battle-tested client proposal templates, pricing proposal calculators, and follow-up pitch scripts designed to close $1,000+ monthly retainers.',
+            'category' => 'Proposal Templates',
+            'price_usd' => 29.00,
+            'price_coins' => 450,
+            'file_url' => '/downloads/proposal_bundle_pack.pdf',
+            'image_url' => '💌'
+        ],
+        [
+            'title' => 'Cold Email Outreach & LinkedIn Lead Gen Playbook',
+            'slug' => 'cold-email-outreach-linkedin-lead-gen-playbook',
+            'description' => 'Proven outreach scripts, B2B lead generation verification checklists, and LinkedIn Connection message flows for securing direct clients outside job boards.',
+            'category' => 'Outreach Scripts',
+            'price_usd' => 24.00,
+            'price_coins' => 350,
+            'file_url' => '/downloads/lead_gen_outreach_playbook.pdf',
+            'image_url' => '🎯'
+        ],
+        [
+            'title' => '365-Day Social Media Content Calendar & Canva Kit',
+            'slug' => '365-day-social-media-content-calendar-canva-kit',
+            'description' => 'A full year of pre-written social media prompts, content pillars, reel ideas, and customizable Canva Pro template links for Social Media VAs.',
+            'category' => 'Social Media Templates',
+            'price_usd' => 34.00,
+            'price_coins' => 500,
+            'file_url' => '/downloads/social_media_365_kit.pdf',
+            'image_url' => '🎨'
+        ],
+    ];
+
+    $stmtP = $pdo->prepare("INSERT INTO products (title, slug, description, category, price_usd, price_coins, file_url, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    foreach ($products as $p) {
+        $stmtP->execute([$p['title'], $p['slug'], $p['description'], $p['category'], $p['price_usd'], $p['price_coins'], $p['file_url'], $p['image_url']]);
+    }
+
     echo "Expanded database seeding completed successfully.\n";
 }
 

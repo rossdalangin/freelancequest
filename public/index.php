@@ -42,6 +42,7 @@ use App\Controllers\CoverLetterController;
 use App\Controllers\ApplicationTrackerController;
 use App\Controllers\LeaderboardController;
 use App\Controllers\SupportTicketController;
+use App\Controllers\ShopController;
 
 SecurityService::setSecurityHeaders();
 SecurityService::startSecureSession();
@@ -97,6 +98,18 @@ $router->post('/support/create', [SupportTicketController::class, 'store']);
 $router->get('/support/tickets/{id}', [SupportTicketController::class, 'show']);
 $router->post('/support/tickets/{id}/reply', [SupportTicketController::class, 'reply']);
 $router->post('/support/tickets/{id}/close', [SupportTicketController::class, 'close']);
+
+// Digital Shop Marketplace Routes
+$router->get('/shop', [ShopController::class, 'index']);
+$router->get('/shop/library', [ShopController::class, 'myPurchases']);
+$router->get('/shop/{id}', [ShopController::class, 'show']);
+$router->post('/shop/{id}/buy-coins', [ShopController::class, 'purchaseWithCoins']);
+$router->get('/shop/{id}/checkout', [ShopController::class, 'checkout']);
+$router->post('/shop/{id}/process-payment', [ShopController::class, 'processPayment']);
+
+// Coin Unlock Level and Resource Routes
+$router->post('/unlock/level/{level_number}', [LearningController::class, 'unlockLevelWithCoins']);
+$router->post('/unlock/resource/{id}', [ResourceVaultController::class, 'unlockResourceWithCoins']);
 
 $router->get('/onboarding', [OnboardingController::class, 'index']);
 $router->post('/onboarding', [OnboardingController::class, 'store']);
@@ -166,6 +179,11 @@ $router->post('/admin/resources/{id}/edit', [AdminController::class, 'editResour
 $router->post('/admin/resources/{id}/delete', [AdminController::class, 'deleteResource']);
 $router->get('/admin/tickets', [SupportTicketController::class, 'adminTickets']);
 $router->post('/admin/tickets/{id}/status', [SupportTicketController::class, 'adminUpdateStatus']);
+
+$router->get('/admin/products', [AdminController::class, 'manageProducts']);
+$router->post('/admin/products/create', [AdminController::class, 'createProduct']);
+$router->post('/admin/products/{id}/edit', [AdminController::class, 'editProduct']);
+$router->post('/admin/products/{id}/delete', [AdminController::class, 'deleteProduct']);
 
 $router->get('/admin/payments', [AdminController::class, 'managePayments']);
 $router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);

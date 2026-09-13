@@ -59,10 +59,19 @@ class LearningController
             return;
         }
 
-        // Check subscription level restriction: Levels 4+ require Pro or Master subscription
+        // Check subscription level restriction: Levels 4+ require Pro or Master subscription UNLESS unlocked with coins
         $userTier = strtolower($user['subscription_tier'] ?? 'free');
-        if ((int)$lesson['level_number'] >= 4 && !in_array($userTier, ['pro', 'master']) && ($user['role'] ?? '') !== 'admin') {
-            $_SESSION['checkout_error'] = "🔒 Course Level " . $lesson['level_number'] . " is locked on Free Tier. Upgrade to Pro or Master to unlock all 16 levels!";
+        $levelNum = (int)$lesson['level_number'];
+
+        $isUnlockedViaCoins = false;
+        if ($levelNum >= 4) {
+            $stmtCoins = $pdo->prepare("SELECT id FROM user_purchases WHERE user_id = ? AND item_type = 'course_level' AND item_id = ?");
+            $stmtCoins->execute([$user['id'], $levelNum]);
+            $isUnlockedViaCoins = (bool)$stmtCoins->fetch();
+        }
+
+        if ($levelNum >= 4 && !in_array($userTier, ['pro', 'master']) && !$isUnlockedViaCoins && ($user['role'] ?? '') !== 'admin') {
+            $_SESSION['checkout_error'] = "🔒 Course Level " . $lesson['level_number'] . " is locked on Free Tier. Upgrade to Pro/Master or unlock this level for 500 Coins!";
             header('Location: /pricing');
             exit;
         }
@@ -112,9 +121,18 @@ class LearningController
         $stmtL->execute([$slug]);
         $lesson = $stmtL->fetch();
 
-        // Enforce subscription lock on complete action
+        // Enforce subscription lock or coin unlock on complete action
         $userTier = strtolower($user['subscription_tier'] ?? 'free');
-        if ((int)$lesson['level_number'] >= 4 && !in_array($userTier, ['pro', 'master']) && ($user['role'] ?? '') !== 'admin') {
+        $levelNum = (int)$lesson['level_number'];
+
+        $isUnlockedViaCoins = false;
+        if ($levelNum >= 4) {
+            $stmtCoins = $pdo->prepare("SELECT id FROM user_purchases WHERE user_id = ? AND item_type = 'course_level' AND item_id = ?");
+            $stmtCoins->execute([$user['id'], $levelNum]);
+            $isUnlockedViaCoins = (bool)$stmtCoins->fetch();
+        }
+
+        if ($levelNum >= 4 && !in_array($userTier, ['pro', 'master']) && !$isUnlockedViaCoins && ($user['role'] ?? '') !== 'admin') {
             header('Location: /pricing');
             exit;
         }
@@ -209,6 +227,50 @@ class LearningController
         $mission = $stmtM->fetch();
 
         require __DIR__ . '/../../views/missions/show.php';
+    }
+
+    public function unlockLevelWithCoins(string $levelNumber)
+    {
+        $user = AuthController::requireAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $levelNum = (int)$levelNumber;
+        $coinCost = 500;
+
+        if (($user['coins'] ?? 0) < $coinCost) {
+            $_SESSION['learning_error'] = "Insufficient coins! Unlocking Level {$levelNum} requires {$coinCost} coins. You currently have {$user['coins']} coins.";
+            header('Location: /learn');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+
+        // Check if already unlocked
+        $stmtCheck = $pdo->prepare("SELECT id FROM user_purchases WHERE user_id = ? AND item_type = 'course_level' AND item_id = ?");
+        $stmtCheck->execute([$user['id'], $levelNum]);
+        if ($stmtCheck->fetch()) {
+            $_SESSION['learning_success'] = "Course Level {$levelNum} is already unlocked on your account!";
+            header('Location: /learn');
+            exit;
+        }
+
+        // Deduct coins & record purchase
+        $stmtDeduct = $pdo->prepare("UPDATE users SET coins = coins - ? WHERE id = ?");
+        $stmtDeduct->execute([$coinCost, $user['id']]);
+
+        $txnId = 'COIN-LVL-' . strtoupper(substr(md5(uniqid((string)rand(), true)), 0, 8));
+        $stmtIns = $pdo->prepare("INSERT INTO user_purchases (user_id, item_type, item_id, payment_method, amount_paid, coins_spent, transaction_id) VALUES (?, 'course_level', ?, 'coins', 0.0, ?, ?)");
+        $stmtIns->execute([$user['id'], $levelNum, $coinCost, $txnId]);
+
+        \App\Services\DataManagementService::logActivity($user['id'], 'LEVEL_UNLOCKED_COINS', "Unlocked Course Level {$levelNum} using {$coinCost} coins");
+
+        $_SESSION['learning_success'] = "🎉 Level {$levelNum} has been permanently unlocked for {$coinCost} Coins!";
+        header('Location: /learn');
+        exit;
     }
 
     public function submitMission(string $id)
