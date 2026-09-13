@@ -145,7 +145,7 @@
                 💬 Post Reply to Support Thread
             </h3>
             <form action="/support/tickets/<?= $ticket['id'] ?>/reply" method="POST" class="space-y-4">
-                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::generateCsrfToken() ?>">
+                <input type="hidden" name="csrf_token" value="<?= \App\Services\SecurityService::getCsrfToken() ?>">
                 <div>
                     <textarea name="message" rows="4" required placeholder="Type your response or additional information here..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"></textarea>
                 </div>
