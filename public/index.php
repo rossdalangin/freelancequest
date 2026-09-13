@@ -126,6 +126,7 @@ $router->post('/checkout/process', [SubscriptionController::class, 'processCheck
 
 $router->get('/admin', [AdminController::class, 'index']);
 $router->get('/admin/users', [AdminController::class, 'manageUsers']);
+$router->post('/admin/users/create', [AdminController::class, 'createUser']);
 $router->post('/admin/users/{id}/plan', [AdminController::class, 'updateUserPlan']);
 $router->get('/admin/lessons', [AdminController::class, 'manageLessons']);
 $router->post('/admin/lessons/create', [AdminController::class, 'createLesson']);

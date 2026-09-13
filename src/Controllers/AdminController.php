@@ -65,7 +65,59 @@ class AdminController
         $stmt = $pdo->query("SELECT * FROM users ORDER BY id DESC");
         $users = $stmt->fetchAll();
 
+        $error = $_SESSION['admin_user_error'] ?? null;
+        $success = $_SESSION['admin_user_success'] ?? null;
+        unset($_SESSION['admin_user_error'], $_SESSION['admin_user_success']);
+
         require __DIR__ . '/../../views/admin/users.php';
+    }
+
+    public function createUser()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+
+        $name = trim($_POST['name'] ?? '');
+        $email = strtolower(trim($_POST['email'] ?? ''));
+        $rawUsername = trim($_POST['username'] ?? '');
+        $username = strtolower(preg_replace('/[^a-zA-Z0-9_]/', '', $rawUsername ?: $name));
+        $password = $_POST['password'] ?? '';
+        $role = in_array($_POST['role'] ?? '', ['student', 'admin']) ? $_POST['role'] : 'student';
+        $tier = in_array($_POST['subscription_tier'] ?? '', ['free', 'pro', 'master']) ? $_POST['subscription_tier'] : 'free';
+        $level = (int)($_POST['level'] ?? 0);
+
+        if (empty($name) || empty($email) || empty($password)) {
+            $_SESSION['admin_user_error'] = 'Name, email, and password are required.';
+            header('Location: /admin/users');
+            exit;
+        }
+
+        // Check email uniqueness
+        $stmtChk = $pdo->prepare("SELECT id FROM users WHERE email = ? OR username = ?");
+        $stmtChk->execute([$email, $username]);
+        if ($stmtChk->fetch()) {
+            $_SESSION['admin_user_error'] = 'A user with that email or username already exists.';
+            header('Location: /admin/users');
+            exit;
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        $stmtIns = $pdo->prepare("INSERT INTO users (name, email, username, password, role, level, xp, coins, streak_count, subscription_tier) VALUES (?, ?, ?, ?, ?, ?, 0, 100, 1, ?)");
+        $stmtIns->execute([$name, $email, $username, $hashedPassword, $role, $level, $tier]);
+        $newUserId = $pdo->lastInsertId();
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_USER_CREATE', "Created user #{$newUserId}: {$name} ({$email}) with Role: {$role}, Tier: {$tier}");
+
+        $_SESSION['admin_user_success'] = "✓ User '{$name}' created successfully!";
+        header('Location: /admin/users');
+        exit;
     }
 
     public function manageLessons()
