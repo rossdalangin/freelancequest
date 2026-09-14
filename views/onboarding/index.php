@@ -15,10 +15,19 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-300 mb-2">Target Role</label>
+                <label class="block text-xs font-bold text-slate-300 mb-2">Target Role / Career Specialization</label>
                 <select name="target_career" required class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-100">
-                    <option value="admin_va">General Administrative VA</option>
-                    <option value="social_media">Social Media VA</option>
+                    <?php if (!empty($targetRoles)): ?>
+                        <?php foreach ($targetRoles as $role): ?>
+                            <option value="<?= htmlspecialchars($role['slug'], ENT_QUOTES, 'UTF-8') ?>">
+                                <?= htmlspecialchars($role['name'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($role['category'], ENT_QUOTES, 'UTF-8') ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="admin-va">General Administrative VA</option>
+                        <option value="social-media-va">Social Media & Graphic VA</option>
+                        <option value="lead-gen-va">B2B Lead Generation Specialist</option>
+                    <?php endif; ?>
                 </select>
             </div>
             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold py-3.5 px-6 rounded-xl text-sm">GENERATE ROADMAP &rarr;</button>

@@ -10,6 +10,10 @@ class OnboardingController
     public function index()
     {
         $user = AuthController::requireAuth();
+        $pdo = Database::getConnection();
+        $stmt = $pdo->query("SELECT * FROM target_roles WHERE is_active = 1 ORDER BY category ASC, name ASC");
+        $targetRoles = $stmt->fetchAll();
+
         require __DIR__ . '/../../views/onboarding/index.php';
     }
 

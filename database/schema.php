@@ -7,6 +7,7 @@ function initializeSchema()
     $pdo = Database::getConnection();
 
     $queries = [
+        "DROP TABLE IF EXISTS target_roles;",
         "DROP TABLE IF EXISTS testimonials;",
         "DROP TABLE IF EXISTS coupons;",
         "DROP TABLE IF EXISTS user_purchases;",
@@ -440,6 +441,16 @@ function initializeSchema()
             amount_paid REAL DEFAULT 0.0,
             coins_spent INTEGER DEFAULT 0,
             transaction_id TEXT UNIQUE NOT NULL,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
+        );",
+
+        "CREATE TABLE target_roles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            slug TEXT UNIQUE NOT NULL,
+            description TEXT,
+            category TEXT DEFAULT 'General',
+            is_active INTEGER DEFAULT 1,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );"
     ];

@@ -751,6 +751,64 @@ class AdminController
         exit;
     }
 
+    public function manageTargetRoles()
+    {
+        $admin = $this->checkAdminAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("SELECT * FROM target_roles ORDER BY id DESC");
+        $targetRoles = $stmt->fetchAll();
+
+        require __DIR__ . '/../../views/admin/target_roles.php';
+    }
+
+    public function storeTargetRole()
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $name = trim($_POST['name'] ?? '');
+        $category = trim($_POST['category'] ?? 'General');
+        $description = trim($_POST['description'] ?? '');
+
+        if (!empty($name)) {
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $name), '-'));
+            $pdo = Database::getConnection();
+            $stmt = $pdo->prepare("INSERT INTO target_roles (name, slug, category, description, is_active) VALUES (?, ?, ?, ?, 1)");
+            $stmt->execute([$name, $slug, $category, $description]);
+
+            DataManagementService::logActivity($admin['id'], 'ADMIN_TARGET_ROLE_ADD', "Added new target role: {$name}");
+            $_SESSION['flash_success'] = "Added new target career role '{$name}' successfully!";
+        }
+
+        header('Location: /admin/target-roles');
+        exit;
+    }
+
+    public function deleteTargetRole(string $id)
+    {
+        $admin = $this->checkAdminAuth();
+
+        if (!SecurityService::verifyCsrfToken($_POST['csrf_token'] ?? '')) {
+            http_response_code(403);
+            die("Invalid CSRF Token.");
+        }
+
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("DELETE FROM target_roles WHERE id = ?");
+        $stmt->execute([$id]);
+
+        DataManagementService::logActivity($admin['id'], 'ADMIN_TARGET_ROLE_DELETE', "Deleted target role #{$id}");
+        $_SESSION['flash_success'] = "Deleted target career role successfully.";
+
+        header('Location: /admin/target-roles');
+        exit;
+    }
+
     public function manageCertificates()
     {
         $admin = $this->checkAdminAuth();

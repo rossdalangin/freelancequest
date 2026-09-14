@@ -192,6 +192,9 @@ $router->post('/admin/products/{id}/delete', [AdminController::class, 'deletePro
 
 $router->get('/admin/payments', [AdminController::class, 'managePayments']);
 $router->post('/admin/payments/{id}/refund', [AdminController::class, 'refundPayment']);
+$router->get('/admin/target-roles', [AdminController::class, 'manageTargetRoles']);
+$router->post('/admin/target-roles/store', [AdminController::class, 'storeTargetRole']);
+$router->post('/admin/target-roles/delete/{id}', [AdminController::class, 'deleteTargetRole']);
 $router->get('/admin/certificates', [AdminController::class, 'manageCertificates']);
 $router->post('/admin/certificates/{id}/delete', [AdminController::class, 'revokeCertificate']);
 $router->get('/admin/pages', [AdminController::class, 'managePages']);

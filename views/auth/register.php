@@ -35,6 +35,23 @@
             <input type="password" name="password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
         </div>
 
+        <div>
+            <label class="block text-xs font-extrabold text-slate-300 uppercase tracking-wider mb-2">Target Career Role</label>
+            <select name="target_role" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                <?php if (!empty($targetRoles)): ?>
+                    <?php foreach ($targetRoles as $role): ?>
+                        <option value="<?= htmlspecialchars($role['slug'], ENT_QUOTES, 'UTF-8') ?>">
+                            <?= htmlspecialchars($role['name'], ENT_QUOTES, 'UTF-8') ?> (<?= htmlspecialchars($role['category'], ENT_QUOTES, 'UTF-8') ?>)
+                        </option>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <option value="admin-va">General Administrative VA</option>
+                    <option value="social-media-va">Social Media & Graphic VA</option>
+                    <option value="lead-gen-va">B2B Lead Generation Specialist</option>
+                <?php endif; ?>
+            </select>
+        </div>
+
         <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold py-3.5 rounded-xl text-sm transition shadow-xl shadow-amber-500/20">
             CREATE CHARACTER & PLAY &rarr;
         </button>

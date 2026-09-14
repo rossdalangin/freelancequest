@@ -5417,6 +5417,27 @@ function seedDatabase()
     $stmtCpn->execute(['FREELANCE50', 50, 0]);
     $stmtCpn->execute(['WELCOME10', 0, 10.00]);
 
+    // Seed Target Career Roles
+    $targetRoles = [
+        ['name' => 'General Administrative VA', 'slug' => 'admin-va', 'description' => 'Email management, calendar scheduling, file organization, and customer support.', 'category' => 'Administrative'],
+        ['name' => 'Social Media & Graphic VA', 'slug' => 'social-media-va', 'description' => 'Canva graphics, content scheduling, engagement, and social media reporting.', 'category' => 'Marketing'],
+        ['name' => 'B2B Lead Generation Specialist', 'slug' => 'lead-gen-va', 'description' => 'List building, Apollo lead scraping, email verification, and prospect research.', 'category' => 'Sales'],
+        ['name' => 'Executive Virtual Assistant', 'slug' => 'executive-va', 'description' => 'C-suite calendar management, inbox zero, meeting minutes, and travel logistics.', 'category' => 'Executive'],
+        ['name' => 'Customer Support Specialist', 'slug' => 'customer-support-va', 'description' => 'Zendesk ticket management, live chat support, and customer query resolution.', 'category' => 'Support'],
+        ['name' => 'E-Commerce Operations VA', 'slug' => 'ecommerce-va', 'description' => 'Shopify product listings, inventory management, and order processing.', 'category' => 'E-Commerce'],
+        ['name' => 'WordPress & Web Tech VA', 'slug' => 'wordpress-tech-va', 'description' => 'WordPress content updates, plugin maintenance, and technical site updates.', 'category' => 'Technical'],
+        ['name' => 'Bookkeeping & Financial VA', 'slug' => 'bookkeeping-va', 'description' => 'QuickBooks transaction categorization, invoicing, and expense tracking.', 'category' => 'Finance'],
+        ['name' => 'Real Estate Virtual Assistant', 'slug' => 'real-estate-va', 'description' => 'MLS listing management, client follow-up, and transaction coordination.', 'category' => 'Real Estate'],
+        ['name' => 'Content Writer & Copywriting VA', 'slug' => 'content-copy-va', 'description' => 'Blog article writing, email newsletter copywriting, and SEO content formatting.', 'category' => 'Content'],
+        ['name' => 'Email Marketing Specialist', 'slug' => 'email-marketing-va', 'description' => 'Klaviyo/Mailchimp email campaign setup, automation flows, and newsletter design.', 'category' => 'Marketing'],
+        ['name' => 'AI-Assisted Operations VA', 'slug' => 'ai-operations-va', 'description' => 'ChatGPT prompt engineering, workflow automation, and AI content generation.', 'category' => 'AI & Tech'],
+    ];
+
+    $stmtTrg = $pdo->prepare("INSERT INTO target_roles (name, slug, description, category, is_active) VALUES (?, ?, ?, ?, 1)");
+    foreach ($targetRoles as $tr) {
+        $stmtTrg->execute([$tr['name'], $tr['slug'], $tr['description'], $tr['category']]);
+    }
+
     // Seed Digital Shop Products
     $products = [
         ['title' => 'Executive Client Onboarding & SOP Vault', 'slug' => 'executive-client-onboarding-sop-vault', 'description' => 'Comprehensive client onboarding templates, intake forms, and operational SOP blueprints.', 'price_usd' => 19.00, 'price_coins' => 300, 'category' => 'Template Vault', 'file_url' => '/downloads/level-03-client-onboarding-sop-checklist.md', 'is_active' => 1],

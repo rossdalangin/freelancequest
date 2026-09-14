@@ -78,6 +78,10 @@ class AuthController
         $error = $_SESSION['auth_error'] ?? null;
         unset($_SESSION['auth_error']);
 
+        $pdo = \Database::getConnection();
+        $stmt = $pdo->query("SELECT * FROM target_roles WHERE is_active = 1 ORDER BY category ASC, name ASC");
+        $targetRoles = $stmt->fetchAll();
+
         require __DIR__ . '/../../views/auth/register.php';
     }
 
@@ -108,9 +112,12 @@ class AuthController
             exit;
         }
 
+        $targetRole = trim($_POST['target_role'] ?? 'admin-va');
+
         $hash = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $pdo->prepare("INSERT INTO users (name, email, username, password, role, level, xp, coins, streak_count, subscription_tier) VALUES (?, ?, ?, ?, 'student', 0, 0, 100, 1, 'free')");
-        $stmt->execute([$name, $email, $username, $hash]);
+        $onboardingAns = json_encode(['target_career' => $targetRole]);
+        $stmt = $pdo->prepare("INSERT INTO users (name, email, username, password, role, level, xp, coins, streak_count, subscription_tier, onboarding_answers) VALUES (?, ?, ?, ?, 'student', 0, 0, 100, 1, 'free', ?)");
+        $stmt->execute([$name, $email, $username, $hash, $onboardingAns]);
 
         $newUserId = $pdo->lastInsertId();
 
