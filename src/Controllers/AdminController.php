@@ -699,53 +699,30 @@ class AdminController
     {
         $admin = $this->checkAdminAuth();
 
-        $pagesList = [
-            'home_hero' => [
-                'title' => 'Homepage Hero & Tagline Section',
-                'url' => '/',
-                'content' => DataManagementService::getSetting('page_content_home_hero', '')
-            ],
-            'about' => [
-                'title' => 'About Us Page & Founder Story',
-                'url' => '/about',
-                'content' => DataManagementService::getSetting('page_content_about', '')
-            ],
-            'features' => [
-                'title' => 'Platform Features & Gameplay Section',
-                'url' => '/features',
-                'content' => DataManagementService::getSetting('page_content_features', '')
-            ],
-            'pricing_hero' => [
-                'title' => 'Pricing & Membership Plans Section',
-                'url' => '/pricing',
-                'content' => DataManagementService::getSetting('page_content_pricing_hero', '')
-            ],
-            'faq' => [
-                'title' => 'Frequently Asked Questions (FAQ)',
-                'url' => '/faq',
-                'content' => DataManagementService::getSetting('page_content_faq', '')
-            ],
-            'terms' => [
-                'title' => 'Terms of Service Page',
-                'url' => '/terms',
-                'content' => DataManagementService::getSetting('page_content_terms', '')
-            ],
-            'privacy' => [
-                'title' => 'Privacy Policy Page',
-                'url' => '/privacy',
-                'content' => DataManagementService::getSetting('page_content_privacy', '')
-            ],
-            'disclaimer' => [
-                'title' => 'Earnings Disclaimer Page',
-                'url' => '/disclaimer',
-                'content' => DataManagementService::getSetting('page_content_disclaimer', '')
-            ],
-            'contact' => [
-                'title' => 'Contact & Support Section',
-                'url' => '/contact',
-                'content' => DataManagementService::getSetting('page_content_contact', '')
-            ],
+        $pagesConfig = [
+            'home_hero' => ['title' => 'Homepage Hero & Tagline Section', 'url' => '/', 'default_file' => null],
+            'about' => ['title' => 'About Us Page & Founder Story', 'url' => '/about', 'default_file' => __DIR__ . '/../../views/pages/about.php'],
+            'features' => ['title' => 'Platform Features & Gameplay Section', 'url' => '/features', 'default_file' => __DIR__ . '/../../views/pages/features.php'],
+            'pricing_hero' => ['title' => 'Pricing & Membership Plans Section', 'url' => '/pricing', 'default_file' => null],
+            'faq' => ['title' => 'Frequently Asked Questions (FAQ)', 'url' => '/faq', 'default_file' => __DIR__ . '/../../views/pages/faq.php'],
+            'terms' => ['title' => 'Terms of Service Page', 'url' => '/terms', 'default_file' => __DIR__ . '/../../views/pages/terms.php'],
+            'privacy' => ['title' => 'Privacy Policy Page', 'url' => '/privacy', 'default_file' => __DIR__ . '/../../views/pages/privacy.php'],
+            'disclaimer' => ['title' => 'Disclaimer & Earnings Notice', 'url' => '/disclaimer', 'default_file' => __DIR__ . '/../../views/pages/disclaimer.php'],
+            'contact' => ['title' => 'Contact Us & Support Desk', 'url' => '/contact', 'default_file' => __DIR__ . '/../../views/pages/contact.php'],
         ];
+
+        $pagesList = [];
+        foreach ($pagesConfig as $slug => $cfg) {
+            $content = DataManagementService::getSetting('page_content_' . $slug, '');
+            if (empty($content) && $cfg['default_file'] && file_exists($cfg['default_file'])) {
+                $content = file_get_contents($cfg['default_file']);
+            }
+            $pagesList[$slug] = [
+                'title' => $cfg['title'],
+                'url' => $cfg['url'],
+                'content' => $content
+            ];
+        }
 
         require __DIR__ . '/../../views/admin/pages.php';
     }
